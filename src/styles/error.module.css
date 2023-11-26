@@ -1,0 +1,30 @@
+.errorContainer {
+  width: 40%;
+  margin: 0 auto;
+  background: white;
+  color: var(--white-resalt-hk);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorContainer h2 {
+  color: var(--delete-alert);
+}
+
+.errorContainer h3 {
+  width: 100%;
+  text-align: center;
+}
+
+.errorContainer p {
+  font-weight: bold;
+}
+
+.errorContainer p:nth-of-type(1) {
+  color: var(--tittles-hk);
+  font-size: large;
+}

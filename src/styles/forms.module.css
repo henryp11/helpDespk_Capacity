@@ -1,0 +1,503 @@
+.form-default {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.input-container {
+  margin: 10px;
+  display: flex;
+  /* flex-wrap: wrap; */
+  flex-direction: column;
+  position: relative;
+}
+
+.input-container label {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  padding: 0 4px;
+  transition: all 0.2s ease;
+  color: var(--button-color-hk-hover);
+  font-weight: bolder;
+}
+
+.input-container input {
+  padding: 4px 4px 1px 4px;
+  height: 28px;
+  font-size: var(--font-nm);
+  z-index: 1;
+  background: transparent;
+  border-radius: 5px;
+  outline-color: var(--tittles-hk);
+  border: 1px solid var(--subtittles-hk);
+  color: var(--background-hk);
+}
+.input-container input:focus ~ label {
+  top: -13px;
+  background-color: white;
+  z-index: 2;
+  font-size: var(--font-nm);
+}
+
+.input-container b {
+  font-weight: bold;
+  font-size: 14px;
+  margin-right: 2px;
+}
+
+.activate-label-position {
+  top: -11px !important;
+  background-color: white !important;
+  z-index: 2;
+  color: var(--button-color-hk) !important;
+  font-size: var(--font-sm) !important;
+}
+
+.loginContainer {
+  width: 50%;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.recovery {
+  margin: 8px auto;
+  padding: 4px;
+  font-size: small;
+  transition: all 0.1s ease;
+}
+
+.recovery:hover {
+  text-decoration: underline;
+  font-weight: bold;
+  color: var();
+}
+
+.formButton {
+  background: var(--button-color-hk-hover);
+  color: white;
+  font-size: var(--font-md);
+  font-weight: 600;
+  padding: 8px;
+  width: 60%;
+  margin: 0 auto;
+  border-color: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.formButton:hover {
+  background: var(--button-color-hk-hover);
+  color: var(--white-resalt-hk);
+}
+
+.formButton:active {
+  transform: scale(0.9);
+}
+
+/* Botón para mostrar solicitudes */
+.formButtonShow {
+  width: auto;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0 8px;
+  gap: 4px;
+  border-radius: 0;
+}
+
+.formButtonShow svg {
+  color: var(--tittles-hk);
+  width: 28px;
+  height: 28px;
+}
+
+/* manejo de contenedor de botones */
+.buttonContainer {
+  width: 30%;
+  margin: 12px auto 0 auto;
+  grid-column: 1 / -1;
+  display: flex;
+  /* flex-wrap: wrap; */
+}
+
+.buttonContainer button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.buttonContainer button:hover {
+  background: white;
+}
+
+.buttonContainer button:hover svg {
+  color: var(--button-color-hk);
+}
+
+.buttonContainer svg {
+  color: var(--tittles-hk);
+  transform: scale(1.5);
+  height: 100%;
+}
+
+.cancelButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.buttonContainerInline {
+  grid-column: auto;
+  margin: 0;
+  width: 100%;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 16px;
+}
+
+.buttonContainerInline button {
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  background: transparent;
+}
+
+.buttonContainerInline button svg {
+  transform: scale(1);
+  color: rgb(155, 32, 32);
+}
+
+.buttonContainerInline button:first-child {
+  transform: scale(1.2);
+}
+.buttonContainerInline button:first-child svg {
+  color: var(--save-button);
+}
+.buttonContainerInline button:first-child svg:hover {
+  color: var(--button-color-hk-hover);
+}
+
+/* clases especiales para casos de inputs específicos */
+/* 1) Para Unificar el id con el campo siguiente */
+.idField {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 25% 75%;
+}
+
+.idField span input {
+  width: 100%;
+}
+
+/* 2) Para inputs CheckBox   */
+
+.input-containerCheckbox {
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+}
+
+.input-containerCheckbox label {
+  transition: all 0.2s ease;
+  color: var(--button-color-hk-hover);
+  font-weight: bolder;
+}
+
+.input-containerCheckbox input {
+  transform: scale(1.7);
+}
+
+/* Para select */
+
+.selectContainer {
+  color: var(--button-color-hk-hover);
+  font-size: var(--font-nm);
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0 12px;
+  margin: 10px;
+  align-self: flex-start;
+}
+
+.selectContainer select {
+  display: block;
+  padding: 4px;
+  border-color: var(--tittles-hk);
+  outline: none;
+  min-width: 80%;
+}
+
+.selectContainer option:checked {
+  background: var(--button-color-hk-hover);
+  color: white;
+}
+
+.inputWithButton {
+  display: grid;
+  grid-template-columns: 35% 65%;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.inputWithButton button {
+  background: var(--button-color-hk);
+  border: 1px solid var(--tittles-hk);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 8px;
+  color: white;
+  transition: all ease 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.inputWithButton button:hover {
+  background: var(--button-color-hk-hover);
+  transform: scale(0.95);
+}
+
+.inputWithButton p {
+  color: var(--button-color-hk);
+  margin: 8px;
+  font-weight: bold;
+}
+
+.inputWithButton p b {
+  color: var(--button-color-hk-hover);
+}
+
+.textArea {
+  width: '100%';
+  border: 1px solid var(--subtittles-hk);
+  padding: 2px;
+  font-family: inherit;
+  font-size: small;
+  outline-color: var(--tittles-hk);
+}
+
+/* Container fechas y horas - Controles*/
+
+.containerDates {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 4px;
+  padding: 4px;
+}
+
+.containerDates span {
+  margin: 0 !important;
+}
+
+.numberReg {
+  background: var(--background-hk);
+  width: 25px;
+  height: 25px;
+  margin: 0 0 3px 0;
+  border-radius: 50%;
+  font-size: large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formButtonAddSol {
+  background: var(--tittles-hk);
+  color: var(--button-color-hk-hover);
+  font-size: larger;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 0px 8px 3px;
+}
+
+/*Contenedores de inputs por número de columnas*/
+.inputContainer2_1 {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: repeat(2, 45%) 10%;
+}
+
+.inputContainer3_1 {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: repeat(3, 28%) 16%;
+}
+
+.inputContainer1_3 {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: 10% repeat(3, 30%);
+}
+
+.inputContainer1_1 {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: 75% 25%;
+}
+
+.inputContainer1_1v {
+  grid-template-columns: 95% 5%;
+}
+
+#buttonTicket,
+#buttonSolicitud {
+  grid-column: auto;
+  width: 100%;
+  align-items: center;
+}
+
+#buttonSolicitud {
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 0;
+}
+
+#buttonTicket button,
+#buttonSolicitud button {
+  background: transparent;
+}
+
+#buttonSolicitud button svg {
+  width: 25px;
+  height: 25px;
+}
+
+#buttonTicket button:first-child svg,
+#buttonSolicitud button:first-child svg {
+  color: var(--acept-button);
+}
+#buttonTicket button:last-child svg,
+#buttonSolicitud button:last-child svg {
+  color: var(--cancel-alert);
+  scale: 0.9;
+}
+
+#buttonTicket button:hover,
+#buttonSolicitud button:hover {
+  background: var(--button-color-hk-hover);
+}
+
+#buttonTicket button:hover svg,
+#buttonSolicitud button:hover svg {
+  color: var(--subtittles-hk);
+}
+
+/* RESPONSIVE DESIGN */
+@media screen and (max-width: 768px) {
+  /* Tablet  */
+  .loginContainer {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* Movil  */
+
+  .form-default {
+    padding: 8px;
+  }
+  .loginContainer {
+    width: 90%;
+  }
+
+  .input-container {
+    margin: 10px 4px;
+  }
+
+  .input-container label,
+  .input-containerCheckbox label {
+    font-size: var(--font-nm);
+  }
+
+  .input-container input {
+    font-size: var(--font-nm);
+  }
+
+  .input-container input:focus ~ label {
+    font-size: var(--font-sm);
+  }
+
+  .activate-label-position {
+    font-size: var(--font-sm) !important;
+  }
+
+  .idField {
+    grid-template-columns: 35% 65%;
+  }
+
+  /* manejo de contenedor de botones */
+  .buttonContainer {
+    width: 60%;
+    margin: 8px auto 0 auto;
+  }
+
+  .buttonContainer button {
+    width: 45px;
+    height: 45px;
+  }
+
+  .buttonContainer svg {
+    transform: scale(1.5);
+  }
+
+  .cancelButton {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .idField {
+    grid-template-columns: auto;
+  }
+}
+
+/* .icon-container--create {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.icon-container--create .icons {
+  font-size: 40px;
+  padding: 2px;
+}
+
+.icon-container--create .icons:hover {
+  box-shadow: inset 0 -5px var(--very-light-pink);
+  transform: scale(1.2);
+}
+
+.icon-container--create .icons:first-child {
+  color: rgb(51, 136, 70);
+}
+
+.icon-container--create .icons:last-child {
+  color: rgb(117, 22, 22);
+} */

@@ -1,0 +1,306 @@
+// En este componente separo la lógica de llamado a la API usando custom hook
+// donde se envía el dato de la API como parametro
+//y mediante el hook de useEffect retorno el valor del estado que deseo utilizar
+
+import { useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
+const API = 'http://localhost:3000/api/v1/tickets';
+const API_DET = 'http://localhost:3000/api/v1/detalle-tickets';
+
+const useApiTickets = () => {
+  const router = useRouter();
+  const [dataTicket, setDataTicket] = useState([]);
+  const [token, setToken] = useState('');
+  const [payloadJwt, setPayloadJwt] = useState({});
+  const [error, setError] = useState(false);
+  const [load, setLoad] = useState(true);
+  const [messageError, setMessageError] = useState({});
+  const [statusError, setStatusError] = useState('');
+
+  //Controla los errores a mostrar para todo tipo de petición, invocandolo en el catch
+  const showError = (error) => {
+    console.error(error);
+    setError(true);
+    if (typeof error.response.data === 'object') {
+      setMessageError([error.response.data.error, error.response.data.message]);
+      setStatusError(error.response.data.statusCode);
+    } else {
+      setMessageError([error.response.data]);
+      setStatusError(error.response.status);
+    }
+  };
+
+  //Consulta a todas las empresas
+  const getTickets = async (tracking) => {
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    const payloadLS = localStorage.getItem('payload');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    const payloadStorage = payloadLS && JSON.parse(payloadLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+        params: {
+          rol: payloadStorage.perfil,
+          idemp: payloadStorage.idEmp,
+          idclient: payloadStorage.idClient,
+          tracking: tracking || false, //Se usa el estatus cuando quiero quitar los tickets finalizados y anulados caso de tracking
+        },
+      };
+      setLoad(true);
+      const response = await axios.get(API, axiosConfig);
+      if (response) {
+        setToken(tokenStorage);
+        setPayloadJwt(payloadStorage);
+        console.log(response);
+        setDataTicket(response.data);
+        setLoad(false);
+      }
+    } catch (error) {
+      setLoad(false);
+      showError(error);
+    }
+  };
+
+  //para usar la API que detecte el id_ticket, al usar el método get de la api se debe
+  //Cambiar la URL inicial mandando el id_ticket como queryParam de la ruta, por eso al iniciar la función se arma la URL con la API, añadiendo el id_ticket
+  //De está forma el API utilizará el método GET especifico para obtener solo el dato del registro a buscar
+  const getTicketById = async (id_ticket) => {
+    const API_PARAMS = `${API}/${id_ticket}`;
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    const payloadLS = localStorage.getItem('payload');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    const payloadStorage = payloadLS && JSON.parse(payloadLS);
+
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+      };
+      const response = await axios.get(API_PARAMS, axiosConfig);
+      if (response) {
+        setPayloadJwt(payloadStorage);
+        return response.data;
+      }
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  // const getTicketByRuc = async (ruc) => {
+  //   const API_PARAMS = `${API}/ruc`;
+  //   //Obtengo las variables del LocalStorage
+  //   const tokenLS = localStorage.getItem('jwt');
+  //   //Si existen las variables, se las transforma en JSON para su uso
+  //   const tokenStorage = tokenLS && JSON.parse(tokenLS);
+  //   try {
+  //     let axiosConfig = {
+  //       headers: {
+  //         Authorization: `Bearer ${tokenStorage}`,
+  //       },
+  //       params: { ruc: ruc },
+  //     };
+  //     const response = await axios.get(API_PARAMS, axiosConfig);
+  //     if (response) {
+  //       // setToken(tokenStorage);
+  //       //En este caso retorno la promesa de la respuesta a la API la cual me entrega los datos de la consulta
+  //       return response.data;
+  //     }
+  //   } catch (error) {
+  //     showError(error);
+  //   }
+  // };
+
+  //Crear nueva Ticket
+  const postTickets = async (data) => {
+    const tokenLS = localStorage.getItem('jwt');
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+      };
+      const response = await axios.post(API, data, axiosConfig);
+      if (response) {
+        //Muestro el mensaje de retorno de la API
+        console.log(response);
+        setToken(tokenStorage);
+        toast.success(response.data.message, { duration: 5000 });
+        console.log(response.data.newRegister);
+        localStorage.setItem(
+          'ticket',
+          JSON.stringify(response.data.newRegister)
+        );
+        const ticketNew = response.data.newRegister;
+        return ticketNew;
+        // router.push('/solicitud/new');
+      }
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  const postSolicitud = async (data, id_ticket) => {
+    const tokenLS = localStorage.getItem('jwt');
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+      };
+      const response = await axios.post(
+        `${API_DET}/${id_ticket}`,
+        data,
+        axiosConfig
+      );
+      if (response) {
+        //Muestro el mensaje de retorno de la API
+        console.log(response);
+        setToken(tokenStorage);
+        toast.success(response.data.message);
+        console.log(response.data.newRegister);
+        const solicitudNew = response.data.newRegister;
+        return solicitudNew;
+        // router.push('/solicitud/new');
+      }
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  const updateSolicitud = async (id_ticket, id_solicitud, dataUpdate) => {
+    const API_PARAMS = `${API_DET}/${id_ticket}/${id_solicitud}`;
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+      };
+      const response = await axios.patch(API_PARAMS, dataUpdate, axiosConfig);
+      if (response) {
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  //Actualizar datos de Ticket
+  const updateTicket = async (id_ticket, dataUpdate) => {
+    const API_PARAMS = `${API}/${id_ticket}`;
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+      };
+      const response = await axios.patch(API_PARAMS, dataUpdate, axiosConfig);
+      if (response) {
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  //Eliminar Ticket
+  const deleteTicket = async (id_ticket, message) => {
+    const API_PARAMS = `${API}/${id_ticket}`;
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    toast(
+      (t) => (
+        <span className="toasterDelete">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+            />
+          </svg>
+          <b>{message}</b>
+          <span className="toasterButtons">
+            <button
+              onClick={async () => {
+                try {
+                  let axiosConfig = {
+                    headers: {
+                      Authorization: `Bearer ${tokenStorage}`,
+                    },
+                  };
+                  const response = await axios.delete(API_PARAMS, axiosConfig);
+                  toast.dismiss(t.id);
+                  response && getTickets(); //Una vez eliminado realizo "hotReload" para refrescar datos
+                  toast.success(response.data.message, {
+                    style: {
+                      border: '1px solid rgb(155, 32, 32)',
+                      padding: '16px',
+                    },
+                    iconTheme: {
+                      primary: 'rgb(155, 32, 32)',
+                      secondary: '#FFFAEE',
+                    },
+                    duration: 1000,
+                  });
+                  setTimeout(() => {
+                    toast.dismiss();
+                  }, 2000);
+                } catch (error) {
+                  toast.dismiss(t.id);
+                  showError(error);
+                }
+              }}
+            >
+              SI
+            </button>
+            <button onClick={() => toast.dismiss(t.id)}>NO</button>
+          </span>
+        </span>
+      ),
+      { duration: 60000 }
+    );
+  };
+  return {
+    getTickets,
+    getTicketById,
+    postTickets,
+    updateTicket,
+    deleteTicket,
+    postSolicitud,
+    updateSolicitud,
+    dataTicket,
+    payloadJwt,
+    load,
+    error,
+    statusError,
+    messageError,
+  };
+};
+
+export default useApiTickets;

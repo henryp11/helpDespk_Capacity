@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import ModuleCard from '../components/ModuleCard';
 import styles from '../styles/modulGeneral.module.css';
 
+//Opciones a mostrar para el modulo de Empresas por perfil
 const modEmpresasAdmin = [
   {
     idOption: 1,
@@ -32,6 +33,63 @@ const modEmpresasSup = [
     route: '/detalle-soporte',
   },
 ];
+//Opciones a mostrar para el modulo de Tickets por perfil
+const modTicketsClients = [
+  {
+    idOption: 1,
+    descrip: 'Registrar ticket de soporte',
+    route: '/tickets/new',
+  },
+  {
+    idOption: 2,
+    descrip: 'Seguimiento de ticket',
+    route: '/tracking/allTickets',
+  },
+  {
+    idOption: 3,
+    descrip: 'Historial de tickets realizados',
+    route: '/tickets/allTickets',
+  },
+];
+const modTicketsAdmin = [
+  {
+    idOption: 1,
+    descrip: 'Registrar ticket de soporte (extemporaneo)',
+    route: '/tickets/new',
+  },
+  {
+    idOption: 2,
+    descrip: 'Seguimiento de ticket en proceso',
+    route: '/tracking/allTickets',
+  },
+  {
+    idOption: 3,
+    descrip: 'Historial de todos los tickets realizados',
+    route: '/tickets/allTickets',
+  },
+];
+const modTicketsAgents = [
+  {
+    idOption: 1,
+    descrip: 'Solicitudes Pendientes para Asignar Agente',
+    route: '/support/allTickets',
+  },
+  {
+    idOption: 2,
+    descrip: 'Solicitudes Asignadas al Agente de Sop.',
+    route: '/support/allTicketsAsign',
+  },
+  {
+    idOption: 3,
+    descrip: 'Historial de tickets atendidos',
+    route: '/support/supportAgent',
+  },
+  {
+    idOption: 4,
+    descrip: 'Historial de todos los tickets realizados',
+    route: '/tickets/allTickets',
+  },
+];
 
 const ModulesMain = ({ userName }) => {
   const [payloadJwt, setPayloadJwt] = useState({});
@@ -49,7 +107,7 @@ const ModulesMain = ({ userName }) => {
       <h4 style={{ width: '100%', textAlign: 'center' }}>
         Saludos {userName} - Da clic en un módulo para usar sus opciones.
       </h4>
-      {payloadJwt.perfil !== 'cliente' && (
+      {payloadJwt.perfil !== 'cliente' && payloadJwt.perfil !== 'agente' && (
         <ModuleCard
           name="Gestión Empresas"
           moduleDescrip="Gestión de empresas/clientes que solicitarán soporte"
@@ -169,23 +227,13 @@ const ModulesMain = ({ userName }) => {
             />
           </svg>
         }
-        optionLinks={[
-          {
-            idOption: 1,
-            descrip: 'Registrar ticket de soporte',
-            route: '/tickets/new',
-          },
-          {
-            idOption: 2,
-            descrip: 'Seguimiento de ticket',
-            route: '/tracking/allTickets',
-          },
-          {
-            idOption: 3,
-            descrip: 'Historial de tickets realizados',
-            route: '/tickets/allTickets',
-          },
-        ]}
+        optionLinks={
+          payloadJwt.perfil === 'admin'
+            ? modTicketsAdmin
+            : payloadJwt.perfil === 'agente'
+            ? modTicketsAgents
+            : modTicketsClients
+        }
       />
       {payloadJwt.perfil === 'admin' && (
         <ModuleCard

@@ -16,8 +16,15 @@ import stylesEmp from '../../styles/emp.module.css';
 
 const newregister = () => {
   const router = useRouter();
-  const { postTickets, postSolicitud, error, statusError, messageError } =
-    useApiTickets();
+  const {
+    postTickets,
+    postSolicitud,
+    getOnlySolicitud,
+    dataTicket,
+    error,
+    statusError,
+    messageError,
+  } = useApiTickets();
 
   const nextRouter = useNextRouter(); //usado de next/router para extraer el query params de la ruta (el id de cada registro de firebase)
   // const idSearch = nextRouter.query.id_ticket; //Para verificar el string param de id_ticket y saber si estoy creando o editando un registro
@@ -44,6 +51,7 @@ const newregister = () => {
     isCreated: false,
     cantidad: 1,
   });
+  const [showButtonSol, setShowButtonSol] = useState(true);
   // const [regCapture, setRegCapture] = useState('');
 
   useEffect(() => {
@@ -124,6 +132,8 @@ const newregister = () => {
           isCreated: true,
           response,
         });
+        setShowButtonSol(false);
+        getOnlySolicitud(ticketCreated.response.id_ticket);
       })
       .catch((error) => {
         console.error(error);
@@ -132,8 +142,8 @@ const newregister = () => {
     if (solicitudCreated.cantidad === 3) {
       router.push('/home');
       toast.success(
-        'Ha ingresado el máximo de solicitudes permitidas para este ticket, puede monitorear el proceso de atención ingrendo a la opción de "Seguimiento"',
-        { duration: 7000 }
+        'Ha ingresado el máximo de solicitudes permitidas para este ticket, si desea ingresar más, por favor registrar un nuevo ticket, puede monitorear el proceso de atención ingresando a la opción de "Seguimiento"',
+        { duration: 9000 }
       );
     }
   };
@@ -147,6 +157,7 @@ const newregister = () => {
       isCreated: false,
     });
     setStateSolicitud(initialStateSolic);
+    setShowButtonSol(true);
   };
 
   console.log({ stateTicket: valueState });
@@ -177,43 +188,25 @@ const newregister = () => {
             </span>
 
             {!ticketCreated.isCreated && (
-              <span className={styles.buttonContainer}>
-                <button title="Siguiente" className={styles['formButton']}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    style={{ scale: '0.5' }}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"
-                    />
-                  </svg>
+              <span
+                className={styles.buttonContainer}
+                style={{ gap: '4px', width: '50%' }}
+              >
+                <button
+                  title="Siguiente"
+                  className={`${styles.formButton} ${styles.formButtonTicket}`}
+                  id={styles.regTicket}
+                >
+                  Registrar Ticket
                 </button>
 
                 <button
                   tittle="Cancelar"
-                  className={`${styles.formButton}`}
-                  id="cancelButton"
+                  className={`${styles.formButton} ${styles.formButtonTicket}`}
+                  id={styles.cancelButtonTicket}
                 >
                   <Link href="/home" className={`${styles.cancelButton}`}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
+                    Cancelar
                   </Link>
                 </button>
               </span>
@@ -225,10 +218,9 @@ const newregister = () => {
         {ticketCreated.isCreated && (
           <p style={{ textAlign: 'center' }}>
             Puede registrar hasta {4 - solicitudCreated.cantidad} solicitudes
-            diferentes para este ticket{' '}
-            <b>#{ticketCreated.response.id_ticket}</b>
+            diferentes para el ticket <b>#{ticketCreated.response.id_ticket}</b>
             <br /> Si ya no desea añadir más, de clic en el botón de{' '}
-            <b>cancelar</b> {`(❌)`}
+            <b>CANCELAR</b> {`(❌)`}
           </p>
         )}
         {ticketCreated.isCreated && (
@@ -239,14 +231,29 @@ const newregister = () => {
           >
             <h2 className={styles.numberReg}>{solicitudCreated.cantidad}</h2>
             <span style={{ gridColumn: '1/-1' }}>
-              <CustomInput
+              {/* <CustomInput
                 typeInput="text"
                 nameInput="descripcion"
                 valueInput={stateSolicitud.descripcion}
                 onChange={handleChangeSol}
                 nameLabel="Detalle su solicitud"
                 required={true}
-              />
+              /> */}
+              <span className={styles['input-container']}>
+                <textarea
+                  name="descripcion"
+                  onChange={handleChangeSol}
+                  defaultValue={stateSolicitud.descripcion}
+                  cols="30"
+                  rows="4"
+                  className={styles.textArea}
+                  required
+                  disabled={!showButtonSol ? true : false}
+                ></textarea>
+                <label className={styles['activate-label-position']}>
+                  Detalle su Solicitud
+                </label>
+              </span>
             </span>
             <CustomInput
               typeInput="text"
@@ -255,25 +262,31 @@ const newregister = () => {
               onChange={handleChangeSol}
               placeholder="Puede subir capturas de pantalla o imagenes para respaldar su explicación"
               nameLabel="Capturas"
+              disabled={!showButtonSol ? true : false}
             />
 
             <span className={styles.buttonContainer}>
-              <button title="Siguiente" className={styles['formButton']}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  style={{ scale: '0.5' }}
+              {showButtonSol && (
+                <button
+                  title="Crear Solicitud"
+                  className={styles['formButton']}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    style={{ scale: '0.6' }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12"
+                    />
+                  </svg>
+                </button>
+              )}
 
               <button
                 title="Cancelar"
@@ -304,9 +317,22 @@ const newregister = () => {
             onClick={addSolicitud}
             className={`${styles.formButton} ${styles.formButtonShow} ${styles.formButtonAddSol}`}
           >
-            ¿Añadir Solicitud adicional para este Ticket?
+            Agregar solicitud adicional para este Ticket#
+            {ticketCreated.response.id_ticket}
           </button>
         )}
+        <div className={styles.resumenSolicitudes}>
+          {dataTicket.length > 0 && <h4>Solicitudes Ingresadas</h4>}
+          {dataTicket &&
+            dataTicket.map((solicitud) => {
+              return (
+                <span>
+                  <b>{solicitud.id_solicitud}</b>
+                  <p>{solicitud.descripcion}</p>
+                </span>
+              );
+            })}
+        </div>
       </div>
       {error && statusError !== 400 && (
         <ErrorLayout messageError={messageError} statusCode={statusError} />

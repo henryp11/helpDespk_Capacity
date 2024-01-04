@@ -334,6 +334,69 @@
   box-shadow: 0 0px 8px 3px;
 }
 
+.formButtonTicket {
+  border-radius: 2px !important;
+  width: 45% !important;
+}
+
+#regTicket {
+  color: var(--acept-button);
+  background: white;
+  border: 1px solid var(--button-color-hk-hover);
+}
+#regTicket:hover {
+  background: var(--acept-button);
+  color: white;
+  border: 1px solid var(--acept-button);
+}
+
+#cancelButtonTicket {
+  background: white;
+  border: 1px solid var(--button-color-hk-hover);
+}
+
+#cancelButtonTicket a {
+  color: var(--cancel-alert);
+}
+
+#cancelButtonTicket:hover {
+  background: var(--cancel-alert);
+  border: 1px solid var(--cancel-alert);
+}
+
+#cancelButtonTicket:hover a {
+  color: white;
+}
+
+.resumenSolicitudes {
+  width: 60%;
+  background: var(--letters-hk);
+  color: darkblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.resumenSolicitudes span {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 10% auto;
+  align-items: center;
+  gap: 8px;
+  margin: 4px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--button-color-hk-hover);
+}
+
+.resumenSolicitudes h4 {
+  color: var(--acept-button);
+}
+
+.resumenSolicitudes b {
+  color: var(--button-color-hk-hover);
+  border-right: 1px solid var(--button-color-hk-hover);
+}
+
 /*Contenedores de inputs por número de columnas*/
 .inputContainer2_1 {
   grid-column: 1/-1;
@@ -361,6 +424,53 @@
 
 .inputContainer1_1v {
   grid-template-columns: 95% 5%;
+}
+
+.fieldSetCustom {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--letters-hk2);
+  width: 100%;
+  margin: 0 0 8px 0;
+}
+
+.fieldSetCustom legend {
+  color: var(--save-button);
+  margin-left: 8px;
+  padding: 2px;
+  font-size: 0.8em;
+}
+
+.fieldSetControls {
+  display: flex;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  color: var(--letters-hk2);
+}
+
+.controlsTable {
+  width: 100%;
+  text-align: center;
+  border-spacing: 4px;
+}
+
+.controlsTable tbody strong {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--button-color-hk-hover);
+  color: var(--button-color-hk);
+  margin: 0 auto;
+}
+
+.controlsTable thead {
+  color: var(--subtittles-hk);
 }
 
 #buttonTicket,
@@ -406,6 +516,51 @@
 #buttonTicket button:hover svg,
 #buttonSolicitud button:hover svg {
   color: var(--subtittles-hk);
+}
+
+/*Especiales ventana de control de soporte para solución (agente de soprote)*/
+
+.modalSolucion {
+  background: rgba(39, 41, 39, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modalSolucion span textarea {
+  background: rgb(238, 238, 238);
+  padding: 8px;
+  border: 2px solid var(--save-button);
+}
+
+.modalSolucion span {
+  background: rgb(247, 247, 247);
+  margin: 0;
+  border-radius: 0 0 8px 8px;
+}
+
+.modalSolucion label {
+  font-size: 16px !important;
+  left: 0;
+  top: -25px !important;
+  width: 100% !important;
+  padding: 2px;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+}
+
+.modalSolucion #buttonSolicitud {
+  flex-direction: row;
+  width: 30%;
+  margin: 0 auto;
+  padding: 4px;
 }
 
 /* RESPONSIVE DESIGN */

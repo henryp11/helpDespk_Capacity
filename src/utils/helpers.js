@@ -70,3 +70,21 @@ export const formatDateTransform = (fecha) => {
 
   return finalDate;
 };
+
+//Formato de hora para transformar de milisegundo a hora
+export const timeFormat = (ms) => {
+  if (!ms) return '00:00:00';
+  let ss = Math.floor(ms / 1000);
+  let mm = Math.floor(ss / 60);
+  let hh = Math.floor(mm / 60);
+
+  hh = hh < 10 ? '0' + hh : hh;
+  mm = mm < 10 ? '0' + mm : mm;
+  ss = ss < 10 ? '0' + ss : ss;
+
+  // console.log(`FORMATEO DE FECHA: ${hh}:${mm % 60}:${ss % 60}`);
+
+  return `${hh}:${mm % 60 < 10 ? '0' : ''}${mm % 60}:${
+    ss % 60 < 10 ? '0' : ''
+  }${ss % 60}`;
+};

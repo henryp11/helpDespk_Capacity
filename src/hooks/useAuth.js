@@ -68,6 +68,7 @@ const useAuth = () => {
     console.error(error);
     setMessageError([error]);
     setError(true);
+    setStatusError(error.response.status);
     if (error.message) {
       console.log(error);
     } else {
@@ -76,10 +77,8 @@ const useAuth = () => {
           error.response.data.error,
           error.response.data.message,
         ]);
-        setStatusError(error.response.data.statusCode);
       } else {
         setMessageError([error.response.data]);
-        setStatusError(error.response.status);
       }
     }
   };

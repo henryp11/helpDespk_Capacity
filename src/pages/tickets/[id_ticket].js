@@ -9,7 +9,7 @@ import CustomInput from '../../components/CustomInput';
 import Solicitud from '@/components/Solicitud';
 import ErrorLayout from '../../components/ErrorLayout';
 import useApiTickets from '../../hooks/useApiTickets';
-import { validateExpToken } from '../../utils/helpers';
+import { validateExpToken, timeFormat } from '../../utils/helpers';
 import styles from '../../styles/forms.module.css';
 import stylesEmp from '../../styles/emp.module.css';
 
@@ -210,7 +210,9 @@ const newregister = () => {
               <CustomInput
                 typeInput="text"
                 nameInput="tiempo_real_sop"
-                valueInput={valueState.tiempo_real_sop}
+                valueInput={timeFormat(
+                  Number(valueState.tiempo_real_sop) * 1000
+                )}
                 onChange={handleChange}
                 nameLabel="Tiempo Total"
                 disabled={true}

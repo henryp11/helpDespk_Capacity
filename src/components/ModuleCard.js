@@ -6,33 +6,52 @@ const ModuleCard = ({ name, moduleDescrip, icon, optionLinks }) => {
   const [showOptions, setShowOptions] = useState(false);
 
   return (
-    <div
-      className={styles.containerCardMod}
-      onClick={() => {
-        setShowOptions(!showOptions);
-      }}
-    >
+    <div className={styles.containerCardMod}>
       <div className={styles.buttonHandleCard}>
         <span className={styles.titleCard}>
           {icon}
           <h3>{name}</h3>
+          <span
+            style={{
+              scale: '0.8',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onClick={() => {
+              setShowOptions(!showOptions);
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+              />
+            </svg>
+          </span>
         </span>
-        {!showOptions && <i>{moduleDescrip}</i>}
+        {showOptions && <i>{moduleDescrip}</i>}
       </div>
-      {showOptions &&
-        optionLinks.map((option) => {
-          return (
-            <>
-              <Link
-                key={option.idOption}
-                href={option.route}
-                className={styles.linkOptions}
-              >
-                <p>{option.descrip}</p>
-              </Link>
-            </>
-          );
-        })}
+      {optionLinks.map((option) => {
+        return (
+          <>
+            <Link
+              key={option.idOption}
+              href={option.route}
+              className={styles.linkOptions}
+            >
+              <p>{option.descrip}</p>
+            </Link>
+          </>
+        );
+      })}
     </div>
   );
 };

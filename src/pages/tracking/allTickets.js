@@ -15,7 +15,7 @@ const moduleHeaders = {
 };
 
 const AllTickets = () => {
-  return <GetAllTickets headersTable={moduleHeaders} />;
+  return <GetAllTickets headersTable={moduleHeaders} enviroment="tracking" />;
 };
 
 export default AllTickets;

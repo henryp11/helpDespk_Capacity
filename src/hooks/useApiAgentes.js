@@ -60,6 +60,29 @@ const useApiAgentes = () => {
     }
   };
 
+  const getAgentByCed = async (cedula) => {
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+        params: {
+          cedagent: cedula,
+        },
+      };
+      const response = await axios.get(API, axiosConfig);
+      if (response) {
+        return response.data;
+      }
+    } catch (error) {
+      showError(error);
+    }
+  };
+
   //para usar la API que detecte el id_agente, al usar el método get de la api se debe
   //Cambiar la URL inicial mandando el id_agente como queryParam de la ruta, por eso al iniciar la función se arma la URL con la API, añadiendo el id_agente
   //De está forma el API utilizará el método GET especifico para obtener solo el dato del registro a buscar
@@ -87,7 +110,7 @@ const useApiAgentes = () => {
   };
 
   //Crear nueva Agente
-  const postAgente = async (data) => {
+  const postAgente = async (data, register) => {
     const tokenLS = localStorage.getItem('jwt');
     const tokenStorage = tokenLS && JSON.parse(tokenLS);
     try {
@@ -103,6 +126,19 @@ const useApiAgentes = () => {
         setToken(tokenStorage);
         toast.success(response.data.message);
         router.push('/agentes');
+        //Si se invoca la función desde la pantalla de Vinculación de usuario y cliente se elimina el local
+        //Storage, recarga la página para que el usuario deba ingresar nuevamente y crear un nuevo token con los nuevos datos
+        if (register) {
+          toast.success(
+            'Por favor vuelva a ingresar con sus credenciales para hacer uso del sistema',
+            { duration: 4000 }
+          );
+          localStorage.clear();
+          router.push('/');
+          setTimeout(() => {
+            window.location.reload();
+          }, 4000);
+        }
       }
     } catch (error) {
       showError(error);
@@ -110,7 +146,7 @@ const useApiAgentes = () => {
   };
 
   //Actualizar datos de Agente
-  const updateAgente = async (id_agente, dataUpdate) => {
+  const updateAgente = async (id_agente, dataUpdate, register) => {
     const API_PARAMS = `${API}/${id_agente}`;
     //Obtengo las variables del LocalStorage
     const tokenLS = localStorage.getItem('jwt');
@@ -125,6 +161,19 @@ const useApiAgentes = () => {
       const response = await axios.patch(API_PARAMS, dataUpdate, axiosConfig);
       if (response) {
         toast.success(response.data.message);
+      }
+      //Si se invoca la función desde la pantalla de Vinculación de usuario y cliente se elimina el local
+      //Storage, recarga la página para que el usuario deba ingresar nuevamente y crear un nuevo token con los nuevos datos
+      if (register) {
+        toast.success(
+          'Por favor vuelva a ingresar con sus credenciales para hacer uso del sistema',
+          { duration: 4000 }
+        );
+        localStorage.clear();
+        router.push('/');
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
       }
     } catch (error) {
       showError(error);
@@ -199,6 +248,7 @@ const useApiAgentes = () => {
   return {
     getAgentes,
     getAgenteById,
+    getAgentByCed,
     postAgente,
     updateAgente,
     deleteAgente,

@@ -113,9 +113,12 @@ const Solicitud = ({
             <CustomInput
               typeInput="text"
               nameInput="fecha_ini_solucion"
-              valueInput={moment(valueState.fecha_ini_solucion).format(
-                'DD/MM/YYYY - kk:mm:ss'
-              )}
+              valueInput={
+                valueState.fecha_ini_solucion &&
+                moment(valueState.fecha_ini_solucion).format(
+                  'DD/MM/YYYY - kk:mm:ss'
+                )
+              }
               onChange={handleChange}
               nameLabel="Fecha Inicio Atención"
               disabled={true}
@@ -123,23 +126,35 @@ const Solicitud = ({
             <CustomInput
               typeInput="text"
               nameInput="fecha_fin_solucion"
-              valueInput={moment(valueState.fecha_fin_solucion).format(
-                'DD/MM/YYYY - kk:mm:ss'
-              )}
+              valueInput={
+                valueState.fecha_fin_solucion &&
+                moment(valueState.fecha_fin_solucion).format(
+                  'DD/MM/YYYY - kk:mm:ss'
+                )
+              }
               onChange={handleChange}
               nameLabel="Fecha Final Atención"
               disabled={true}
             />
           </span>
-          <CustomInput
-            typeInput="text"
-            nameInput="descripcion"
-            valueInput={valueState.descripcion}
-            onChange={handleChange}
-            nameLabel="Detalle Solicitud"
-            required={true}
-            disabled={true}
-          />
+          <span
+            className={`${styles.inputContainer1_1} ${styles.inputContainer1_1v}`}
+          >
+            <span className={styles['input-container']}>
+              <textarea
+                name="descripcion"
+                onChange={handleChange}
+                defaultValue={valueState.descripcion}
+                cols="30"
+                rows="4"
+                className={styles.textArea}
+                disabled={perfil === 'admin' ? false : true}
+              ></textarea>
+              <label className={styles['activate-label-position']}>
+                Detalle Solicitud
+              </label>
+            </span>
+          </span>
           <span
             className={`${styles.inputContainer1_1} ${styles.inputContainer1_1v}`}
           >

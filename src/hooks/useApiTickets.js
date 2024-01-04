@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 const API = 'http://localhost:3000/api/v1/tickets';
 const API_DET = 'http://localhost:3000/api/v1/detalle-tickets';
+const API_CTR = 'http://localhost:3000/api/v1/control-tickets';
 
 const useApiTickets = () => {
   const router = useRouter();
@@ -41,6 +42,7 @@ const useApiTickets = () => {
     const tokenStorage = tokenLS && JSON.parse(tokenLS);
     const payloadStorage = payloadLS && JSON.parse(payloadLS);
     try {
+      console.log({ rastreoActivo: tracking });
       let axiosConfig = {
         headers: {
           Authorization: `Bearer ${tokenStorage}`,
@@ -54,6 +56,44 @@ const useApiTickets = () => {
       };
       setLoad(true);
       const response = await axios.get(API, axiosConfig);
+      if (response) {
+        setToken(tokenStorage);
+        setPayloadJwt(payloadStorage);
+        console.log(response);
+        setDataTicket(response.data);
+        setLoad(false);
+      }
+    } catch (error) {
+      setLoad(false);
+      showError(error);
+    }
+  };
+
+  const getSolicitudes = async (tracking, assigment, agent) => {
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    const payloadLS = localStorage.getItem('payload');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    const payloadStorage = payloadLS && JSON.parse(payloadLS);
+    try {
+      console.log({
+        rastreoActivo: tracking,
+        assign: assigment,
+        agente: agent,
+      });
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+        params: {
+          tracking: tracking || false, //Se usa el estatus cuando quiero quitar los tickets finalizados y anulados caso de tracking
+          assigment: assigment ? true : false,
+          agent: agent ? payloadStorage.agSop : '',
+        },
+      };
+      setLoad(true);
+      const response = await axios.get(API_DET, axiosConfig);
       if (response) {
         setToken(tokenStorage);
         setPayloadJwt(payloadStorage);
@@ -178,7 +218,42 @@ const useApiTickets = () => {
     }
   };
 
-  const updateSolicitud = async (id_ticket, id_solicitud, dataUpdate) => {
+  const postControl = async (data, id_ticket, id_solicitud) => {
+    const tokenLS = localStorage.getItem('jwt');
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+      };
+      const response = await axios.post(
+        `${API_CTR}/${id_ticket}/${id_solicitud}`,
+        data,
+        axiosConfig
+      );
+      if (response) {
+        //Muestro el mensaje de retorno de la API
+        console.log(response);
+        setToken(tokenStorage);
+        toast.success(response.data.message);
+        console.log(response.data.newRegister);
+        const solicitudNew = response.data.newRegister;
+        return solicitudNew;
+        // router.push('/solicitud/new');
+      }
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  const updateSolicitud = async (
+    id_ticket,
+    id_solicitud,
+    dataUpdate,
+    assign,
+    redirect
+  ) => {
     const API_PARAMS = `${API_DET}/${id_ticket}/${id_solicitud}`;
     //Obtengo las variables del LocalStorage
     const tokenLS = localStorage.getItem('jwt');
@@ -193,6 +268,62 @@ const useApiTickets = () => {
       const response = await axios.patch(API_PARAMS, dataUpdate, axiosConfig);
       if (response) {
         toast.success(response.data.message);
+        //Assign = true para recargar la página al momento de asignar el agente
+        if (assign) {
+          toast.success('Solicitud asignada con éxito');
+          getSolicitudes(true, true);
+        }
+
+        if (redirect) {
+          toast.success('Solicitud Finalizada');
+          router.push('/support/allTicketsAsign');
+        }
+      }
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  //Trae todas las solicitudes de un ticket
+  const getOnlySolicitud = async (id_ticket) => {
+    const API_PARAMS = `${API_DET}/${id_ticket}`;
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+      };
+      const response = await axios.get(API_PARAMS, axiosConfig);
+      if (response) {
+        console.log(response.data);
+        setDataTicket(response.data);
+        return response.data;
+      }
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  //Obtiene la solicitud especifica del ticket para ser atendida
+  const getTicketSolic = async (id_ticket, id_solicitud) => {
+    const API_PARAMS = `${API_DET}/${id_ticket}/${id_solicitud}`;
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+      };
+      const response = await axios.get(API_PARAMS, axiosConfig);
+      if (response) {
+        return response.data;
       }
     } catch (error) {
       showError(error);
@@ -292,8 +423,12 @@ const useApiTickets = () => {
     postTickets,
     updateTicket,
     deleteTicket,
+    getSolicitudes,
     postSolicitud,
     updateSolicitud,
+    getOnlySolicitud,
+    getTicketSolic,
+    postControl,
     dataTicket,
     payloadJwt,
     load,

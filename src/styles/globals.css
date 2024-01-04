@@ -26,10 +26,23 @@
   --font-xxl: 28px;
   /* GRIDS */
   --grid-column-items: 10% 25% 15% 10% 20% 15%;
-  --grid-column-tickets: 5% 15% 7% 25% 5% 15% 10% 10%;
+  --grid-column-tickets: 5% 15% 25% 5% 15% 7% 10% 10%;
+  --grid-column-solicitud: 5% 11% 25% 6% 21% 11% 8% 10%;
   --grid-column-5-col: 10% 40% repeat(2, 15%) 10%;
   --grid-column-items-tablet: 13% repeat(2, 30%) 10% 15%;
   --grid-column-items-mobile: 13% repeat(2, 31%) 25%;
+  /*ESTATUS*/
+  --estatus-mtr-solicitado: rgb(252, 192, 82);
+  --estatus-mtr-proceso: rgb(41 185 125);
+  --estatus-mtr-finalizado: rgb(197, 78, 201);
+  --estatus-mtr-anulado: rgb(179, 179, 179);
+  --estatus-det-pendiente: rgb(177, 55, 55);
+  --estatus-det-asignado: rgb(128, 196, 223);
+  --estatus-det-proceso: rgb(41 185 125);
+  --estatus-det-pausado: rgb(216, 163, 66);
+  --estatus-det-reasignado: rgb(42, 88, 238);
+  --estatus-det-finalizado: rgb(197, 78, 201);
+  --estatus-det-anulado: rgb(179, 179, 179);
 }
 
 * {
@@ -60,7 +73,9 @@ h5 {
 }
 
 header {
-  background: var(--background-hk);
+  /* background: var(--background-hk); */
+  background: var(--white);
+  height: 60px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -70,6 +85,30 @@ header {
 
 header svg {
   cursor: pointer;
+}
+
+.loginView {
+  height: 80px;
+  box-shadow: inset 0px -4px 4px 0px var(--button-color-hk-hover);
+}
+
+.logoMain {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0 12px;
+  padding: 4px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.logoMain h2 {
+  color: var(--button-color-hk) !important;
+}
+
+.logoMain img {
+  height: 100%;
 }
 
 nav,
@@ -308,7 +347,18 @@ svg {
   gap: 4px;
   justify-content: center;
   align-items: center;
-  /* word-break: break-all; */
+  word-break: break-word;
+}
+
+.grid_solicitudes {
+  display: grid;
+  grid-template-columns: var(--grid-column-solicitud);
+  width: 100%;
+  padding: 4px 0;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  word-break: break-word;
 }
 
 /* iconos en general */
@@ -371,6 +421,16 @@ svg:active {
   display: none;
 }
 
+#returnButton {
+  position: absolute;
+  top: 15px;
+  right: -17px;
+}
+
+#returnButton:hover {
+  background: var(--tittles-hk);
+}
+
 /* Para iconó de busqueda de RUC en inputs de Personal_emp */
 #searchRuc {
   position: absolute;
@@ -395,6 +455,71 @@ svg:active {
   font-size: var(--font-nm);
   width: 100%;
   margin: 2px auto;
+}
+
+/* Para Timer */
+
+.timerContainer {
+  margin: 0;
+  background: white;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  /* box-shadow: inset 0 0 6px 2px var(--button-color-hk-hover); */
+  border-radius: 8px;
+}
+
+.timer {
+  text-align: center;
+  color: var(--button-color-hk);
+  text-shadow: 2px 1px var(--button-color-hk-hover);
+  font-size: 40px;
+}
+
+.timerButtonContaniner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.timerButtonContaniner button {
+  width: 70px;
+  height: 70px;
+  border: none;
+  background: white;
+  font-size: 12px;
+  font-weight: bold;
+  color: rgb(27, 27, 155);
+  cursor: pointer;
+  padding: 4px;
+  transition: 0.2s ease all;
+}
+
+.timerButtonContaniner button:disabled {
+  color: rgb(236, 236, 236);
+}
+
+.timerButtonContaniner button svg {
+  width: 45px;
+  height: 45px;
+}
+
+.timerButtonContaniner button:hover {
+  box-shadow: inset 0px -6px 8px -5px var(--button-color-hk-hover);
+  border-radius: 8px;
+  color: var(--button-color-hk);
+}
+
+.timerButtonContaniner button:active {
+  scale: 0.8;
+}
+
+.timerButtonContaniner button:hover svg {
+  color: var(--subtittles-hk);
+  scale: 1.2;
 }
 
 /* RESPONSIVE DESIGN */

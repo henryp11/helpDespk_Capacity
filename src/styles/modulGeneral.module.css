@@ -75,7 +75,7 @@
   width: 100%;
   display: grid;
   gap: 8px;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto;
   align-items: center;
   justify-content: flex-start;
 }
@@ -99,4 +99,40 @@
   justify-content: space-between;
   align-items: center;
   gap: 4px;
+}
+
+.dataPerfil {
+  border: 1px solid var(--button-color-hk-hover);
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: var(--button-color-hk);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  width: 100%;
+  border: 1px solid var(--button-color-hk-hover);
+  padding: 2px 0px;
+  color: var(--button-color-hk);
+  background: white;
+  z-index: 5;
+}
+
+.dataPerfil:hover,
+.menu li:hover {
+  background: var(--button-color-hk-hover);
+  color: white;
+}
+
+.menu li {
+  text-align: end;
+  padding: 8px;
+  margin: 4px 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }

@@ -144,16 +144,7 @@ const newregister = () => {
               nameInput="cedula"
               valueInput={valueState.cedula}
               onChange={handleChange}
-              nameLabel="Nombre Cédula"
-              required={true}
-            />
-            <CustomInput
-              typeInput="date"
-              nameInput="fecha_ingreso"
-              placeholder="Fecha inicio actividades en la empresa"
-              valueInput={valueState.fecha_ingreso}
-              onChange={handleChange}
-              nameLabel="Fecha Ingreso"
+              nameLabel="Cédula"
               required={true}
             />
             <CustomInput
@@ -164,6 +155,16 @@ const newregister = () => {
               onChange={handleChange}
               nameLabel="Fecha Nacimiento"
             />
+            <CustomInput
+              typeInput="date"
+              nameInput="fecha_ingreso"
+              placeholder="Fecha inicio actividades en la empresa"
+              valueInput={valueState.fecha_ingreso}
+              onChange={handleChange}
+              nameLabel="Fecha Ingreso"
+              required={true}
+            />
+
             <CustomInput
               typeInput="date"
               nameInput="fecha_salida"

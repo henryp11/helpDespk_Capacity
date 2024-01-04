@@ -33,16 +33,26 @@ const newregister = () => {
     rol: undefined,
     estatus: true,
   };
-  const [valueState, setValueState] = useState(initialState);
-  const [loadCreate, setLoadCreate] = useState({
-    loading: false,
-    error: null,
-  });
 
+  const [valueState, setValueState] = useState(initialState);
+
+  //Para usuario personal de empresa
   const [dataEmp, setDataEmp] = useState({
     id_per: '',
     nombre_per: '',
     empresa: '',
+  });
+
+  //Para usuario personal de soporte
+  const [dataAgent, setDataAgent] = useState({
+    id_agente: '',
+    nombre: '',
+    cargo: '',
+  });
+
+  const [loadCreate, setLoadCreate] = useState({
+    loading: false,
+    error: null,
   });
 
   useEffect(() => {
@@ -78,8 +88,17 @@ const newregister = () => {
                 ? 'NO ASIGNADO'
                 : data.personalEmp.empresa.nombre_emp,
           };
+
+          const infoAgent = {
+            id_agente:
+              data.agentesSop === null ? '-' : data.agentesSop.id_agente,
+            nombre: data.agentesSop === null ? '-' : data.agentesSop.nombre,
+            cargo: data.agentesSop === null ? '-' : data.agentesSop.cargo,
+          };
+
           setValueState(dataEdit);
           setDataEmp(infoEmp);
+          setDataAgent(infoAgent);
           setLoadCreate({ loading: false, error: null });
         })
         .catch((error) => {
@@ -173,20 +192,33 @@ const newregister = () => {
               nameLabel="Usuario Activo?"
               required={false}
             />
-            <span style={{ color: 'black' }}>
-              <p>
-                <b>
-                  <i>Pertenece a: </i>
-                </b>
-                {dataEmp.empresa}
-              </p>
-              <p>
-                <b>
-                  <i>Vinculado con: </i>
-                </b>
-                {dataEmp.id_per} - {dataEmp.nombre_per}
-              </p>
-            </span>
+            {valueState.rol !== 'agente' ? (
+              <span style={{ color: 'black' }}>
+                <p>
+                  <b>
+                    <i>Pertenece a: </i>
+                  </b>
+                  {dataEmp.empresa}
+                </p>
+                <p>
+                  <b>
+                    <i>Vinculado con: </i>
+                  </b>
+                  {dataEmp.id_per} - {dataEmp.nombre_per}
+                </p>
+              </span>
+            ) : (
+              <span style={{ color: 'black' }}>
+                <p>
+                  <b>
+                    <i>Vinculado con Agente de Soporte: </i>
+                  </b>
+                  {dataAgent.id_agente} - {dataAgent.nombre} <br />
+                  {dataAgent.cargo}
+                </p>
+              </span>
+            )}
+
             <span className={styles.buttonContainer}>
               <button title="Guardar" className={styles['formButton']}>
                 {idSearch === 'new' ? (

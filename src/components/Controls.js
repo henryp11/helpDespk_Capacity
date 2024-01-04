@@ -3,6 +3,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import CustomInput from './CustomInput';
 import useApiControls from '@/hooks/useApiControls';
+import { timeFormat } from '@/utils/helpers';
 import styles from '../styles/forms.module.css';
 
 const Controls = ({ id_ticket, id_solicitud }) => {
@@ -160,7 +161,7 @@ const Controls = ({ id_ticket, id_solicitud }) => {
               <CustomInput
                 typeInput="text"
                 nameInput="tiempo_calc"
-                valueInput={dataControl.tiempo_calc}
+                valueInput={timeFormat(dataControl.tiempo_calc * 1000)}
                 onChange={handleChange}
                 nameLabel="Tiempo"
                 disabled={true}

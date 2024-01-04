@@ -36,7 +36,7 @@ const Login = () => {
     userData: dataUser,
     data: resData,
     isError: error,
-    code: statusError,
+    codeStatus: statusError,
     errorM: messageError,
     token: token,
     payloadJWT: payloadJwt,

@@ -563,6 +563,93 @@
   padding: 4px;
 }
 
+/*Para pantalla de generación de reportes*/
+.reportContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  margin: 4px;
+  gap: 4px;
+  overflow: auto;
+}
+
+.formReports {
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  gap: 0 8px;
+}
+
+.formReports .fieldSetCustom {
+  grid-template-columns: auto;
+  grid-column: auto;
+  justify-content: stretch;
+  padding: 0 4px;
+}
+.formReports .selectContainer {
+  display: grid;
+  grid-template-columns: 20% 70% 10%;
+  gap: 0;
+  margin: 0;
+}
+
+.previewReports {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: white;
+  color: black;
+  padding: 8px;
+}
+
+#excelExport {
+  background: transparent;
+  border: 1px solid #31be7d;
+  color: #31be7d;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  margin: 0;
+}
+
+#excelExport:hover {
+  box-shadow: inset 0 -2px 3px 2px #63af8c;
+  color: #63af8c;
+}
+
+#excelExport:hover svg {
+  scale: 1.1;
+}
+
+.previewReports table {
+  padding: 4px;
+  word-break: normal;
+}
+
+.previewReports table {
+  font-size: small;
+}
+
+.previewReports table thead {
+  border: 1px solid black;
+  background: var(--subtittles-hk);
+  font-size: var(--font-md);
+}
+
+.previewReports table thead th {
+  padding: 4px;
+}
+
+.previewReports table td {
+  border: 1px solid rgb(206, 206, 206);
+  text-align: center;
+  padding: 2px;
+}
+
 /* RESPONSIVE DESIGN */
 @media screen and (max-width: 768px) {
   /* Tablet  */

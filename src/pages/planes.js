@@ -51,7 +51,7 @@ const Planes = () => {
   const [open, setOpen] = useState(false);
   const [regCapture, setRegCapture] = useState('');
   const [dataRegCap, setDataRegCap] = useState({});
-  const { query, setQuery, filteredRegs } = useSearchSimple(dataPlan);
+  const { query, setQuery, filteredRegs } = useSearchSimple(dataPlan, 'planes');
 
   if (error) {
     console.log({ message: messageError, code: statusError });
@@ -88,7 +88,7 @@ const Planes = () => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Plan por nombre o Id'}
+          placeholder={'Buscar Plan por Nombre / Id / Días vigencia'}
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

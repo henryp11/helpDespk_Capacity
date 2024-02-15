@@ -266,7 +266,7 @@ const ModulesMain = ({ userName }) => {
             },
             {
               idOption: 3,
-              descrip: 'Reportes personalizados por módulo',
+              descrip: 'Reportes',
               route: '/reports',
             },
           ]}

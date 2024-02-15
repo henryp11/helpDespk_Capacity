@@ -50,7 +50,10 @@ const Contratos = () => {
   const [open, setOpen] = useState(false);
   const [regCapture, setRegCapture] = useState('');
   const [dataRegCap, setDataRegCap] = useState({});
-  const { query, setQuery, filteredRegs } = useSearchSimple(dataCtr);
+  const { query, setQuery, filteredRegs } = useSearchSimple(
+    dataCtr,
+    'contratos'
+  );
 
   if (error) {
     console.log({ message: messageError, code: statusError });
@@ -88,7 +91,7 @@ const Contratos = () => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Contrato'}
+          placeholder={'Buscar Contrato por Id / Empresa / Plan'}
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

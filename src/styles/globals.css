@@ -167,6 +167,10 @@ svg {
 .search_container {
   width: 90%;
   height: 10%;
+}
+
+.search_container label {
+  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;

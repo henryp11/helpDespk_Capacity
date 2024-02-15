@@ -32,8 +32,10 @@ const CustomInput = ({
             disabled={disabled}
             readOnly={readonly}
             required={required}
+            id={nameInput}
           />
           <label
+            htmlFor={nameInput}
             className={
               placeholder !== undefined
                 ? styles['activate-label-position']
@@ -75,7 +77,7 @@ const CustomInput = ({
         </span>
       ) : (
         <span className={styles['input-containerCheckbox']}>
-          <label>
+          <label htmlFor={nameInput}>
             {required && <b>*</b>}
             {nameLabel}
           </label>

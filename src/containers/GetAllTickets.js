@@ -34,6 +34,7 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
     if (enviroment === 'tracking') {
       getTickets(true);
     } else {
+      //getTickets(false, 10, 1); //Para agregar paginación
       getTickets();
     }
     validateExpToken();
@@ -45,7 +46,10 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
   const [open, setOpen] = useState(false);
   const [regCapture, setRegCapture] = useState('');
   const [dataRegCap, setDataRegCap] = useState({});
-  const { query, setQuery, filteredRegs } = useSearchSimple(dataTicket);
+  const { query, setQuery, filteredRegs } = useSearchSimple(
+    dataTicket,
+    'tickets'
+  );
 
   if (error) {
     console.log({ message: messageError, code: statusError });
@@ -82,7 +86,7 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Ticket por su código / nombre / RUC'}
+          placeholder={'Buscar Ticket por su #Ticket / Empresa / Solicitante'}
         />
         <HeadersColumns
           classEsp={headersTable.classEspec}
@@ -111,8 +115,12 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
                   }
                 >
                   <span>{register.id_ticket}</span>
-                  <span>{register.personal_emp.empresa.nombre_emp}</span>
-
+                  <span>
+                    {register.personal_emp.empresa.nombre_emp} <br />
+                    <em>
+                      <strong>{register.personal_emp.nombre}</strong>
+                    </em>
+                  </span>
                   <span>{register.descrip_tk}</span>
                   {register.det_tickets ? (
                     <span>{register.det_tickets.length}</span>
@@ -180,6 +188,7 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
                     </button>
                     <Link
                       href={`/tickets/${register.id_ticket}?entorno=${enviroment}`}
+                      title="Ver detalle solicitudes"
                     >
                       <button title="Ver solicitudes del ticket">
                         <svg

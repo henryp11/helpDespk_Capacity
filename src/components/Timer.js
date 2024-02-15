@@ -23,7 +23,7 @@ const Timer = ({
   const [dateStart, setDateStart] = useState(data.fecha_ini_solucion);
   const [datePause, setDatePause] = useState(null);
 
-  console.log(`props del Timer= idTicker: ${idTicket} - ${idSolicitud}`);
+  // console.log(`props del Timer= idTicker: ${idTicket} - ${idSolicitud}`);
 
   useEffect(() => {
     let idFrame;
@@ -61,15 +61,19 @@ const Timer = ({
       updateMtrTicket(idTicket, {
         estatus: 'proceso',
       });
+
+      //Si ya esta el ticket en proceso y no tiene una fecha de inicio registrada
+      //se asignará la fecha de inicio de todo el soporte para todo el ticket ya que se entiende que es
+      //la primera solicitud para ese ticket en ser atendida
+      if (!data.mtr_tickets.fecha_ini_sop) {
+        updateMtrTicket(idTicket, {
+          fecha_ini_sop: moment(new Date(dateBegin)).format(
+            'YYYY-MM-DDTkk:mm:ss'
+          ),
+        });
+      }
     }
-    //Si ya esta el ticket en proceso y no tiene una fecha de inicio registrada se asignará la fecha de inicio de todo el soporte para todo el ticket
-    if (data.mtr_tickets.estatus === 'solicitado' && !fecha_ini_sop) {
-      updateMtrTicket(idTicket, {
-        fecha_ini_sop: moment(new Date(dateBegin)).format(
-          'YYYY-MM-DDTkk:mm:ss'
-        ),
-      });
-    }
+
     //Evaluo la primera vez que empieza la atención en la solicitud, es decir cuando la solicitud este como "asignado"
     //Para cambiar su estatus y colocar la fecha de inicio de atención de la solución para la solicitud
     if (data.estatus === 'asignado') {

@@ -34,7 +34,7 @@ const useApiTickets = () => {
   };
 
   //Consulta a todas las empresas
-  const getTickets = async (tracking) => {
+  const getTickets = async (tracking, limit, offset) => {
     //Obtengo las variables del LocalStorage
     const tokenLS = localStorage.getItem('jwt');
     const payloadLS = localStorage.getItem('payload');
@@ -54,6 +54,10 @@ const useApiTickets = () => {
           tracking: tracking || false, //Se usa el estatus cuando quiero quitar los tickets finalizados y anulados caso de tracking
         },
       };
+      if (limit) {
+        axiosConfig.params.limit = limit;
+        axiosConfig.params.offset = offset;
+      }
       setLoad(true);
       const response = await axios.get(API, axiosConfig);
       if (response) {

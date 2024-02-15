@@ -142,14 +142,14 @@ const newregister = () => {
           {idSearch !== 'new'
             ? `Ticket # ${idSearch} `
             : 'Creando Nuevo Registro '}
-          - <i>Estado: {valueState.estatus}</i>
+          - <em>Estado: {valueState.estatus}</em>
         </h2>
-        <h4>
-          <i>
+        <h3>
+          <em>
             Si el estado del ticket es "Solicitado" aún puede editar su
             información
-          </i>
-        </h4>
+          </em>
+        </h3>
         {loadCreate.loading === false ? (
           <form
             id="form"
@@ -313,6 +313,7 @@ const newregister = () => {
                   <Link
                     href="/tickets/allTickets"
                     className={`${styles.cancelButton}`}
+                    title="regresar"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -356,7 +357,7 @@ const newregister = () => {
                     color: '#444a8d',
                   }}
                 >
-                  Solicitud # {index + 1} | <i>Estado: {solicitud.estatus}</i>
+                  Solicitud # {index + 1} | <em>Estado: {solicitud.estatus}</em>
                   <button
                     className={`${styles['formButton']} ${styles['formButtonShow']}`}
                     onClick={() => {

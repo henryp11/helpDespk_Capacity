@@ -12,7 +12,6 @@ const HeadersColumns = dynamic(
   { ssr: false }
 );
 import useScreenSize from '../hooks/useScreenSize';
-//import MenuLateral from "../components/MenuLateral";
 import SectionSearch from '../containers/SectionSearch';
 import useSearchSimple from '../hooks/useSearchSimple';
 import useApiEmpresas from '../hooks/useApiEmpresas';
@@ -54,7 +53,10 @@ const Empresas = () => {
   const [open, setOpen] = useState(false);
   const [regCapture, setRegCapture] = useState('');
   const [dataRegCap, setDataRegCap] = useState({});
-  const { query, setQuery, filteredRegs } = useSearchSimple(dataEmp);
+  const { query, setQuery, filteredRegs } = useSearchSimple(
+    dataEmp,
+    'empresas'
+  );
 
   if (error) {
     console.log({ message: messageError, code: statusError });
@@ -91,7 +93,7 @@ const Empresas = () => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Empresa por su código / nombre / RUC'}
+          placeholder={'Buscar Empresa por su código / Nombre / RUC'}
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

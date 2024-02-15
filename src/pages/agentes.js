@@ -50,7 +50,7 @@ const Agentes = () => {
   const [open, setOpen] = useState(false);
   const [regCapture, setRegCapture] = useState('');
   const [dataRegCap, setDataRegCap] = useState({});
-  const { query, setQuery, filteredRegs } = useSearchSimple(dataAgt);
+  const { query, setQuery, filteredRegs } = useSearchSimple(dataAgt, 'agentes');
 
   if (error) {
     console.log({ message: messageError, code: statusError });
@@ -88,7 +88,7 @@ const Agentes = () => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Agente'}
+          placeholder={'Buscar Agente por Id / Nombre / Cargo / Nivel'}
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

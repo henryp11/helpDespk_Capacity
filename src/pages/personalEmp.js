@@ -53,7 +53,10 @@ const PersonalEmp = () => {
   const [open, setOpen] = useState(false);
   const [regCapture, setRegCapture] = useState('');
   const [dataRegCap, setDataRegCap] = useState({});
-  const { query, setQuery, filteredRegs } = useSearchSimple(dataPerEmp);
+  const { query, setQuery, filteredRegs } = useSearchSimple(
+    dataPerEmp,
+    'personal'
+  );
 
   if (error) {
     console.log({ message: messageError, code: statusError });
@@ -90,7 +93,7 @@ const PersonalEmp = () => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Empresa por su código / nombre / RUC'}
+          placeholder={'Buscar Personal por su Cédula / Nombre / Empresa'}
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

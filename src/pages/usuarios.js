@@ -50,7 +50,10 @@ const Usuarios = () => {
   const [open, setOpen] = useState(false);
   const [regCapture, setRegCapture] = useState('');
   const [dataRegCap, setDataRegCap] = useState({});
-  const { query, setQuery, filteredRegs } = useSearchSimple(dataUser);
+  const { query, setQuery, filteredRegs } = useSearchSimple(
+    dataUser,
+    'usuarios'
+  );
 
   if (error) {
     console.log({ message: messageError, code: statusError });
@@ -88,7 +91,9 @@ const Usuarios = () => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Usuario'}
+          placeholder={
+            'Buscar por UserName / Empresa / Nombre personal / Correo / Rol'
+          }
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

@@ -70,7 +70,12 @@ const CreateLinkPersonalEmp = ({ userName, subPayload, mail }) => {
           //El estado se llenará con toda la info y adicional se colocará el id_user para que
           //Quede vinculado el cliente con el usuario que está registrandose.
           // Este dato proviene del payload del token siendo el sub, el cual es enviado como Props desde Home
-          setValueState({ ...valueState, ...data, id_user: subPayload });
+          setValueState({
+            ...valueState,
+            ...data,
+            id_user: subPayload,
+            telf2: !data.telf2 ? undefined : data.telf2,
+          });
         } else {
           setRucEmpresa({
             ...rucEmpresa,

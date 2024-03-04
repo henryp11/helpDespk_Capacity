@@ -47,7 +47,10 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
   const [open, setOpen] = useState(false);
   const [regCapture, setRegCapture] = useState('');
   const [dataRegCap, setDataRegCap] = useState({});
-  const { query, setQuery, filteredRegs } = useSearchSimple(dataTicket);
+  const { query, setQuery, filteredRegs } = useSearchSimple(
+    dataTicket,
+    'solicitudes'
+  );
 
   const getDataSolicitudes = () => {
     if (agent) {
@@ -95,7 +98,9 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Ticket por su código / nombre / RUC'}
+          placeholder={
+            'Buscar Solicitud por #Ticket / #Solicitud / Empresa / Solicitante / Descrip. General'
+          }
         />
         <HeadersColumns
           classEsp={headersTable.classEspec}

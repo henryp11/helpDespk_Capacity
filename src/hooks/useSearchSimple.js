@@ -33,6 +33,9 @@ function useSearchSimple(dataSearch, modOption) {
           case 'tickets':
             fieldSearch = `${dataFilter.id_ticket} ${dataFilter.personal_emp.nombre} ${dataFilter.personal_emp.empresa.nombre_emp} ${dataFilter.estatus}`;
             break;
+          case 'solicitudes':
+            fieldSearch = `${dataFilter.id_ticket} ${dataFilter.id_solicitud} ${dataFilter.mtr_tickets.personal_emp.nombre} ${dataFilter.mtr_tickets.personal_emp.empresa.nombre_emp} ${dataFilter.mtr_tickets.descrip_tk} ${dataFilter.estatus}`;
+            break;
           case 'usuarios':
             fieldSearch = `${dataFilter.id_user} ${dataFilter.username} ${
               dataFilter.rol

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { usePathname } from 'next/navigation';
-import ErrorLayout from './ErrorLayout';
+// import ErrorLayout from './ErrorLayout';
 import useApiTickets from '@/hooks/useApiTickets';
 import CustomInput from './CustomInput';
 import Controls from './Controls';
@@ -12,14 +12,15 @@ const Solicitud = ({
   showSolicitud,
   setShowSolicitud,
   showControl,
-  showButtons,
   perfil,
+  enviroment,
+  statusTicket,
 }) => {
   const { updateSolicitud, error, statusError, messageError } = useApiTickets();
 
   // const nextRouter = useNextRouter(); //usado de next/router para extraer el query params de la ruta (el id de cada registro de firebase)
   // const idSearch = nextRouter.query.id_ticket; //Para verificar el string param de id_ticket y saber si estoy creando o editando un registro
-  const ruta = usePathname();
+  // const ruta = usePathname();
 
   const stateSolicitud = {
     agente_asig: '',
@@ -148,7 +149,13 @@ const Solicitud = ({
                 cols="30"
                 rows="4"
                 className={styles.textArea}
-                disabled={perfil === 'admin' ? false : true}
+                disabled={
+                  perfil !== 'admin' &&
+                  enviroment === 'tracking' &&
+                  statusTicket === 'solicitado'
+                    ? false
+                    : true
+                }
               ></textarea>
               <label className={styles['activate-label-position']}>
                 Detalle Solicitud
@@ -166,7 +173,9 @@ const Solicitud = ({
                 cols="30"
                 rows="4"
                 className={styles.textArea}
-                disabled={perfil === 'admin' ? false : true}
+                disabled={
+                  perfil === 'admin' || perfil === 'agente' ? false : true
+                }
               ></textarea>
               <label className={styles['activate-label-position']}>
                 Observaciones solución
@@ -176,28 +185,32 @@ const Solicitud = ({
               className={styles.buttonContainer}
               id={styles.buttonSolicitud}
             >
-              {showButtons && perfil !== 'admin' && (
-                <button title="Guardar" className={styles['formButton']}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
+              {perfil !== 'admin' &&
+                enviroment === 'tracking' &&
+                statusTicket === 'solicitado' && (
+                  <button
+                    title="Guardar/Actualizar Solic."
+                    className={styles['formButton']}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </button>
-              )}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </button>
+                )}
 
               <button
-                title="Cerrar"
+                title="Ocultar Solic."
                 className={`${styles.formButton}`}
-                // className={`${styles.cancelButton}`}
                 id="cancelButton"
                 type="button"
                 onClick={() => {
@@ -227,6 +240,7 @@ const Solicitud = ({
         <Controls
           id_ticket={dataSolicitud.id_ticket}
           id_solicitud={dataSolicitud.id_solicitud}
+          perfil={perfil}
         />
       )}
     </>

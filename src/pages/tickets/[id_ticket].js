@@ -36,6 +36,7 @@ const newregister = () => {
     descrip_tk: '',
     personal_emp: { empresa: {} },
     det_tickets: [],
+    estatus: '',
   };
   const [valueState, setValueState] = useState(initialState);
   const [loadCreate, setLoadCreate] = useState({
@@ -67,7 +68,7 @@ const newregister = () => {
             id_emp: data.id_emp,
             prioridad: data.prioridad,
             descrip_tk: data.descrip_tk,
-            // fecha_reg: data.fecha_reg,
+            id_tipo: data.id_tipo === null ? undefined : data.id_tipo,
             fecha_reg: moment(data.fecha_reg).format('YYYY-MM-DDTkk:mm:ss'),
             fecha_ini_sop:
               data.fecha_ini_sop === null
@@ -103,13 +104,13 @@ const newregister = () => {
     setValueState({ ...valueState, [e.target.name]: e.target.value });
   };
 
-  const handleCheck = (fieldCheck) => {
-    if (fieldCheck === 'plan') {
-      setValueState({ ...valueState, planMant: !valueState.planMant });
-    } else if (fieldCheck === 'est') {
-      setValueState({ ...valueState, estatus: !valueState.estatus });
-    }
-  };
+  // const handleCheck = (fieldCheck) => {
+  //   if (fieldCheck === 'plan') {
+  //     setValueState({ ...valueState, planMant: !valueState.planMant });
+  //   } else if (fieldCheck === 'est') {
+  //     setValueState({ ...valueState, estatus: !valueState.estatus });
+  //   }
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -235,7 +236,10 @@ const newregister = () => {
               />
               <span className={styles.buttonContainer} id={styles.buttonTicket}>
                 {payloadJwt.perfil === 'admin' ? (
-                  <button title="Guardar" className={styles['formButton']}>
+                  <button
+                    title="Guardar/Actualizar"
+                    className={styles['formButton']}
+                  >
                     {idSearch === 'new' ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -268,8 +272,12 @@ const newregister = () => {
                     )}
                   </button>
                 ) : payloadJwt.perfil !== 'admin' &&
-                  enviroment === 'tracking' ? (
-                  <button title="Guardar" className={styles['formButton']}>
+                  enviroment === 'tracking' &&
+                  valueState.estatus === 'solicitado' ? (
+                  <button
+                    title="Guardar/Actualizar"
+                    className={styles['formButton']}
+                  >
                     {idSearch === 'new' ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -311,7 +319,11 @@ const newregister = () => {
                   id="cancelButton"
                 >
                   <Link
-                    href="/tickets/allTickets"
+                    href={
+                      enviroment === 'tracking'
+                        ? '/tracking/allTickets'
+                        : '/tickets/allTickets'
+                    }
                     className={`${styles.cancelButton}`}
                     title="regresar"
                   >
@@ -418,8 +430,10 @@ const newregister = () => {
                     setShowSolicitud={setShowSolicitud}
                     dataSolicitud={solicitud}
                     showControl={true}
-                    showButtons={enviroment === 'history' ? false : true}
+                    // showButtons={enviroment === 'history' ? false : true}
                     perfil={payloadJwt.perfil}
+                    enviroment={enviroment}
+                    statusTicket={valueState.estatus}
                   />
                 )}
               </div>

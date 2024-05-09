@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import moment from 'moment';
 import CustomInput from './CustomInput';
 import useApiControls from '@/hooks/useApiControls';
 import { timeFormat } from '@/utils/helpers';
 import styles from '../styles/forms.module.css';
 
-const Controls = ({ id_ticket, id_solicitud }) => {
+const Controls = ({ id_ticket, id_solicitud, perfil }) => {
   const ruta = usePathname();
   const {
     getControlByTicketSolicitud,
@@ -24,19 +25,30 @@ const Controls = ({ id_ticket, id_solicitud }) => {
     error: null,
   });
   const [valueState, setValueState] = useState([]);
+  const [totalTimeControl, SetTotalTimeControl] = useState(0);
 
   useEffect(() => {
     getDataControl();
   }, [ruta]);
 
   const getDataControl = () => {
-    //Valido si estoy crendo un nuevo registro o editando
     setLoadCreate({ loading: true, error: null });
     //La consulta a la API me retorna una promesa con la información de la consulta, por eso utilizo un then/catch
     const response = getControlByTicketSolicitud(id_ticket, id_solicitud);
     response
       .then((data) => {
-        console.log({ dataGetApi: data });
+        console.log({ GetControlApi: data });
+        console.log(
+          timeFormat(
+            data
+              ?.map((control) => {
+                return Number(control.tiempo_calc);
+              })
+              .reduce((acumulador, tiempo) => {
+                return Number(acumulador + tiempo);
+              }, 0) * 1000
+          )
+        );
         //xtraigo los datos que me interesan para armar el objeto del estado y de esa forma actualizar
         //Solo los datos que pertenecen a la tabla que requiero, en este caso la tabla de COntroles, no envio el id_ticket ya que es la PK y está prohibido topar ese campo.
         // const dataEdit = {
@@ -74,7 +86,7 @@ const Controls = ({ id_ticket, id_solicitud }) => {
   };
 
   const handleSubmit = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     // if (idSearch === 'new') {
     //   // postEmpresas(valueState);
     // } else {
@@ -86,9 +98,43 @@ const Controls = ({ id_ticket, id_solicitud }) => {
 
   return (
     <span className={styles['input-container']} style={{ gridColumn: '1/-1' }}>
-      <h5 style={{ color: '#1c4f92' }}>
-        <i>Historial de tiempos de control para la solicitud:</i>
-      </h5>
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          margin: '8px',
+          padding: '4px',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          gap: '12px',
+          borderBottom: '1px solid #444a8d',
+          fontSize: '1.1em',
+        }}
+      >
+        <h5 style={{ color: '#1c4f92' }}>
+          <i>Detalle control de tiempos | </i>
+        </h5>
+        <span
+          style={{
+            border: '1px solid #1c4f92',
+            padding: '2px 4px',
+            borderRadius: '8px',
+          }}
+        >
+          <b style={{ color: '#444a8d' }}>Total Solicitud:</b>
+          <b style={{ color: '#1a73e8' }}>
+            {timeFormat(
+              valueState
+                ?.map((control) => {
+                  return Number(control.tiempo_calc);
+                })
+                .reduce((acumulador, tiempo) => {
+                  return Number(acumulador + tiempo);
+                }, 0) * 1000
+            )}
+          </b>
+        </span>
+      </div>
       {!loadCreate.loading &&
         valueState?.map((dataControl) => {
           return (
@@ -130,7 +176,9 @@ const Controls = ({ id_ticket, id_solicitud }) => {
                 <CustomInput
                   typeInput="text"
                   nameInput="fecha_ini_atencion"
-                  valueInput={dataControl.fecha_ini_atencion}
+                  valueInput={moment(dataControl.fecha_ini_atencion).format(
+                    'DD-MM-YYYY'
+                  )}
                   onChange={handleChange}
                   nameLabel="Fecha Inicio"
                 />
@@ -146,7 +194,9 @@ const Controls = ({ id_ticket, id_solicitud }) => {
                 <CustomInput
                   typeInput="text"
                   nameInput="fecha_fin_atencion"
-                  valueInput={dataControl.fecha_fin_atencion}
+                  valueInput={moment(dataControl.fecha_fin_atencion).format(
+                    'DD-MM-YYYY'
+                  )}
                   onChange={handleChange}
                   nameLabel="Fecha Fin"
                 />
@@ -166,25 +216,30 @@ const Controls = ({ id_ticket, id_solicitud }) => {
                 nameLabel="Tiempo"
                 disabled={true}
               />
-              <span
-                className={`${styles.buttonContainer} ${styles.buttonContainerInline}`}
-              >
-                <button title="Guardar" className={styles['formButton']}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
+              {perfil === 'admin' ||
+                (perfil === 'agente' && (
+                  <span
+                    className={`${styles.buttonContainer} ${styles.buttonContainerInline}`}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </button>
-                <button
+                    <button
+                      title="Guardar/actualizar Control"
+                      className={styles['formButton']}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </button>
+                    {/* <button
                   tittle="Cancelar"
                   className={`${styles.formButton}`}
                   id="cancelButton"
@@ -207,8 +262,9 @@ const Controls = ({ id_ticket, id_solicitud }) => {
                       />
                     </svg>
                   </Link>
-                </button>
-              </span>
+                </button> */}
+                  </span>
+                ))}
             </form>
           );
         })}

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useRouter as useNextRouter } from 'next/router';
 import CustomInput from '@/components/CustomInput';
-// import Appcontext from '../context/AppContext';
 import ErrorLayout from '@/components/ErrorLayout';
 import Timer from '@/components/Timer';
 import useApiTickets from '@/hooks/useApiTickets';
@@ -124,9 +123,9 @@ const newregister = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //El último parámetro (true) es para que sed redireccione a la pantalla anterior una vez actualizado
-    //El tercer parámetro (false) se usa en la pantalla de asignación de ticket a agente, por eso coloco en false
-    //No es obligatorio pero en este caso si requiero enviar el último parámetro para el redireccionamiento
+    //El tercer parámetro (false) se usa en la pantalla de asignación de ticket a agente, por eso coloco en false (Porque aquí no estoy asignando agente, ya está asignado el ticket)
+    //El último parámetro (true) es para que se redireccione a la pantalla anterior una vez actualizado
+    //No son parámetros obligatorios, pero en este caso si requiero enviar el último parámetro para el redireccionamiento
     updateSolicitud(
       idTicketSearch,
       idSolicSearch,
@@ -137,21 +136,6 @@ const newregister = () => {
       true
     );
   };
-
-  // const timeFormat = (ms) => {
-  //   if (!ms) return '00:00:00';
-  //   let ss = Math.floor(ms / 1000);
-  //   let mm = Math.floor(ss / 60);
-  //   let hh = Math.floor(mm / 60);
-
-  //   hh = hh < 10 ? '0' + hh : hh;
-  //   mm = mm < 10 ? '0' + mm : mm;
-  //   ss = ss < 10 ? '0' + ss : ss;
-
-  //   return `${hh}:${mm % 60 < 10 ? '0' : ''}${mm % 60}:${
-  //     ss % 60 < 10 ? '0' : ''
-  //   }${ss % 60}`;
-  // };
 
   console.log({ stateCompon: valueState });
 
@@ -269,8 +253,8 @@ const newregister = () => {
               <Timer
                 idTicket={idTicketSearch}
                 idSolicitud={idSolicSearch}
-                updateMtrTicket={updateTicket}
-                updateSolicitud={updateSolicitud}
+                updateMtrTicket={updateTicket} //Actualiza estado del TICKET y fechas de inicio y fin en Timer
+                updateSolicitud={updateSolicitud} //Actualiza estado de la SOLICITUD y fechas de inicio y fin en Timer
                 postControl={postControl}
                 getDataTicket={getDataTicket}
                 getTicketSolic={getTicketSolic}

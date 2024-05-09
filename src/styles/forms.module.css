@@ -650,6 +650,164 @@
   padding: 2px;
 }
 
+/*Para inputs de archivo e imagenes*/
+
+.inputImage {
+  display: grid;
+  grid-template-columns: 20% 40% 35%;
+  justify-content: space-around;
+  align-items: center;
+  gap: 8px;
+  grid-column: 1/-1;
+  justify-self: flex-start;
+  width: 100%;
+  color: black;
+  font-size: small;
+  border-bottom: 1px solid var(--save-button);
+  padding: 2px 0;
+}
+
+.inputImageModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--dark);
+}
+
+.inputImageModal h2 {
+  z-index: 7;
+}
+
+.inputImage span {
+  /* position: relative; */
+  display: inline-block;
+  cursor: pointer;
+  padding: 12px;
+}
+.inputImage span::before {
+  /* background-color: var(--dark-transparent); */
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-size: x-large;
+  border-radius: 4px;
+  padding: 12px;
+  content: 'De clic o Arrastre su Archivo';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.inputImage span input[type='file'] {
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  cursor: pointer;
+  padding: 8px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.inputImage button {
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  gap: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--acept-button);
+  color: white;
+  transition: all 0.1s ease;
+  justify-self: center;
+  font-size: 1em;
+  outline: none;
+  border: none;
+  z-index: 7;
+}
+
+.inputImage button:hover {
+  background-color: var(--button-color-hk-hover);
+}
+
+.inputImage button svg {
+  color: white;
+}
+
+.removeImage {
+  background: var(--delete-alert) !important;
+}
+
+.removeImage:hover {
+  background-color: brown !important;
+}
+
+.previewImage {
+  width: 50%;
+  object-fit: contain;
+  justify-self: center;
+}
+
+/* .formItems {
+  display: grid;
+  grid-template-columns: 70% 30%;
+} */
+
+.containerPreview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.inputImageModal .containerPreview {
+  z-index: 4;
+  flex-direction: column;
+}
+
+.inputImageModal .previewImage {
+  width: 60%;
+}
+
+/*Preview en pantalla de solicitudes de imagenes ya elegidas*/
+.addFiles {
+  color: var(--button-color-hk);
+  font-size: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  border: 1px solid var(--dark-transparent);
+  transition: all 0.1s ease;
+  margin: 2px 8px;
+}
+
+.addFiles:hover {
+  background: var(--button-color-hk-hover);
+  color: white;
+}
+
+/*Fin Para inputs de archivo / imagenes*/
+
 /* RESPONSIVE DESIGN */
 @media screen and (max-width: 768px) {
   /* Tablet  */

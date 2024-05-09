@@ -6,11 +6,19 @@ import { useRouter as useNextRouter } from 'next/router';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import CustomInput from '../../components/CustomInput';
-// import Appcontext from '../context/AppContext';
-import Solicitud from '@/components/Solicitud';
 import ErrorLayout from '../../components/ErrorLayout';
 import useApiTickets from '../../hooks/useApiTickets';
+import useApiCategory from '../../hooks/useApiCategory';
 import { validateExpToken } from '../../utils/helpers';
+import FileTickets from '@/components/FileTickets';
+import { storage } from '@/server/firebase';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage'; //Storage de firebase para almacenar archivos
+
 import styles from '../../styles/forms.module.css';
 import stylesEmp from '../../styles/emp.module.css';
 
@@ -26,6 +34,8 @@ const newregister = () => {
     messageError,
   } = useApiTickets();
 
+  const { getCategory, dataCateg } = useApiCategory();
+
   const nextRouter = useNextRouter(); //usado de next/router para extraer el query params de la ruta (el id de cada registro de firebase)
   // const idSearch = nextRouter.query.id_ticket; //Para verificar el string param de id_ticket y saber si estoy creando o editando un registro
   // console.log(`id_ticket: ${idSearch}`);
@@ -33,12 +43,17 @@ const newregister = () => {
 
   const initialState = {
     descrip_tk: '',
+    id_tipo: '',
   };
 
   const initialStateSolic = {
     descripcion: '',
-    // capturas: { img1: '', img2: '', img3: '', img4: '' },
-    capturas: undefined,
+    capturas: {
+      file1: { name: '', url: '' },
+      file2: { name: '', url: '' },
+      file3: { name: '', url: '' },
+      file4: { name: '', url: '' },
+    },
   };
   const [valueState, setValueState] = useState(initialState);
   const [stateSolicitud, setStateSolicitud] = useState(initialStateSolic);
@@ -52,12 +67,36 @@ const newregister = () => {
     cantidad: 1,
   });
   const [showButtonSol, setShowButtonSol] = useState(true);
-  // const [regCapture, setRegCapture] = useState('');
+  //Estados para control de archivos e imágenes
+  const [archivo, setArchivo] = useState(null); //captura archivo a subir a storage
+  const [previewImg, setPreviewImg] = useState(''); //Para mostrar un preview de la imagen a subir
+  const [isUpload, setIsUpload] = useState(true); //Detecta si se selecciona una imagen para obligar a subirle primero
+  const [resetUpFiles, setResetUpFiles] = useState(false);
+  //Para control de módales para cada archivo (máximo 4)
+  const [showModalFile1, setShowModalFile1] = useState({
+    name: 'file1',
+    active: false,
+  });
+  const [showModalFile2, setShowModalFile2] = useState({
+    name: 'file2',
+    active: false,
+  });
+  const [showModalFile3, setShowModalFile3] = useState({
+    name: 'file3',
+    active: false,
+  });
+  const [showModalFile4, setShowModalFile4] = useState({
+    name: 'file4',
+    active: false,
+  });
 
   useEffect(() => {
     // getDataTicket();
     validateExpToken();
+    getCategory();
   }, [ruta]);
+
+  console.log({ dataCateg });
 
   // const getDataTicket = () => {
   //   //Valido si estoy crendo un nuevo registro o editando
@@ -102,14 +141,16 @@ const newregister = () => {
   //   }
   // };
 
+  //Controla el change para la infomación principal del ticket
   const handleChange = (e) => {
     setValueState({ ...valueState, [e.target.name]: e.target.value });
   };
-
+  //Controla el change para la infomación de la solicitud
   const handleChangeSol = (e) => {
     setStateSolicitud({ ...stateSolicitud, [e.target.name]: e.target.value });
   };
 
+  //Submit para crear el ticket en MTR_TICKETS
   const handleSubmit = (e) => {
     e.preventDefault();
     postTickets(valueState)
@@ -122,6 +163,7 @@ const newregister = () => {
       });
   };
 
+  //Submit para crear la(s) solicitud en DET_TICKETS para cada ticket
   const handleSubmitSolic = (e) => {
     e.preventDefault();
     postSolicitud(stateSolicitud, ticketCreated.response.id_ticket)
@@ -142,8 +184,8 @@ const newregister = () => {
     if (solicitudCreated.cantidad === 3) {
       router.push('/home');
       toast.success(
-        'Ha ingresado el máximo de solicitudes permitidas para este ticket, si desea ingresar más, por favor registrar un nuevo ticket, puede monitorear el proceso de atención ingresando a la opción de "Seguimiento"',
-        { duration: 9000 }
+        'Ha ingresado el máximo de solicitudes para este ticket, para ingresar más, por favor registrar un nuevo ticket. Puede monitorear el proceso de atención ingresando a la opción de "Seguimiento"',
+        { duration: 7000 }
       );
     }
   };
@@ -157,13 +199,21 @@ const newregister = () => {
       isCreated: false,
     });
     setStateSolicitud(initialStateSolic);
+    setResetUpFiles(true);
     setShowButtonSol(true);
+  };
+
+  //Para controlar el input select de categorías
+  const handleChangeSelect = (e) => {
+    setValueState({ ...valueState, [e.target.name]: e.target.value });
   };
 
   console.log({ stateTicket: valueState });
   console.log({ stateSolicitud: stateSolicitud });
   console.log(ticketCreated);
   console.log(solicitudCreated);
+  console.log({ archivo });
+  console.log({ previewImg });
 
   return (
     <>
@@ -175,7 +225,41 @@ const newregister = () => {
             onSubmit={handleSubmit}
             className={styles['form-default']}
           >
-            <span style={{ gridColumn: '1/-1' }}>
+            <span
+              style={{
+                gridColumn: '1/-1',
+                display: 'grid',
+                gridTemplateColumns: '20% 80%',
+                alignItems: 'center',
+              }}
+            >
+              <span className={styles.selectContainer}>
+                {/* <b>* Categoría Soporte:</b> */}
+                <select name="id_tipo" onChange={handleChangeSelect} required>
+                  {valueState.id_tipo ? (
+                    <option value={valueState.id_tipo}>
+                      {dataCateg
+                        .filter(
+                          (catSelect) => catSelect.id_cat === valueState.id_tipo
+                        )
+                        .map((category) => category.descrip)}
+                    </option>
+                  ) : (
+                    <option value="" label="Elegir Categ. Soporte">
+                      Elegir Categ. Soporte
+                    </option>
+                  )}
+                  {dataCateg.map((category) => {
+                    if (category.estatus) {
+                      return (
+                        <option key={category.id_cat} value={category.id_cat}>
+                          {category.descrip}
+                        </option>
+                      );
+                    }
+                  })}
+                </select>
+              </span>
               <CustomInput
                 typeInput="text"
                 nameInput="descrip_tk"
@@ -193,7 +277,7 @@ const newregister = () => {
                 style={{ gap: '4px', width: '50%' }}
               >
                 <button
-                  title="Siguiente"
+                  title="Registrar"
                   className={`${styles.formButton} ${styles.formButtonTicket}`}
                   id={styles.regTicket}
                 >
@@ -202,6 +286,7 @@ const newregister = () => {
 
                 <button
                   tittle="Cancelar"
+                  type="button"
                   className={`${styles.formButton} ${styles.formButtonTicket}`}
                   id={styles.cancelButtonTicket}
                 >
@@ -231,14 +316,6 @@ const newregister = () => {
           >
             <h2 className={styles.numberReg}>{solicitudCreated.cantidad}</h2>
             <span style={{ gridColumn: '1/-1' }}>
-              {/* <CustomInput
-                typeInput="text"
-                nameInput="descripcion"
-                valueInput={stateSolicitud.descripcion}
-                onChange={handleChangeSol}
-                nameLabel="Detalle su solicitud"
-                required={true}
-              /> */}
               <span className={styles['input-container']}>
                 <textarea
                   name="descripcion"
@@ -255,16 +332,177 @@ const newregister = () => {
                 </label>
               </span>
             </span>
-            <CustomInput
-              typeInput="text"
-              nameInput="capturas"
-              valueInput={stateSolicitud.capturas}
-              onChange={handleChangeSol}
-              placeholder="Puede subir capturas de pantalla o imagenes para respaldar su explicación"
-              nameLabel="Capturas"
-              disabled={!showButtonSol ? true : false}
-            />
-
+            <h5
+              style={{
+                gridColumn: '1/-1',
+                textAlign: 'center',
+                margin: '8px 0',
+                borderBottom: '#ffc870',
+              }}
+            >
+              Puede subir capturas de pantalla / imágenes o archivos para
+              respaldar su explicación.
+            </h5>
+            <span
+              onClick={() => {
+                setShowModalFile1({
+                  ...showModalFile1,
+                  active: !showModalFile1.active,
+                });
+              }}
+              className={styles.addFiles}
+            >
+              {stateSolicitud.capturas.file1.url && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                  style={{ color: 'rgb(66, 167, 96)' }}
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                  />
+                </svg>
+              )}
+              {`Archivo 1: ${stateSolicitud.capturas.file1.name}`}
+            </span>
+            {showModalFile1.active && (
+              <FileTickets
+                setStateSolicitud={setStateSolicitud}
+                stateSolicitud={stateSolicitud}
+                idFile="file1"
+                idTicket={ticketCreated.response.id_ticket}
+                reset={resetUpFiles}
+                setReset={setResetUpFiles}
+                showModal={showModalFile1}
+                setShowModalFile={setShowModalFile1}
+              />
+            )}
+            <span
+              onClick={() => {
+                setShowModalFile2({
+                  ...showModalFile2,
+                  active: !showModalFile2.active,
+                });
+              }}
+              className={styles.addFiles}
+            >
+              {stateSolicitud.capturas.file2.url && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                  style={{ color: 'rgb(66, 167, 96)' }}
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                  />
+                </svg>
+              )}
+              {`Archivo 2: ${stateSolicitud.capturas.file2.name}`}
+            </span>
+            {showModalFile2.active && (
+              <FileTickets
+                setStateSolicitud={setStateSolicitud}
+                stateSolicitud={stateSolicitud}
+                idFile="file2"
+                idTicket={ticketCreated.response.id_ticket}
+                reset={resetUpFiles}
+                setReset={setResetUpFiles}
+                showModal={showModalFile2}
+                setShowModalFile={setShowModalFile2}
+              />
+            )}
+            <span
+              onClick={() => {
+                setShowModalFile3({
+                  ...showModalFile3,
+                  active: !showModalFile3.active,
+                });
+              }}
+              className={styles.addFiles}
+            >
+              {stateSolicitud.capturas.file3.url && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                  style={{ color: 'rgb(66, 167, 96)' }}
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                  />
+                </svg>
+              )}
+              {`Archivo 3: ${stateSolicitud.capturas.file3.name}`}
+            </span>
+            {showModalFile3.active && (
+              <FileTickets
+                setStateSolicitud={setStateSolicitud}
+                stateSolicitud={stateSolicitud}
+                idFile="file3"
+                idTicket={ticketCreated.response.id_ticket}
+                reset={resetUpFiles}
+                setReset={setResetUpFiles}
+                showModal={showModalFile3}
+                setShowModalFile={setShowModalFile3}
+              />
+            )}
+            <span
+              onClick={() => {
+                setShowModalFile4({
+                  ...showModalFile4,
+                  active: !showModalFile4.active,
+                });
+              }}
+              className={styles.addFiles}
+            >
+              {stateSolicitud.capturas.file4.url && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                  style={{ color: 'rgb(66, 167, 96)' }}
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                  />
+                </svg>
+              )}
+              {`Archivo 4: ${stateSolicitud.capturas.file4.name}`}
+            </span>
+            {showModalFile4.active && (
+              <FileTickets
+                setStateSolicitud={setStateSolicitud}
+                stateSolicitud={stateSolicitud}
+                idFile="file4"
+                idTicket={ticketCreated.response.id_ticket}
+                reset={resetUpFiles}
+                setReset={setResetUpFiles}
+                showModal={showModalFile4}
+                setShowModalFile={setShowModalFile4}
+              />
+            )}
             <span className={styles.buttonContainer}>
               {showButtonSol && (
                 <button

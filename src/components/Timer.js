@@ -154,7 +154,7 @@ const Timer = ({
           'YYYY-MM-DDTkk:mm:ss'
         ),
       });
-      //Una vez actualizado, obtengo los datos del tickets con todos sus controles
+      //Una vez actualizado, obtengo los datos del ticket y solicitud con todos sus controles
       const response = getTicketSolic(idTicket, idSolicitud);
       response
         .then((data) => {

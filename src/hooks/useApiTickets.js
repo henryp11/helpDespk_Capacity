@@ -9,6 +9,7 @@ import { toast } from 'react-hot-toast';
 const API = 'http://localhost:3000/api/v1/tickets';
 const API_DET = 'http://localhost:3000/api/v1/detalle-tickets';
 const API_CTR = 'http://localhost:3000/api/v1/control-tickets';
+const API_CAT = 'http://localhost:3000/api/v1/category';
 
 const useApiTickets = () => {
   const router = useRouter();
@@ -357,7 +358,7 @@ const useApiTickets = () => {
   };
 
   //Eliminar Ticket
-  const deleteTicket = async (id_ticket, message) => {
+  const deleteTicket = async (id_ticket, message, tracking) => {
     const API_PARAMS = `${API}/${id_ticket}`;
     //Obtengo las variables del LocalStorage
     const tokenLS = localStorage.getItem('jwt');
@@ -391,7 +392,74 @@ const useApiTickets = () => {
                   };
                   const response = await axios.delete(API_PARAMS, axiosConfig);
                   toast.dismiss(t.id);
-                  response && getTickets(); //Una vez eliminado realizo "hotReload" para refrescar datos
+                  response && getTickets(tracking); //Una vez eliminado realizo "hotReload" para refrescar datos
+                  toast.success(response.data.message, {
+                    style: {
+                      border: '1px solid rgb(155, 32, 32)',
+                      padding: '16px',
+                    },
+                    iconTheme: {
+                      primary: 'rgb(155, 32, 32)',
+                      secondary: '#FFFAEE',
+                    },
+                    duration: 1000,
+                  });
+                  setTimeout(() => {
+                    toast.dismiss();
+                  }, 2000);
+                } catch (error) {
+                  toast.dismiss(t.id);
+                  showError(error);
+                }
+              }}
+            >
+              SI
+            </button>
+            <button onClick={() => toast.dismiss(t.id)}>NO</button>
+          </span>
+        </span>
+      ),
+      { duration: 60000 }
+    );
+  };
+  //Eliminar Todas las Solicitud de un ticket Ticket Especifico
+  const deleteAllSolicitud = async (id_ticket, message, tracking) => {
+    const API_PARAMS = `${API_DET}/${id_ticket}`;
+    const API_TICKET = `${API}/${id_ticket}`;
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    toast(
+      (t) => (
+        <span className="toasterDelete">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+            />
+          </svg>
+          <b>{message}</b>
+          <span className="toasterButtons">
+            <button
+              onClick={async () => {
+                try {
+                  let axiosConfig = {
+                    headers: {
+                      Authorization: `Bearer ${tokenStorage}`,
+                    },
+                  };
+                  const response = await axios.delete(API_PARAMS, axiosConfig);
+                  const response2 = await axios.delete(API_TICKET, axiosConfig); //Este elimina el ticket total
+                  toast.dismiss(t.id);
+                  response && response2 && getTickets(tracking); //Una vez eliminado realizo "hotReload" para refrescar datos
                   toast.success(response.data.message, {
                     style: {
                       border: '1px solid rgb(155, 32, 32)',
@@ -431,6 +499,7 @@ const useApiTickets = () => {
     postSolicitud,
     updateSolicitud,
     getOnlySolicitud,
+    deleteAllSolicitud,
     getTicketSolic,
     postControl,
     dataTicket,

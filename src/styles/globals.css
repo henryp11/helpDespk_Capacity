@@ -7,8 +7,8 @@
   --letters-hk: #dbe2e8;
   --letters-hk2: #afb2d5;
   --tittles-hk: #ffc870;
-  --subtittles-hk: #dbc291;
-  --dark: #232830;
+  --subtittles-hk: #c4a25e;
+  --dark: rgb(35, 40, 48, 0.98);
   --dark-transparent: rgba(25, 33, 43, 0.5);
   --save-button: #1a73e8;
   --acept-button: rgb(66, 167, 96);
@@ -26,7 +26,7 @@
   --font-xxl: 28px;
   /* GRIDS */
   --grid-column-items: 10% 25% 15% 10% 20% 15%;
-  --grid-column-tickets: 5% 15% 25% 5% 15% 7% 10% 10%;
+  --grid-column-tickets: 5% 15% 25% 5% 15% 10% 10% 10%;
   --grid-column-solicitud: 5% 11% 25% 6% 21% 11% 8% 10%;
   --grid-column-5-col: 10% 40% repeat(2, 15%) 10%;
   --grid-column-items-tablet: 13% repeat(2, 30%) 10% 15%;

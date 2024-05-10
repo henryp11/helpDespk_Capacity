@@ -52,7 +52,7 @@ const useApiTickets = () => {
           rol: payloadStorage.perfil,
           idemp: payloadStorage.idEmp,
           idclient: payloadStorage.idClient,
-          tracking: tracking || false, //Se usa el estatus cuando quiero quitar los tickets finalizados y anulados caso de tracking
+          tracking: tracking || false, //Se usa el estatus (de la BD) cuando quiero quitar los tickets finalizados y anulados caso de tracking
         },
       };
       if (limit) {

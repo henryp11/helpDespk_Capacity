@@ -26,7 +26,7 @@
   --font-xxl: 28px;
   /* GRIDS */
   --grid-column-items: 10% 25% 15% 10% 20% 15%;
-  --grid-column-tickets: 5% 15% 25% 5% 15% 10% 10% 10%;
+  --grid-column-tickets: 5% 15% 20% 7% 5% 13% 10% 10% 10%;
   --grid-column-solicitud: 5% 11% 25% 6% 21% 11% 8% 10%;
   --grid-column-5-col: 10% 40% repeat(2, 15%) 10%;
   --grid-column-items-tablet: 13% repeat(2, 30%) 10% 15%;
@@ -524,6 +524,61 @@ svg:active {
 .timerButtonContaniner button:hover svg {
   color: var(--subtittles-hk);
   scale: 1.2;
+}
+
+input:disabled,
+textarea:disabled {
+  background: rgb(206, 206, 206, 0.3) !important;
+  border-color: transparent !important;
+  color: black;
+}
+
+#form {
+  position: relative;
+}
+
+#cancelButtonEditTicket {
+  background-color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: absolute;
+  top: -20px;
+  right: -15px;
+}
+
+#cancelButtonEditTicket:hover {
+  background: var(--background-hk2) !important;
+}
+
+#cancelButtonEditTicket svg {
+  scale: 1 !important;
+}
+
+#cancelButtonEditTicket:hover svg {
+  color: red !important;
+}
+
+#updateMtrTK {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 35px;
+  height: 35px;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+#updateMtrTK svg {
+  color: var(--acept-button);
+}
+
+#updateMtrTK:hover svg {
+  color: var(--save-button);
+  scale: 1 !important;
 }
 
 /* RESPONSIVE DESIGN */

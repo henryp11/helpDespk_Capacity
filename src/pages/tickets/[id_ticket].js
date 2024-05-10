@@ -34,6 +34,8 @@ const newregister = () => {
     id_cliente: '',
     id_emp: '',
     descrip_tk: '',
+    id_tipo: '',
+    nombre_categ: '',
     personal_emp: { empresa: {} },
     det_tickets: [],
     estatus: '',
@@ -89,6 +91,10 @@ const newregister = () => {
             estatus: data.estatus,
             personal_emp: data.personal_emp,
             det_tickets: data.det_tickets,
+            nombre_categ:
+              data.categorias_sop === null
+                ? 'Sin Categ.'
+                : data.categorias_sop.descrip,
           };
           setValueState(dataEdit);
           setLoadCreate({ loading: false, error: null });
@@ -141,7 +147,7 @@ const newregister = () => {
       <div className={stylesEmp.crudEmpContainer}>
         <h2>
           {idSearch !== 'new'
-            ? `Ticket # ${idSearch} `
+            ? `Ticket ${valueState.nombre_categ} # ${idSearch} `
             : 'Creando Nuevo Registro '}
           - <em>Estado: {valueState.estatus}</em>
         </h2>
@@ -219,7 +225,13 @@ const newregister = () => {
                 disabled={true}
               />
             </span>
-            <span className={styles.inputContainer1_1}>
+            <span
+              style={{
+                position: 'relative',
+                gridTemplateColumns: '95%',
+              }}
+              className={styles.inputContainer1_1}
+            >
               <CustomInput
                 typeInput="text"
                 nameInput="descrip_tk"
@@ -234,99 +246,13 @@ const newregister = () => {
                     : false
                 }
               />
-              <span className={styles.buttonContainer} id={styles.buttonTicket}>
-                {payloadJwt.perfil === 'admin' ? (
-                  <button
-                    title="Guardar/Actualizar"
-                    className={styles['formButton']}
-                  >
-                    {idSearch === 'new' ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        style={{ scale: '0.7' }}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
-                        />
-                      </svg>
-                    )}
-                  </button>
-                ) : payloadJwt.perfil !== 'admin' &&
-                  enviroment === 'tracking' &&
-                  valueState.estatus === 'solicitado' ? (
-                  <button
-                    title="Guardar/Actualizar"
-                    className={styles['formButton']}
-                  >
-                    {idSearch === 'new' ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        style={{ scale: '0.7' }}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
-                        />
-                      </svg>
-                    )}
-                  </button>
-                ) : (
-                  ''
-                )}
-
+              {!showSolicitud && payloadJwt.perfil === 'admin' ? (
                 <button
-                  title="Cancelar"
-                  className={`${styles.formButton}`}
-                  id="cancelButton"
+                  title="Actualizar Descripción General del Ticket"
+                  className={styles['formButton']}
+                  id="updateMtrTK"
                 >
-                  <Link
-                    href={
-                      enviroment === 'tracking'
-                        ? '/tracking/allTickets'
-                        : '/tickets/allTickets'
-                    }
-                    className={`${styles.cancelButton}`}
-                    title="regresar"
-                  >
+                  {idSearch === 'new' ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -337,12 +263,99 @@ const newregister = () => {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                  </Link>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      style={{ scale: '0.7' }}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                      />
+                    </svg>
+                  )}
                 </button>
-              </span>
+              ) : !showSolicitud &&
+                payloadJwt.perfil !== 'admin' &&
+                enviroment === 'tracking' &&
+                valueState.estatus === 'solicitado' ? (
+                <button
+                  title="Actualizar Descripción General del Ticket"
+                  className={styles['formButton']}
+                  id="updateMtrTK"
+                >
+                  {idSearch === 'new' ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      style={{ scale: '0.7' }}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                      />
+                    </svg>
+                  )}
+                </button>
+              ) : (
+                ''
+              )}
+            </span>
+            <span className={styles.buttonContainer} id={styles.buttonTicket}>
+              <Link
+                href={
+                  enviroment === 'tracking'
+                    ? '/tracking/allTickets'
+                    : '/tickets/allTickets'
+                }
+                className={`${styles.cancelButton}`}
+                title="regresar"
+              >
+                <button
+                  className={`${styles.formButton}`}
+                  id="cancelButtonEditTicket"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </button>
+              </Link>
             </span>
           </form>
         ) : (
@@ -430,7 +443,6 @@ const newregister = () => {
                     setShowSolicitud={setShowSolicitud}
                     dataSolicitud={solicitud}
                     showControl={true}
-                    // showButtons={enviroment === 'history' ? false : true}
                     perfil={payloadJwt.perfil}
                     enviroment={enviroment}
                     statusTicket={valueState.estatus}

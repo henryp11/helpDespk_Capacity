@@ -33,10 +33,10 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
 
   useEffect(() => {
     if (enviroment === 'tracking') {
-      getTickets(true); //Con tracking activo se quitan los tickets finalizados y anulados
+      getTickets(true); //Con tracking activo (true) se quitan los tickets finalizados y anulados
     } else {
       //getTickets(false, 10, 1); //Para agregar paginación
-      getTickets();
+      getTickets(); //Trae todos los tickets caso para historial y usuarios admin
     }
     validateExpToken();
   }, []);
@@ -122,6 +122,11 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
                     </em>
                   </span>
                   <span>{register.descrip_tk}</span>
+                  <span>
+                    {register.categorias_sop
+                      ? register.categorias_sop.descrip
+                      : '-'}
+                  </span>
                   {register.det_tickets ? (
                     <span>{register.det_tickets.length}</span>
                   ) : (

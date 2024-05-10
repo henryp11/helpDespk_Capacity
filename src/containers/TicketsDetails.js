@@ -13,6 +13,13 @@ const TicketsDetails = (props) => {
       {open && (
         <div className={styles.wrapContainer}>
           <span className={styles.wrapFields}>
+            <h3 className={styles.wrapTittles}>Categoría</h3>
+            <p>
+              {details.categorias_sop !== null &&
+                details.categorias_sop.descrip}
+            </p>
+          </span>
+          <span className={styles.wrapFields}>
             <h3 className={styles.wrapTittles}>Solicitante</h3>
             <p>{details.personal_emp.nombre}</p>
           </span>

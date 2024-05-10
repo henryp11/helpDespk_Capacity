@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { usePathname } from 'next/navigation';
 // import ErrorLayout from './ErrorLayout';
+import FileTickets from './FileTickets';
 import useApiTickets from '@/hooks/useApiTickets';
 import CustomInput from './CustomInput';
 import Controls from './Controls';
@@ -24,7 +25,13 @@ const Solicitud = ({
 
   const stateSolicitud = {
     agente_asig: '',
-    capturas: '',
+    agentes_sop: '', //Datos del agente si ya fue asignado, vendrá como objeto
+    capturas: {
+      file1: { name: '', url: '' },
+      file2: { name: '', url: '' },
+      file3: { name: '', url: '' },
+      file4: { name: '', url: '' },
+    },
     descripcion: '',
     estatus: '',
     fecha_ini_solucion: '',
@@ -36,6 +43,26 @@ const Solicitud = ({
   };
 
   const [valueState, setValueState] = useState(stateSolicitud);
+
+  //Estados para control de archivos e imágenes
+  const [resetUpFiles, setResetUpFiles] = useState(false);
+  //Para control de módales para cada archivo (máximo 4)
+  const [showModalFile1, setShowModalFile1] = useState({
+    name: 'file1',
+    active: false,
+  });
+  const [showModalFile2, setShowModalFile2] = useState({
+    name: 'file2',
+    active: false,
+  });
+  const [showModalFile3, setShowModalFile3] = useState({
+    name: 'file3',
+    active: false,
+  });
+  const [showModalFile4, setShowModalFile4] = useState({
+    name: 'file4',
+    active: false,
+  });
 
   useEffect(() => {
     setValueState(dataSolicitud);
@@ -106,7 +133,10 @@ const Solicitud = ({
             <CustomInput
               typeInput="text"
               nameInput="agente_asig"
-              valueInput={valueState.agente_asig}
+              valueInput={
+                valueState.agentes_sop &&
+                `${valueState.agente_asig} - ${valueState.agentes_sop.nombre}`
+              }
               onChange={handleChange}
               nameLabel="Agente Encargado"
               disabled={true}
@@ -161,26 +191,6 @@ const Solicitud = ({
                 Detalle Solicitud
               </label>
             </span>
-          </span>
-          <span
-            className={`${styles.inputContainer1_1} ${styles.inputContainer1_1v}`}
-          >
-            <span className={styles['input-container']}>
-              <textarea
-                name="solucion"
-                onChange={handleChange}
-                defaultValue={valueState.solucion}
-                cols="30"
-                rows="4"
-                className={styles.textArea}
-                disabled={
-                  perfil === 'admin' || perfil === 'agente' ? false : true
-                }
-              ></textarea>
-              <label className={styles['activate-label-position']}>
-                Observaciones solución
-              </label>
-            </span>
             <span
               className={styles.buttonContainer}
               id={styles.buttonSolicitud}
@@ -189,7 +199,7 @@ const Solicitud = ({
                 enviroment === 'tracking' &&
                 statusTicket === 'solicitado' && (
                   <button
-                    title="Guardar/Actualizar Solic."
+                    title="Actualizar Solicitud"
                     className={styles['formButton']}
                   >
                     <svg
@@ -211,7 +221,7 @@ const Solicitud = ({
               <button
                 title="Ocultar Solic."
                 className={`${styles.formButton}`}
-                id="cancelButton"
+                // id="cancelButton"
                 type="button"
                 onClick={() => {
                   setShowSolicitud(false);
@@ -232,6 +242,207 @@ const Solicitud = ({
                   />
                 </svg>
               </button>
+            </span>
+          </span>
+          <h5
+            style={{
+              gridColumn: '1/-1',
+              textAlign: 'center',
+              margin: '8px 0',
+              borderBottom: '#ffc870',
+            }}
+          >
+            Capturas de pantalla / imágenes o archivos de la solicitud.
+          </h5>
+          <div
+            style={{
+              gridColumn: '1/-1',
+              display: 'flex',
+              width: '100%',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <span
+              onClick={() => {
+                setShowModalFile1({
+                  ...showModalFile1,
+                  active: !showModalFile1.active,
+                });
+              }}
+              className={styles.addFiles}
+            >
+              {valueState.capturas.file1.url && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                  style={{ color: 'rgb(66, 167, 96)' }}
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                  />
+                </svg>
+              )}
+              {`Archivo 1: ${valueState.capturas.file1.name}`}
+            </span>
+            {showModalFile1.active && (
+              <FileTickets
+                setStateSolicitud={setValueState}
+                stateSolicitud={valueState}
+                idFile="file1"
+                idTicket={valueState.id_ticket}
+                reset={resetUpFiles}
+                setReset={setResetUpFiles}
+                showModal={showModalFile1}
+                setShowModalFile={setShowModalFile1}
+              />
+            )}
+            <span
+              onClick={() => {
+                setShowModalFile2({
+                  ...showModalFile2,
+                  active: !showModalFile2.active,
+                });
+              }}
+              className={styles.addFiles}
+            >
+              {valueState.capturas.file2.url && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                  style={{ color: 'rgb(66, 167, 96)' }}
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                  />
+                </svg>
+              )}
+              {`Archivo 2: ${valueState.capturas.file2.name}`}
+            </span>
+            {showModalFile2.active && (
+              <FileTickets
+                setStateSolicitud={setValueState}
+                stateSolicitud={valueState}
+                idFile="file2"
+                idTicket={valueState.id_ticket}
+                reset={resetUpFiles}
+                setReset={setResetUpFiles}
+                showModal={showModalFile2}
+                setShowModalFile={setShowModalFile2}
+              />
+            )}
+            <span
+              onClick={() => {
+                setShowModalFile3({
+                  ...showModalFile3,
+                  active: !showModalFile3.active,
+                });
+              }}
+              className={styles.addFiles}
+            >
+              {valueState.capturas.file3.url && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                  style={{ color: 'rgb(66, 167, 96)' }}
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                  />
+                </svg>
+              )}
+              {`Archivo 3: ${valueState.capturas.file3.name}`}
+            </span>
+            {showModalFile3.active && (
+              <FileTickets
+                setStateSolicitud={setValueState}
+                stateSolicitud={valueState}
+                idFile="file3"
+                idTicket={valueState.id_ticket}
+                reset={resetUpFiles}
+                setReset={setResetUpFiles}
+                showModal={showModalFile3}
+                setShowModalFile={setShowModalFile3}
+              />
+            )}
+            <span
+              onClick={() => {
+                setShowModalFile4({
+                  ...showModalFile4,
+                  active: !showModalFile4.active,
+                });
+              }}
+              className={styles.addFiles}
+            >
+              {valueState.capturas.file4.url && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                  style={{ color: 'rgb(66, 167, 96)' }}
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 0 1 9 9v.375M10.125 2.25A3.375 3.375 0 0 1 13.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 0 1 3.375 3.375M9 15l2.25 2.25L15 12"
+                  />
+                </svg>
+              )}
+              {`Archivo 4: ${valueState.capturas.file4.name}`}
+            </span>
+            {showModalFile4.active && (
+              <FileTickets
+                setStateSolicitud={setValueState}
+                stateSolicitud={valueState}
+                idFile="file4"
+                idTicket={valueState.id_ticket}
+                reset={resetUpFiles}
+                setReset={setResetUpFiles}
+                showModal={showModalFile4}
+                setShowModalFile={setShowModalFile4}
+              />
+            )}
+          </div>
+          <span
+            className={`${styles.inputContainer1_1} ${styles.inputContainer1_1v}`}
+          >
+            <span className={styles['input-container']}>
+              <textarea
+                name="solucion"
+                onChange={handleChange}
+                defaultValue={valueState.solucion}
+                cols="30"
+                rows="4"
+                className={styles.textArea}
+                disabled={
+                  perfil === 'admin' || perfil === 'agente' ? false : true
+                }
+              ></textarea>
+              <label className={styles['activate-label-position']}>
+                Observaciones solución
+              </label>
             </span>
           </span>
         </form>

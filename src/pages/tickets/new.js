@@ -11,13 +11,6 @@ import useApiTickets from '../../hooks/useApiTickets';
 import useApiCategory from '../../hooks/useApiCategory';
 import { validateExpToken } from '../../utils/helpers';
 import FileTickets from '@/components/FileTickets';
-import { storage } from '@/server/firebase';
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from 'firebase/storage'; //Storage de firebase para almacenar archivos
 
 import styles from '../../styles/forms.module.css';
 import stylesEmp from '../../styles/emp.module.css';
@@ -38,7 +31,6 @@ const newregister = () => {
 
   const nextRouter = useNextRouter(); //usado de next/router para extraer el query params de la ruta (el id de cada registro de firebase)
   // const idSearch = nextRouter.query.id_ticket; //Para verificar el string param de id_ticket y saber si estoy creando o editando un registro
-  // console.log(`id_ticket: ${idSearch}`);
   const ruta = usePathname();
 
   const initialState = {
@@ -68,9 +60,6 @@ const newregister = () => {
   });
   const [showButtonSol, setShowButtonSol] = useState(true);
   //Estados para control de archivos e imágenes
-  const [archivo, setArchivo] = useState(null); //captura archivo a subir a storage
-  const [previewImg, setPreviewImg] = useState(''); //Para mostrar un preview de la imagen a subir
-  const [isUpload, setIsUpload] = useState(true); //Detecta si se selecciona una imagen para obligar a subirle primero
   const [resetUpFiles, setResetUpFiles] = useState(false);
   //Para control de módales para cada archivo (máximo 4)
   const [showModalFile1, setShowModalFile1] = useState({
@@ -212,8 +201,6 @@ const newregister = () => {
   console.log({ stateSolicitud: stateSolicitud });
   console.log(ticketCreated);
   console.log(solicitudCreated);
-  console.log({ archivo });
-  console.log({ previewImg });
 
   return (
     <>

@@ -43,12 +43,10 @@ const FileTickets = ({
     console.log({ fileDetect });
     if (fileDetect) {
       setArchivo(fileDetect);
-      // setArchivo([...archivo, { [numFile]: fileDetect }]);
       const reader = new FileReader(); //Objeto de JS para poder previsualizar la imagen seleccionada
       //Carga el resultado de la imagen capturada
       reader.onload = () => {
         setPreviewImg(reader.result);
-        // setPreviewImg([...previewImg, { [numFile]: reader.result }]);
       };
       reader.readAsDataURL(fileDetect); //Transforma imagen capturada en string de tipo byte 64 para poderlo visualizar
 
@@ -85,7 +83,7 @@ const FileTickets = ({
       setIsUpload(false);
       const refArchivo = ref(
         storage,
-        `soporte/${stateSolicitud.capturas[numFile].name}` // `soporte/${stateSolicitud.capturas.file1.name}`
+        `soporte/${idTicket}/${stateSolicitud.capturas[numFile].name}` // `soporte/${stateSolicitud.capturas.file1.name}`
       );
       await uploadBytes(refArchivo, archivo); //Carga el archivo al storage dando la referencia y el archivo a cargar
       //Obtengo URL del archivo en Storage para colocarla en el producto a crear
@@ -115,7 +113,7 @@ const FileTickets = ({
   const removeImage = (numFile) => {
     const desertRef = ref(
       storage,
-      `soporte/${stateSolicitud.capturas[numFile].name}`
+      `soporte/${idTicket}/${stateSolicitud.capturas[numFile].name}`
     );
     deleteObject(desertRef)
       .then(() => {
@@ -132,6 +130,7 @@ const FileTickets = ({
           },
         });
         setPreviewImg('');
+        toast.success('Archivo eliminado con éxito!');
       })
       .catch((error) => {
         console.log(`Error al eliminar archivo: ${error}`);
@@ -292,31 +291,6 @@ const FileTickets = ({
                     </button>
                   </>
                 )}
-                {/* Elimina directamente una imagen ya existente */}
-                {/* {idDoc !== 'new' && valueState.image.url.startsWith('http') && (
-                  <button
-                    onClick={() => {
-                      removeImage();
-                    }}
-                    className={styles.removeImage}
-                    type="button"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 13.5H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
-                      />
-                    </svg>
-                    Quitar Imágen
-                  </button>
-                )} */}
               </div>
             </span>
           </div>

@@ -27,10 +27,10 @@ const Solicitud = ({
     agente_asig: '',
     agentes_sop: '', //Datos del agente si ya fue asignado, vendrá como objeto
     capturas: {
-      file1: { name: '', url: '' },
-      file2: { name: '', url: '' },
-      file3: { name: '', url: '' },
-      file4: { name: '', url: '' },
+      file1: { name: '', url: '', type: '', size: '' },
+      file2: { name: '', url: '', type: '', size: '' },
+      file3: { name: '', url: '', type: '', size: '' },
+      file4: { name: '', url: '', type: '', size: '' },
     },
     descripcion: '',
     estatus: '',

@@ -791,7 +791,7 @@
 /*Preview en pantalla de solicitudes de imagenes ya elegidas*/
 .addFiles {
   color: var(--button-color-hk);
-  font-size: 1em;
+  font-size: 0.9em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -802,11 +802,91 @@
   border: 1px solid var(--dark-transparent);
   transition: all 0.1s ease;
   margin: 2px 8px;
+  word-break: break-all;
+  flex-wrap: wrap;
 }
 
 .addFiles:hover {
   background: var(--button-color-hk-hover);
   color: white;
+}
+
+.downloadFile {
+  position: absolute;
+  top: -35px;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 5;
+  background: var(--dark);
+  color: white;
+  padding: 2px;
+  display: flex;
+  width: 110%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  /* height: 100vh; */
+}
+
+.downloadFile h3 {
+  color: var(--tittles-hk);
+  margin-top: 1em;
+}
+
+.downloadLink {
+  color: white;
+  font-size: 1.2em;
+  background: var(--acept-button);
+  padding: 8px;
+  border-radius: 6px;
+  font-weight: bolder;
+  box-shadow: inset 0 -3px 5px 0 var(--dark);
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.downloadLink svg {
+  color: var(--tittles-hk);
+}
+
+.downloadLink:hover {
+  background: var(--save-button);
+}
+.downloadLink:active {
+  font-size: 1em;
+}
+
+#downloadClose {
+  position: absolute;
+  top: 1%;
+  right: 15%;
+  background: #800000;
+  border-radius: 50%;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#downloadClose svg {
+  color: white;
+}
+
+#downloadClose:hover {
+  background: white;
+}
+
+#downloadClose:hover svg {
+  color: red;
 }
 
 /*Fin Para inputs de archivo / imagenes*/

@@ -57,6 +57,8 @@ const FileTickets = ({
           ...stateSolicitud.capturas,
           [numFile]: {
             name: `${idTicket}_${fileDetect.name}`,
+            type: `${fileDetect.type}`,
+            size: `${fileDetect.size}`,
           },
         },
       });
@@ -70,7 +72,10 @@ const FileTickets = ({
       setPreviewImg('');
       setStateSolicitud({
         ...stateSolicitud,
-        capturas: { ...stateSolicitud.capturas, [numFile]: { name: '' } },
+        capturas: {
+          ...stateSolicitud.capturas,
+          [numFile]: { name: '', type: '', size: '' },
+        },
       });
       setIsUpload(true);
     }
@@ -126,6 +131,8 @@ const FileTickets = ({
               ...stateSolicitud.capturas[numFile],
               name: '',
               url: '',
+              type: '',
+              size: '',
             },
           },
         });

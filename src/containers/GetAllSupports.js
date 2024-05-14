@@ -34,7 +34,7 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
 
   console.log(payloadJwt);
   console.log({ entorno: enviroment });
-  console.log({ agenteOk: agent, iAgenteTkn: payloadJwt.agSop });
+  console.log({ agenteOk: agent, idAgenteTkn: payloadJwt.agSop });
 
   useEffect(() => {
     getDataSolicitudes();
@@ -142,6 +142,11 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
                     </i>{' '}
                     <br />
                     <b>{register.mtr_tickets.personal_emp.nombre}</b>
+                  </span>
+                  <span>
+                    {register.mtr_tickets.categorias_sop
+                      ? register.mtr_tickets.categorias_sop.descrip
+                      : '-'}
                   </span>
                   <span>{register.mtr_tickets.prioridad}</span>
                   <span>{register.mtr_tickets.descrip_tk}</span>

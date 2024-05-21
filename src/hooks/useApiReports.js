@@ -4,12 +4,12 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-hot-toast';
+// import { useRouter } from 'next/navigation';
+// import { toast } from 'react-hot-toast';
 const API = 'http://localhost:3000/api/v1/reports';
 
 const useApiReports = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const [dataTicket, setDataTicket] = useState([]);
   const [token, setToken] = useState('');
   const [payloadJwt, setPayloadJwt] = useState({});
@@ -105,7 +105,7 @@ const useApiReports = () => {
         },
       };
       setLoad(true);
-      const response = await axios.get(API_DET, axiosConfig);
+      const response = await axios.get(API, axiosConfig);
       if (response) {
         setToken(tokenStorage);
         setPayloadJwt(payloadStorage);
@@ -198,6 +198,7 @@ const useApiReports = () => {
     getTicketById,
     getSolicitudes,
     dataTicket,
+    token,
     payloadJwt,
     load,
     error,

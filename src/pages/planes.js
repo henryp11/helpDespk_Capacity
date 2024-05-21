@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link.js';
 import ErrorLayout from '../components/ErrorLayout';
@@ -45,12 +45,7 @@ const Planes = () => {
     validateExpToken();
   }, []);
 
-  // Funciones y objetos desde contexto inicial
   const isMobile = useScreenSize();
-
-  const [open, setOpen] = useState(false);
-  const [regCapture, setRegCapture] = useState('');
-  const [dataRegCap, setDataRegCap] = useState({});
   const { query, setQuery, filteredRegs } = useSearchSimple(dataPlan, 'planes');
 
   if (error) {

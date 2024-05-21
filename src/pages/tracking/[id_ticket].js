@@ -12,7 +12,7 @@ import { validateExpToken } from '../../utils/helpers';
 import styles from '../../styles/forms.module.css';
 import stylesEmp from '../../styles/emp.module.css';
 
-const newregister = () => {
+const Newregister = () => {
   const { getTicketById, updateTicket, error, statusError, messageError } =
     useApiTickets();
 
@@ -88,13 +88,13 @@ const newregister = () => {
     setValueState({ ...valueState, [e.target.name]: e.target.value });
   };
 
-  const handleCheck = (fieldCheck) => {
-    if (fieldCheck === 'plan') {
-      setValueState({ ...valueState, planMant: !valueState.planMant });
-    } else if (fieldCheck === 'est') {
-      setValueState({ ...valueState, estatus: !valueState.estatus });
-    }
-  };
+  // const handleCheck = (fieldCheck) => {
+  //   if (fieldCheck === 'plan') {
+  //     setValueState({ ...valueState, planMant: !valueState.planMant });
+  //   } else if (fieldCheck === 'est') {
+  //     setValueState({ ...valueState, estatus: !valueState.estatus });
+  //   }
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -346,4 +346,4 @@ const newregister = () => {
   );
 };
 
-export default newregister;
+export default Newregister;

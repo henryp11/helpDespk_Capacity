@@ -203,6 +203,7 @@ const useApiCategory = () => {
     updateCategory,
     deleteCategory,
     dataCateg,
+    token,
     payloadJwt,
     load,
     error,

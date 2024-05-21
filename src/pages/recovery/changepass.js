@@ -5,7 +5,7 @@ import ErrorLayout from '@/components/ErrorLayout';
 import useAuth from '@/hooks/useAuth';
 import styles from '../../styles/forms.module.css';
 
-const changepass = () => {
+const Changepass = () => {
   const {
     resData,
     dataUser,
@@ -72,4 +72,4 @@ const changepass = () => {
   );
 };
 
-export default changepass;
+export default Changepass;

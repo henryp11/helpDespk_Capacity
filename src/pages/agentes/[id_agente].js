@@ -6,16 +6,15 @@ import { useRouter as useNextRouter } from 'next/router';
 import CustomInput from '../../components/CustomInput';
 import ErrorLayout from '../../components/ErrorLayout';
 import useApiAgentes from '../../hooks/useApiAgentes';
-import { validateExpToken, addZero } from '../../utils/helpers';
+import { validateExpToken } from '../../utils/helpers';
 import styles from '../../styles/forms.module.css';
 import stylesEmp from '../../styles/emp.module.css';
 
-const newregister = () => {
+const Newregister = () => {
   const {
     postAgente,
     getAgenteById,
     updateAgente,
-    payloadJwt,
     error,
     statusError,
     messageError,
@@ -279,4 +278,4 @@ const newregister = () => {
   );
 };
 
-export default newregister;
+export default Newregister;

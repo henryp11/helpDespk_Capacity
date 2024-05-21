@@ -4,12 +4,11 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 const API = 'http://localhost:3000/api/v1/control-tickets';
 
 const useApiControls = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const [dataControl, setDataControl] = useState([]);
   const [token, setToken] = useState('');
   const [payloadJwt, setPayloadJwt] = useState({});
@@ -186,7 +185,7 @@ const useApiControls = () => {
                   };
                   const response = await axios.delete(API_PARAMS, axiosConfig);
                   toast.dismiss(t.id);
-                  response && getTickets(); //Una vez eliminado realizo "hotReload" para refrescar datos
+                  response && getControls(); //Una vez eliminado realizo "hotReload" para refrescar datos
                   toast.success(response.data.message, {
                     style: {
                       border: '1px solid rgb(155, 32, 32)',
@@ -224,6 +223,7 @@ const useApiControls = () => {
     updateControl,
     deleteControl,
     dataControl,
+    token,
     payloadJwt,
     error,
     statusError,

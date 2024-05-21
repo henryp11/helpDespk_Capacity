@@ -2,7 +2,7 @@
 // donde se envía el dato de la API como parametro
 //y mediante el hook de useEffect retorno el valor del estado que deseo utilizar
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
@@ -203,6 +203,7 @@ const useApiContratos = () => {
     updateContrato,
     deleteContrato,
     dataCtr,
+    token,
     payloadJwt,
     load,
     error,

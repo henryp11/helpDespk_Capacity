@@ -230,6 +230,7 @@ const useApiEmpresas = () => {
     updateEmpresa,
     deleteEmpresa,
     dataEmp,
+    token,
     payloadJwt,
     load,
     error,

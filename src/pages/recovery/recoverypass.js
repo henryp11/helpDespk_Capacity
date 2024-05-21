@@ -5,7 +5,7 @@ import ErrorLayout from '@/components/ErrorLayout';
 import useAuth from '@/hooks/useAuth';
 import styles from '../../styles/forms.module.css';
 
-const recoverypass = () => {
+const Recoverypass = () => {
   const {
     resData,
     dataUser,
@@ -79,4 +79,4 @@ const recoverypass = () => {
   );
 };
 
-export default recoverypass;
+export default Recoverypass;

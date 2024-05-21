@@ -230,6 +230,7 @@ const useApiPersonal = () => {
     updatePersonal,
     deletePersonal,
     dataPerEmp,
+    token,
     payloadJwt,
     load,
     error,

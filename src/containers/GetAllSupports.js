@@ -223,7 +223,14 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
                               estatus: 'asignado',
                               agente_asig: payloadJwt.agSop,
                             },
-                            true
+                            true,
+                            false,
+                            {
+                              email: register.mtr_tickets.personal_emp.correo,
+                              nameAgente: payloadJwt.nameAgSop,
+                              estatus: 1,
+                              descripSolic: register.descripcion,
+                            }
                           );
                         }}
                       >

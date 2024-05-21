@@ -1,25 +1,16 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { RiFileWord2Line } from 'react-icons/ri';
 import { RiFileExcel2Line } from 'react-icons/ri';
 import { FaRegFilePdf } from 'react-icons/fa6';
 import { TbFileTypeTxt } from 'react-icons/tb';
 import { TbFileTypeXml } from 'react-icons/tb';
 import { FaDownload } from 'react-icons/fa';
-import { storage } from '@/server/firebase';
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from 'firebase/storage'; //Storage de firebase para almacenar archivos
-import { toast } from 'react-hot-toast';
 import styles from '@/styles/forms.module.css';
 
 const FileDownload = ({
   idFile, //Corresponde al key del array de capturas para modificar (file1, 2,3, 4)
   stateSolicitud, //Objeto con los datos de la solicitud así como los archivos con sus respectivas URL's de Firebase
-  idTicket,
   showModal,
   setShowModalFile,
 }) => {

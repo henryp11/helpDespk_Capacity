@@ -14,7 +14,7 @@ import { timeFormat } from '../../../utils/helpers';
 import styles from '@/styles/forms.module.css';
 import stylesEmp from '@/styles/emp.module.css';
 
-const newregister = () => {
+const Newregister = () => {
   const {
     updateTicket,
     getTicketSolic,
@@ -57,10 +57,8 @@ const newregister = () => {
     error: null,
   });
   const [showSolucion, setShowSolucion] = useState(false);
-  const [regCapture, setRegCapture] = useState('');
+  const [payloadJWT, setPayloadJWT] = useState({});
 
-  //Estados para control de archivos e imágenes
-  const [resetUpFiles, setResetUpFiles] = useState(false);
   //Para control de módales para cada archivo (máximo 4)
   const [showModalFile1, setShowModalFile1] = useState({
     name: 'file1',
@@ -86,6 +84,8 @@ const newregister = () => {
 
   const getDataTicket = () => {
     setLoadCreate({ loading: true, error: null });
+    const payloadLS = localStorage.getItem('payload');
+    setPayloadJWT(payloadLS && JSON.parse(payloadLS));
     //La consulta a la API me retorna una promesa con la información de la consulta, por eso utilizo un then/catch
     const response = getTicketSolic(idTicketSearch, idSolicSearch);
     response
@@ -155,6 +155,7 @@ const newregister = () => {
     //El tercer parámetro (false) se usa en la pantalla de asignación de ticket a agente, por eso coloco en false (Porque aquí no estoy asignando agente, ya está asignado el ticket)
     //El último parámetro (true) es para que se redireccione a la pantalla anterior una vez actualizado
     //No son parámetros obligatorios, pero en este caso si requiero enviar el último parámetro para el redireccionamiento
+    //El último objeto es para enviar el correo de solicitud finalizada, ya que este submit solo se realizará al finalizar la atención de la solicitud
     updateSolicitud(
       idTicketSearch,
       idSolicSearch,
@@ -162,7 +163,14 @@ const newregister = () => {
         solucion: valueState.solucion,
       },
       false,
-      true
+      true,
+      {
+        email: valueState.mtr_tickets.personal_emp.correo,
+        nameAgente: payloadJWT.nameAgSop,
+        estatus: 3,
+        descripSolic: valueState.descripcion,
+        detSolucion: valueState.solucion,
+      }
     );
   };
 
@@ -199,7 +207,6 @@ const newregister = () => {
               <CustomInput
                 typeInput="text"
                 nameInput="nombre"
-                required={true}
                 valueInput={valueState.mtr_tickets.personal_emp.nombre}
                 onChange={handleChange}
                 nameLabel="Solicitante"
@@ -290,7 +297,7 @@ const newregister = () => {
                       )
                     }
                     onChange={handleChange}
-                    nameLabel="Fecha Inicio Atención"
+                    nameLabel="F. Inicio"
                     disabled={true}
                   />
                   <CustomInput
@@ -303,7 +310,7 @@ const newregister = () => {
                       )
                     }
                     onChange={handleChange}
-                    nameLabel="Fecha Final Atención"
+                    nameLabel="F. Final"
                     disabled={true}
                   />
                 </span>
@@ -319,6 +326,7 @@ const newregister = () => {
                 getOnlySolicitud={getOnlySolicitud}
                 showSolucion={setShowSolucion}
                 data={valueState}
+                payloadJwt={payloadJWT}
               />
               <span
                 style={{
@@ -649,4 +657,4 @@ const newregister = () => {
   );
 };
 
-export default newregister;
+export default Newregister;

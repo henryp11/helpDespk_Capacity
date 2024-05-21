@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast';
 const API = 'http://localhost:3000/api/v1/tickets';
 const API_DET = 'http://localhost:3000/api/v1/detalle-tickets';
 const API_CTR = 'http://localhost:3000/api/v1/control-tickets';
-const API_CAT = 'http://localhost:3000/api/v1/category';
+// const API_CAT = 'http://localhost:3000/api/v1/category';
 
 const useApiTickets = () => {
   const router = useRouter();
@@ -257,7 +257,8 @@ const useApiTickets = () => {
     id_solicitud,
     dataUpdate,
     assign,
-    redirect
+    redirect,
+    dataMail
   ) => {
     const API_PARAMS = `${API_DET}/${id_ticket}/${id_solicitud}`;
     //Obtengo las variables del LocalStorage
@@ -274,14 +275,93 @@ const useApiTickets = () => {
       if (response) {
         toast.success(response.data.message);
         //Assign = true para recargar la página al momento de asignar el agente
+        //Se envía cuerpo de correo para enviar mail de ticket asignado agente
         if (assign) {
           toast.success('Solicitud asignada con éxito');
-          getSolicitudes(true, true);
+          // Llamar api para envío de correo al cliente de solicitud asignada y que agente se asignó
+          const dataToMail = {
+            id_ticket: id_ticket,
+            id_solicitud: id_solicitud,
+            emailClient: dataMail.email,
+            agente: dataMail.nameAgente,
+            estatus: dataMail.estatus,
+            descripSolic: dataMail.descripSolic,
+          };
+          try {
+            const responseMail = await axios.post(
+              `${API_DET}/sendMail/assigned`,
+              dataToMail,
+              axiosConfig
+            );
+
+            if (responseMail) {
+              //Muestro el mensaje de retorno de la API
+              console.log(response);
+            }
+            getSolicitudes(true, true);
+          } catch (error) {
+            console.log(error);
+            getSolicitudes(true, true);
+          }
+        }
+        //Se envía cuerpo de correo para enviar mail de inicio de ticket
+        if (dataMail && dataMail.estatus === 2) {
+          console.log('verificacion ingresa a solicitud en proceso');
+          // Llamar api para envío de correo al cliente de solicitud Iniciada
+          const dataToMail = {
+            id_ticket: id_ticket,
+            id_solicitud: id_solicitud,
+            emailClient: dataMail.email,
+            agente: dataMail.nameAgente,
+            estatus: dataMail.estatus,
+            descripSolic: dataMail.descripSolic,
+          };
+          try {
+            const responseMail = await axios.post(
+              `${API_DET}/sendMail/assigned`,
+              dataToMail,
+              axiosConfig
+            );
+
+            if (responseMail) {
+              //Muestro el mensaje de retorno de la API
+              console.log(response);
+            }
+          } catch (error) {
+            console.log(error);
+          }
         }
 
+        //Si "redirect=true" se redirecciona a la página principal de solicitudes, usado cuando se finaliza una solicitud
+        //Se envía cuerpo de correo para enviar mail de finalización de ticket
         if (redirect) {
           toast.success('Solicitud Finalizada');
-          router.push('/support/allTicketsAsign');
+          // Llamar api para envío de correo al cliente de solicitud Finalizada
+          const dataToMail = {
+            id_ticket: id_ticket,
+            id_solicitud: id_solicitud,
+            emailClient: dataMail.email,
+            agente: dataMail.nameAgente,
+            estatus: dataMail.estatus,
+            descripSolic: dataMail.descripSolic,
+            detSolucion: dataMail.detSolucion,
+          };
+          try {
+            const responseMail = await axios.post(
+              `${API_DET}/sendMail/assigned`,
+              dataToMail,
+              axiosConfig
+            );
+
+            if (responseMail) {
+              //Muestro el mensaje de retorno de la API
+              console.log(response);
+            }
+            router.push('/support/allTicketsAsign');
+          } catch (error) {
+            console.log(error);
+            router.push('/support/allTicketsAsign');
+          }
         }
       }
     } catch (error) {
@@ -318,8 +398,10 @@ const useApiTickets = () => {
     const API_PARAMS = `${API_DET}/${id_ticket}/${id_solicitud}`;
     //Obtengo las variables del LocalStorage
     const tokenLS = localStorage.getItem('jwt');
+    const payloadLS = localStorage.getItem('payload');
     //Si existen las variables, se las transforma en JSON para su uso
     const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    const payloadStorage = payloadLS && JSON.parse(payloadLS);
     try {
       let axiosConfig = {
         headers: {
@@ -328,6 +410,8 @@ const useApiTickets = () => {
       };
       const response = await axios.get(API_PARAMS, axiosConfig);
       if (response) {
+        setToken(tokenStorage);
+        setPayloadJwt(payloadStorage);
         return response.data;
       }
     } catch (error) {
@@ -503,6 +587,7 @@ const useApiTickets = () => {
     getTicketSolic,
     postControl,
     dataTicket,
+    token,
     payloadJwt,
     load,
     error,

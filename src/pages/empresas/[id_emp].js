@@ -11,12 +11,11 @@ import { validateExpToken } from '../../utils/helpers';
 import styles from '../../styles/forms.module.css';
 import stylesEmp from '../../styles/emp.module.css';
 
-const newregister = () => {
+const Newregister = () => {
   const {
     postEmpresas,
     getEmpresaById,
     updateEmpresa,
-    payloadJwt,
     error,
     statusError,
     messageError,
@@ -281,4 +280,4 @@ const newregister = () => {
   );
 };
 
-export default newregister;
+export default Newregister;

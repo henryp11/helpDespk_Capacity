@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { usePathname } from 'next/navigation';
-// import ErrorLayout from './ErrorLayout';
 import FileTickets from './FileTickets';
 import useApiTickets from '@/hooks/useApiTickets';
 import CustomInput from './CustomInput';
@@ -17,11 +15,7 @@ const Solicitud = ({
   enviroment,
   statusTicket,
 }) => {
-  const { updateSolicitud, error, statusError, messageError } = useApiTickets();
-
-  // const nextRouter = useNextRouter(); //usado de next/router para extraer el query params de la ruta (el id de cada registro de firebase)
-  // const idSearch = nextRouter.query.id_ticket; //Para verificar el string param de id_ticket y saber si estoy creando o editando un registro
-  // const ruta = usePathname();
+  const { updateSolicitud } = useApiTickets();
 
   const stateSolicitud = {
     agente_asig: '',

@@ -208,6 +208,7 @@ const useApiUsuarios = () => {
     updateUsuario,
     deleteUsuario,
     dataUser,
+    token,
     payloadJwt,
     load,
     error,

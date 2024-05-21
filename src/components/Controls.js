@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import Link from 'next/link';
 import moment from 'moment';
 import CustomInput from './CustomInput';
 import useApiControls from '@/hooks/useApiControls';
@@ -9,23 +8,13 @@ import styles from '../styles/forms.module.css';
 
 const Controls = ({ id_ticket, id_solicitud, perfil }) => {
   const ruta = usePathname();
-  const {
-    getControlByTicketSolicitud,
-    updateControl,
-    error,
-    statusError,
-    messageError,
-  } = useApiControls();
+  const { getControlByTicketSolicitud } = useApiControls();
 
-  const stateControls = {
-    controls: [],
-  };
   const [loadCreate, setLoadCreate] = useState({
     loading: false,
     error: null,
   });
   const [valueState, setValueState] = useState([]);
-  const [totalTimeControl, SetTotalTimeControl] = useState(0);
 
   useEffect(() => {
     getDataControl();
@@ -49,7 +38,7 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
               }, 0) * 1000
           )
         );
-        //xtraigo los datos que me interesan para armar el objeto del estado y de esa forma actualizar
+        //Extraigo los datos que me interesan para armar el objeto del estado y de esa forma actualizar
         //Solo los datos que pertenecen a la tabla que requiero, en este caso la tabla de COntroles, no envio el id_ticket ya que es la PK y está prohibido topar ese campo.
         // const dataEdit = {
         //   id_cliente: data.id_cliente,
@@ -87,11 +76,6 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (idSearch === 'new') {
-    //   // postEmpresas(valueState);
-    // } else {
-    //   updateTicket(idSearch, valueState);
-    // }
   };
 
   console.log({ stateControls: valueState });

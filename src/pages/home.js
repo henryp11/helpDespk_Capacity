@@ -6,7 +6,7 @@ import CreateLinkPersonalEmp from '@/containers/CreateLinkPersonalEmp';
 import CreateLinkAgenteSop from '@/containers/CreateLinkAgenteSop';
 import { validateExpToken } from '../utils/helpers';
 
-const home = () => {
+const Home = () => {
   const [payloadJwt, setPayloadJwt] = useState({});
 
   useEffect(() => {
@@ -44,4 +44,4 @@ const home = () => {
   );
 };
 
-export default home;
+export default Home;

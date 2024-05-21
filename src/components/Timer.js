@@ -13,15 +13,16 @@ const Timer = ({
   getDataTicket,
   getOnlySolicitud,
   data,
+  payloadJwt,
 }) => {
   // const [diff, setDiff] = useState(null);
   const [initial, setInitial] = useState(null);
   const [pause, setPause] = useState(true);
-  const [resume, setResume] = useState(true);
+  // const [resume, setResume] = useState(true);
   const [showStart, setShowStart] = useState(true);
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [dateStart, setDateStart] = useState(data.fecha_ini_solucion);
-  const [datePause, setDatePause] = useState(null);
+  const [datePaused, setDatePaused] = useState(null);
 
   // console.log(`props del Timer= idTicker: ${idTicket} - ${idSolicitud}`);
 
@@ -76,13 +77,26 @@ const Timer = ({
 
     //Evaluo la primera vez que empieza la atención en la solicitud, es decir cuando la solicitud este como "asignado"
     //Para cambiar su estatus y colocar la fecha de inicio de atención de la solución para la solicitud
+    //Adicional se utiliza el último parámetro de la función "updateSolicitud" para enviar los datos para el correo del cliente
     if (data.estatus === 'asignado') {
-      updateSolicitud(idTicket, idSolicitud, {
-        estatus: 'proceso',
-        fecha_ini_solucion: moment(new Date(dateBegin)).format(
-          'YYYY-MM-DDTkk:mm:ss'
-        ),
-      });
+      updateSolicitud(
+        idTicket,
+        idSolicitud,
+        {
+          estatus: 'proceso',
+          fecha_ini_solucion: moment(new Date(dateBegin)).format(
+            'YYYY-MM-DDTkk:mm:ss'
+          ),
+        },
+        false,
+        false,
+        {
+          email: data.mtr_tickets.personal_emp.correo,
+          nameAgente: payloadJwt.nameAgSop,
+          estatus: 2,
+          descripSolic: data.descripcion,
+        }
+      );
     }
   };
 
@@ -90,8 +104,8 @@ const Timer = ({
     const datePause = Date.now(); //Captura la fecha al pausar en ms
     const fin = performance.now();
 
-    setDatePause(moment(new Date(datePause)).format('YYYY-MM-DDTkk:mm:ss'));
-
+    setDatePaused(moment(new Date(datePause)).format('YYYY-MM-DDTkk:mm:ss'));
+    console.log(datePaused);
     const tiempoTotal = fin - initial;
     console.log(`Tiempo total hasta la pausa: ${timeFormat(tiempoTotal)}`);
 

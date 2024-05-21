@@ -13,7 +13,7 @@ import { validateExpToken, timeFormat } from '../../utils/helpers';
 import styles from '../../styles/forms.module.css';
 import stylesEmp from '../../styles/emp.module.css';
 
-const newregister = () => {
+const Newregister = () => {
   const {
     getTicketById,
     updateTicket,
@@ -153,8 +153,8 @@ const newregister = () => {
         </h2>
         <h3>
           <em>
-            Si el estado del ticket es "Solicitado" aún puede editar su
-            información
+            Si el estado del ticket es &quot;Solicitado&quot; aún puede editar
+            su información
           </em>
         </h3>
         {loadCreate.loading === false ? (
@@ -459,4 +459,4 @@ const newregister = () => {
   );
 };
 
-export default newregister;
+export default Newregister;

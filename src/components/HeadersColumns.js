@@ -1,8 +1,6 @@
 import React from 'react';
 
-const HeadersColumns = ({ classEsp, columnTitles, columnActivate }) => {
-  // console.log(columnTitles);
-
+const HeadersColumns = ({ classEsp, columnTitles }) => {
   return (
     <div className={`generalTitle ${classEsp.toString().replace(',', ' ')}`}>
       {columnTitles.map((column) => {

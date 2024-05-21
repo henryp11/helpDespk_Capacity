@@ -6,7 +6,7 @@ import useApiUsuarios from '@/hooks/useApiUsuarios';
 import styles from '../styles/forms.module.css';
 import stylesEmp from '../styles/emp.module.css';
 
-const account = () => {
+const Account = () => {
   const { postUsuario, error, statusError, messageError } = useApiUsuarios();
 
   const initialState = {
@@ -114,4 +114,4 @@ const account = () => {
   );
 };
 
-export default account;
+export default Account;

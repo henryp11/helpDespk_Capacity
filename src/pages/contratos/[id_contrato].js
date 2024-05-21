@@ -11,14 +11,12 @@ import useApiPlanesMant from '@/hooks/useApiPlanesMant';
 import { validateExpToken, addZero } from '../../utils/helpers';
 import styles from '../../styles/forms.module.css';
 import stylesEmp from '../../styles/emp.module.css';
-import Login from '@/containers/Login';
 
-const newregister = () => {
+const Newregister = () => {
   const {
     postContrato,
     getContratoById,
     updateContrato,
-    payloadJwt,
     error,
     statusError,
     messageError,
@@ -389,4 +387,4 @@ const newregister = () => {
   );
 };
 
-export default newregister;
+export default Newregister;

@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useRouter as useNextRouter } from 'next/router';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import CustomInput from '../../components/CustomInput';
@@ -15,7 +14,7 @@ import FileTickets from '@/components/FileTickets';
 import styles from '../../styles/forms.module.css';
 import stylesEmp from '../../styles/emp.module.css';
 
-const newregister = () => {
+const Newregister = () => {
   const router = useRouter();
   const {
     postTickets,
@@ -29,7 +28,6 @@ const newregister = () => {
 
   const { getCategory, dataCateg } = useApiCategory();
 
-  const nextRouter = useNextRouter(); //usado de next/router para extraer el query params de la ruta (el id de cada registro de firebase)
   // const idSearch = nextRouter.query.id_ticket; //Para verificar el string param de id_ticket y saber si estoy creando o editando un registro
   const ruta = usePathname();
 
@@ -49,10 +47,6 @@ const newregister = () => {
   };
   const [valueState, setValueState] = useState(initialState);
   const [stateSolicitud, setStateSolicitud] = useState(initialStateSolic);
-  const [loadCreate, setLoadCreate] = useState({
-    loading: false,
-    error: null,
-  });
   const [ticketCreated, setTicketCreated] = useState({ isCreated: false });
   const [solicitudCreated, setSolicitudCreated] = useState({
     isCreated: false,
@@ -206,87 +200,84 @@ const newregister = () => {
     <>
       <div className={stylesEmp.crudEmpContainer}>
         <h2>Ingresando Nuevo ticket</h2>
-        {loadCreate.loading === false ? (
-          <form
-            id="form"
-            onSubmit={handleSubmit}
-            className={styles['form-default']}
+        <form
+          id="form"
+          onSubmit={handleSubmit}
+          className={styles['form-default']}
+        >
+          <span
+            style={{
+              gridColumn: '1/-1',
+              display: 'grid',
+              gridTemplateColumns: '20% 80%',
+              alignItems: 'center',
+            }}
           >
-            <span
-              style={{
-                gridColumn: '1/-1',
-                display: 'grid',
-                gridTemplateColumns: '20% 80%',
-                alignItems: 'center',
-              }}
-            >
-              <span className={styles.selectContainer}>
-                {/* <b>* Categoría Soporte:</b> */}
-                <select name="id_tipo" onChange={handleChangeSelect} required>
-                  {valueState.id_tipo ? (
-                    <option value={valueState.id_tipo}>
-                      {dataCateg
-                        .filter(
-                          (catSelect) => catSelect.id_cat === valueState.id_tipo
-                        )
-                        .map((category) => category.descrip)}
-                    </option>
-                  ) : (
-                    <option value="" label="Elegir Categ. Soporte">
-                      Elegir Categ. Soporte
-                    </option>
-                  )}
-                  {dataCateg.map((category) => {
-                    if (category.estatus) {
-                      return (
-                        <option key={category.id_cat} value={category.id_cat}>
-                          {category.descrip}
-                        </option>
-                      );
-                    }
-                  })}
-                </select>
-              </span>
-              <CustomInput
-                typeInput="text"
-                nameInput="descrip_tk"
-                valueInput={valueState.descrip_tk}
-                onChange={handleChange}
-                placeholder="Ingrese una descripción general del motivo por el que requiere soporte para que su ticket sea ingresado"
-                nameLabel="Descripción General"
-                required={true}
-              />
+            <span className={styles.selectContainer}>
+              {/* <b>* Categoría Soporte:</b> */}
+              <select name="id_tipo" onChange={handleChangeSelect} required>
+                {valueState.id_tipo ? (
+                  <option value={valueState.id_tipo}>
+                    {dataCateg
+                      .filter(
+                        (catSelect) => catSelect.id_cat === valueState.id_tipo
+                      )
+                      .map((category) => category.descrip)}
+                  </option>
+                ) : (
+                  <option value="" label="Elegir Categ. Soporte">
+                    Elegir Categ. Soporte
+                  </option>
+                )}
+                {dataCateg.map((category) => {
+                  if (category.estatus) {
+                    return (
+                      <option key={category.id_cat} value={category.id_cat}>
+                        {category.descrip}
+                      </option>
+                    );
+                  }
+                })}
+              </select>
             </span>
+            <CustomInput
+              typeInput="text"
+              nameInput="descrip_tk"
+              valueInput={valueState.descrip_tk}
+              onChange={handleChange}
+              placeholder="Ingrese una descripción general del motivo por el que requiere soporte para que su ticket sea ingresado"
+              nameLabel="Descripción General"
+              required={true}
+            />
+          </span>
 
-            {!ticketCreated.isCreated && (
-              <span
-                className={styles.buttonContainer}
-                style={{ gap: '4px', width: '50%' }}
+          {!ticketCreated.isCreated && (
+            <span
+              className={styles.buttonContainer}
+              style={{ gap: '4px', width: '50%' }}
+            >
+              <button
+                title="Registrar"
+                className={`${styles.formButton} ${styles.formButtonTicket}`}
+                id={styles.regTicket}
               >
-                <button
-                  title="Registrar"
-                  className={`${styles.formButton} ${styles.formButtonTicket}`}
-                  id={styles.regTicket}
-                >
-                  Registrar Ticket
-                </button>
+                Registrar Ticket
+              </button>
 
-                <button
-                  tittle="Cancelar"
-                  type="button"
-                  className={`${styles.formButton} ${styles.formButtonTicket}`}
-                  id={styles.cancelButtonTicket}
-                >
-                  <Link href="/home" className={`${styles.cancelButton}`}>
-                    Cancelar
-                  </Link>
-                </button>
-              </span>
-            )}
-          </form>
-        ) : (
-          <h1>loading...</h1>
-        )}
+              <button
+                tittle="Cancelar"
+                type="button"
+                className={`${styles.formButton} ${styles.formButtonTicket}`}
+                id={styles.cancelButtonTicket}
+              >
+                <Link href="/home" className={`${styles.cancelButton}`}>
+                  Cancelar
+                </Link>
+              </button>
+            </span>
+          )}
+        </form>
+
         {ticketCreated.isCreated && (
           <p style={{ textAlign: 'center' }}>
             Puede registrar hasta {4 - solicitudCreated.cantidad} solicitudes
@@ -551,7 +542,7 @@ const newregister = () => {
           {dataTicket &&
             dataTicket.map((solicitud) => {
               return (
-                <span>
+                <span key={solicitud.id_solicitud}>
                   <b>{solicitud.id_solicitud}</b>
                   <p>{solicitud.descripcion}</p>
                 </span>
@@ -566,4 +557,4 @@ const newregister = () => {
   );
 };
 
-export default newregister;
+export default Newregister;

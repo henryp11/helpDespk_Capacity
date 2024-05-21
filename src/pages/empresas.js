@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link.js';
-import Appcontext from '../context/AppContext';
 import EmpDetails from '../containers/EmpDetails';
 import ErrorLayout from '../components/ErrorLayout';
 //Importo este componente con la función dynamic de Next para deshabilitar el SSR (Server side rendering)

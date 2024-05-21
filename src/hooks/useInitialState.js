@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+// NO SE ESTA USANDO PARA ESTE PROYECTO, SE TIENE DE EJEMPLO PARA USO DE ESTADO
+// PERO YA SE COLOCÓ UN ESTADO POR DEFECTO PARA TODO POR ESO SE DEJA EL ARCHIVO
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 // Empiezo creando un estado inicial general de los atributos requeridos en otras pantallas
 const initialState = {
@@ -7,7 +9,7 @@ const initialState = {
   showAlert: false,
   showFormClient: false,
   cliente: null,
-  idVendedor: "",
+  idVendedor: '',
   itemsCotiza: [],
   totalesCotiza: {
     ivaTotal: 0.0,
@@ -33,90 +35,90 @@ const useInitialState = () => {
   const getUrl = () => {
     const url = `${pathname}`;
     console.log(url);
-    if (url === "/") {
+    if (url === '/') {
       setShowHeader(false);
     }
     return url;
   };
 
   //Funciones para obtener los datos de los items a mostrar
-  const getProducts = async () => {
-    setLoadData({ loading: true, error: null });
-    try {
-      onSnapshot(collection(db, "Productos"), (querySnapshot) => {
-        const docs = [];
-        querySnapshot.forEach((doc) => {
-          docs.push({ ...doc.data(), id: doc.id });
-        });
-        // Ordeno los datos por id_producto
-        docs.sort((a, b) => {
-          if (a.idItem < b.idItem) {
-            return -1;
-          }
-          if (a.idItem > b.idItem) {
-            return 1;
-          }
-          return 0;
-        });
-        setItemsList(docs);
-        setLoadData({ loading: false, error: null });
-      });
-    } catch (error) {
-      setLoadData({ loading: false, error: error });
-    }
-  };
+  // const getProducts = async () => {
+  //   setLoadData({ loading: true, error: null });
+  //   try {
+  //     onSnapshot(collection(db, 'Productos'), (querySnapshot) => {
+  //       const docs = [];
+  //       querySnapshot.forEach((doc) => {
+  //         docs.push({ ...doc.data(), id: doc.id });
+  //       });
+  //       // Ordeno los datos por id_producto
+  //       docs.sort((a, b) => {
+  //         if (a.idItem < b.idItem) {
+  //           return -1;
+  //         }
+  //         if (a.idItem > b.idItem) {
+  //           return 1;
+  //         }
+  //         return 0;
+  //       });
+  //       setItemsList(docs);
+  //       setLoadData({ loading: false, error: null });
+  //     });
+  //   } catch (error) {
+  //     setLoadData({ loading: false, error: error });
+  //   }
+  // };
 
-  const getClients = async () => {
-    setLoadData({ loading: true, error: null });
-    try {
-      //querySnapshot es como firebase llama a la obtención de una respuesta, y obtengo los datos con getDocs
-      const querySnapshot = await getDocs(collection(db, "Clientes")); //Obtengo los datos de una colección
-      //Cada colección almacena los datos como documentos, en donde
-      // itero sobre ellos y extraigo la información de cada uno con .data()
-      const docs = [];
-      querySnapshot.forEach((doc) => {
-        // console.log(doc.data());
-        docs.push({ ...doc.data(), id: doc.id });
-      });
-      docs.sort((a, b) => {
-        if (a.idCliente < b.idCliente) {
-          return -1;
-        }
-        if (a.idCliente > b.idCliente) {
-          return 1;
-        }
-        return 0;
-      });
-      setClientList(docs);
-      setLoadData({ loading: false, error: null });
-    } catch (error) {
-      setLoadData({ loading: false, error: error });
-    }
-  };
+  // const getClients = async () => {
+  //   setLoadData({ loading: true, error: null });
+  //   try {
+  //     //querySnapshot es como firebase llama a la obtención de una respuesta, y obtengo los datos con getDocs
+  //     const querySnapshot = await getDocs(collection(db, 'Clientes')); //Obtengo los datos de una colección
+  //     //Cada colección almacena los datos como documentos, en donde
+  //     // itero sobre ellos y extraigo la información de cada uno con .data()
+  //     const docs = [];
+  //     querySnapshot.forEach((doc) => {
+  //       // console.log(doc.data());
+  //       docs.push({ ...doc.data(), id: doc.id });
+  //     });
+  //     docs.sort((a, b) => {
+  //       if (a.idCliente < b.idCliente) {
+  //         return -1;
+  //       }
+  //       if (a.idCliente > b.idCliente) {
+  //         return 1;
+  //       }
+  //       return 0;
+  //     });
+  //     setClientList(docs);
+  //     setLoadData({ loading: false, error: null });
+  //   } catch (error) {
+  //     setLoadData({ loading: false, error: error });
+  //   }
+  // };
 
-  const getVendedores = async () => {
-    setLoadData({ loading: true, error: null });
-    try {
-      const querySnapshot = await getDocs(collection(db, "Vendedores"));
-      const docs = [];
-      querySnapshot.forEach((doc) => {
-        docs.push({ ...doc.data(), id: doc.id });
-      });
-      docs.sort((a, b) => {
-        if (a.idVend < b.idVend) {
-          return -1;
-        }
-        if (a.idVend > b.idVend) {
-          return 1;
-        }
-        return 0;
-      });
-      setVendList(docs);
-      setLoadData({ loading: false, error: null });
-    } catch (error) {
-      setLoadData({ loading: false, error: error });
-    }
-  };
+  // const getVendedores = async () => {
+  //   setLoadData({ loading: true, error: null });
+  //   try {
+  //     const querySnapshot = await getDocs(collection(db, 'Vendedores'));
+  //     const docs = [];
+  //     querySnapshot.forEach((doc) => {
+  //       docs.push({ ...doc.data(), id: doc.id });
+  //     });
+  //     docs.sort((a, b) => {
+  //       if (a.idVend < b.idVend) {
+  //         return -1;
+  //       }
+  //       if (a.idVend > b.idVend) {
+  //         return 1;
+  //       }
+  //       return 0;
+  //     });
+  //     setVendList(docs);
+  //     setLoadData({ loading: false, error: null });
+  //   } catch (error) {
+  //     setLoadData({ loading: false, error: error });
+  //   }
+  // };
 
   //Función para mostrar el componente que contendrá el listado de items al facturar
   const showListItems = () => {
@@ -194,7 +196,6 @@ const useInitialState = () => {
     });
   };
 
-  // const calculaTotales = async () => {
   //   const listaDetItems = await state.itemsCotiza;
   //   if (listaDetItems.length > 0) {
   //     //Las siguientes líneas son para obtener los valores totales de cada columna
@@ -282,7 +283,7 @@ const useInitialState = () => {
       if (item.idItem !== idItemSearch) return item;
       return {
         ...item,
-        [e.target.name]: tipe === "number" ? +e.target.value : e.target.value,
+        [e.target.name]: tipe === 'number' ? +e.target.value : e.target.value,
       };
     };
     //Al obtener el item, bajo un nivel más (precios) el cual es un array
@@ -336,9 +337,6 @@ const useInitialState = () => {
     clientList,
     vendList,
     loadData,
-    getProducts,
-    getClients,
-    getVendedores,
     addItemFact,
     reduceCantItemFact,
     removeItemFact,
@@ -350,7 +348,6 @@ const useInitialState = () => {
     closeAllModal,
     getUrl,
     showHeader,
-    // calculaTotales,
   }; //retorno el estado y funciones a usar
 };
 

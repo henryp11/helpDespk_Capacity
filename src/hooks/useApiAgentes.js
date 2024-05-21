@@ -253,6 +253,7 @@ const useApiAgentes = () => {
     updateAgente,
     deleteAgente,
     dataAgt,
+    token,
     payloadJwt,
     load,
     error,

@@ -100,6 +100,7 @@ const useAuth = () => {
       })
       .catch((error) => {
         console.log('error desde hook auth');
+        console.log({ errorHookAuth: error });
         showError(error);
       });
   };

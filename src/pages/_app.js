@@ -4,7 +4,7 @@
 import Head from 'next/head';
 import Header from '../containers/Header';
 import Appcontext from '../context/AppContext';
-import { Toaster } from './_Toaster';
+import { Toaster } from '../componentHide/_Toaster';
 //import Header from "components/Header";
 import useInitialState from '../hooks/useInitialState';
 import '../styles/globals.css';

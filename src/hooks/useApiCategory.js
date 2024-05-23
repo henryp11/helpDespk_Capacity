@@ -6,7 +6,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-const API = 'http://localhost:3000/api/v1/category';
+const API = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/category`;
 
 const useApiCategory = () => {
   const router = useRouter();

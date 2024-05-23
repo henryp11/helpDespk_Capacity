@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
-const API = 'http://localhost:3000/api/v1/auth';
+const API = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/auth`;
 
 const useAuth = () => {
   const router = useRouter();

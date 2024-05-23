@@ -6,9 +6,9 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-const API = 'http://localhost:3000/api/v1/tickets';
-const API_DET = 'http://localhost:3000/api/v1/detalle-tickets';
-const API_CTR = 'http://localhost:3000/api/v1/control-tickets';
+const API = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/tickets`;
+const API_DET = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/detalle-tickets`;
+const API_CTR = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/control-tickets`;
 // const API_CAT = 'http://localhost:3000/api/v1/category';
 
 const useApiTickets = () => {

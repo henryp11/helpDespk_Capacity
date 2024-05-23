@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-const API = 'http://localhost:3000/api/v1/control-tickets';
+const API = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/control-tickets`;
 
 const useApiControls = () => {
   // const router = useRouter();

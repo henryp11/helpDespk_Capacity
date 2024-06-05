@@ -9,6 +9,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
 const API = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/auth`;
+console.log(API);
 
 const useAuth = () => {
   const router = useRouter();

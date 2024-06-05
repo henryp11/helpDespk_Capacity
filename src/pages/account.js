@@ -40,7 +40,7 @@ const Account = () => {
           <CustomInput
             typeInput="text"
             nameInput="username"
-            placeholder="Nombre de usuario que deseas se muestre en la app"
+            placeholder="Nombre de usuario a mostrar en la app (No debe contener números, espacios o caracteres especiales)"
             valueInput={valueState.username}
             onChange={handleChange}
             nameLabel={`Nombre de usuario`}

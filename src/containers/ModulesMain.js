@@ -37,17 +37,17 @@ const modEmpresasSup = [
 const modTicketsClients = [
   {
     idOption: 1,
-    descrip: 'Registrar ticket de soporte',
+    descrip: 'Registrar tickets y solicitudes de soporte',
     route: '/tickets/new',
   },
   {
     idOption: 2,
-    descrip: 'Seguimiento de ticket',
+    descrip: 'Seguimiento / edición de tickets y solicitudes',
     route: '/tracking/allTickets',
   },
   {
     idOption: 3,
-    descrip: 'Historial de tickets realizados',
+    descrip: 'Consultar historial de tickets y solicitudes realizadas',
     route: '/tickets/allTickets',
   },
 ];
@@ -64,19 +64,19 @@ const modTicketsAdmin = [
   },
   {
     idOption: 3,
-    descrip: 'Historial de todos los tickets realizados',
+    descrip: 'Consultar historial de tickets y solicitudes realizadas',
     route: '/tickets/allTickets',
   },
 ];
 const modTicketsAgents = [
   {
     idOption: 1,
-    descrip: 'Solicitudes Pendientes para Asignar Agente',
+    descrip: 'Solicitudes Pendientes de Asignar un Agente',
     route: '/support/allTickets',
   },
   {
     idOption: 2,
-    descrip: 'Solicitudes Asignadas al Agente de Sop.',
+    descrip: 'Solicitudes que se te han asignado',
     route: '/support/allTicketsAsign',
   },
   {
@@ -86,7 +86,7 @@ const modTicketsAgents = [
   },
   {
     idOption: 4,
-    descrip: 'Historial de todos los tickets realizados',
+    descrip: 'Consultar historial de tickets y solicitudes realizadas',
     route: '/tickets/allTickets',
   },
 ];

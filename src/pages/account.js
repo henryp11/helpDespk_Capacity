@@ -40,7 +40,7 @@ const Account = () => {
           <CustomInput
             typeInput="text"
             nameInput="username"
-            placeholder="Nombre de usuario a mostrar en la app (No debe contener números, espacios o caracteres especiales)"
+            placeholder="Nombre de usuario que se mostrará en la app"
             valueInput={valueState.username}
             onChange={handleChange}
             nameLabel={`Nombre de usuario`}
@@ -49,7 +49,7 @@ const Account = () => {
           <CustomInput
             typeInput="email"
             nameInput="mail"
-            placeholder="Correo que utilizaras para realizar el Inicio de Sesión a la App"
+            placeholder="Correo que utilizaras para realizar el inicio de sesión a la App"
             valueInput={valueState.mail}
             onChange={handleChange}
             nameLabel="Correo"
@@ -82,7 +82,7 @@ const Account = () => {
             </svg>
           </button>
           <button
-            tittle="Cancelar"
+            title="Cancelar"
             className={`${styles.formButton}`}
             id="cancelButton"
             onClick={() => {

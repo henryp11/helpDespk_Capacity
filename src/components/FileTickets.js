@@ -8,6 +8,12 @@ import {
   deleteObject,
 } from 'firebase/storage'; //Storage de firebase para almacenar archivos
 import { toast } from 'react-hot-toast';
+import { RiFileWord2Line } from 'react-icons/ri';
+import { RiFileExcel2Line } from 'react-icons/ri';
+import { FaRegFilePdf } from 'react-icons/fa6';
+import { TbFileTypeTxt } from 'react-icons/tb';
+import { TbFileTypeXml } from 'react-icons/tb';
+import { FaDownload } from 'react-icons/fa';
 import styles from '@/styles/forms.module.css';
 
 const FileTickets = ({
@@ -151,156 +157,208 @@ const FileTickets = ({
   return (
     <>
       {showModal.active && showModal.name === idFile && (
-        <div>
-          <div className={styles.inputImage}>
-            <i>
-              {stateSolicitud.capturas[idFile].name &&
-                `Nombre Archivo: ${stateSolicitud.capturas[idFile].name}`}
-            </i>
+        <div className={`${styles.inputImage} ${styles.inputImageModal}`}>
+          <h1
+            style={{
+              position: 'absolute',
+              top: '0',
+              textAlign: 'center',
+              marginTop: '12px',
+            }}
+          >
+            Para añadir un archivo, de click en el recuadro o arrastrelo
+          </h1>
+          <button
+            tittle="Cancelar"
+            type="button"
+            onClick={() => {
+              setShowModalFile({ ...showModal, active: false });
+              // Al Cerrar el modal de preview de archivos, si solo está viendo un archivo
+              // Ya subido y cancela no se quitara el URL de estado de la solicitud
+              // Esta condición solo aplica para cuando se ha seleccionado algún archivo
+              //Y no se subió al Storage y se dió clic en cancelar, se entiende que debe enserar el estado del archivo
+              if (!stateSolicitud.capturas[idFile].url) {
+                setStateSolicitud({
+                  ...stateSolicitud,
+                  capturas: {
+                    ...stateSolicitud.capturas,
+                    [idFile]: {
+                      name: '',
+                      url: '',
+                    },
+                  },
+                });
+              }
+            }}
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: '50px',
+              background: '#800000',
+              borderRadius: '50%',
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+          </button>
+          <span style={{ position: 'relative' }}>
+            <input type="file" id="file" onChange={handleFile(idFile)} />
             <div className={styles.containerPreview}>
+              <h2>
+                {stateSolicitud.capturas[idFile].name &&
+                  `Nombre Archivo: ${stateSolicitud.capturas[idFile].name}`}
+              </h2>
               {archivo && (
                 <>
-                  <img
-                    src={previewImg}
-                    alt={stateSolicitud.capturas[idFile].name}
-                    className={styles.previewImage}
-                  />
-                </>
-              )}
-              {!archivo && stateSolicitud.capturas[idFile].url && (
-                <>
-                  <img
-                    src={stateSolicitud.capturas[idFile].url}
-                    alt={stateSolicitud.capturas[idFile].name}
-                    className={styles.previewImage}
-                  />
-                </>
-              )}
-            </div>
-          </div>
-          <div className={`${styles.inputImage} ${styles.inputImageModal}`}>
-            <button
-              tittle="Cancelar"
-              type="button"
-              onClick={() => {
-                setShowModalFile({ ...showModal, active: false });
-                // Al Cerrar el modal de preview de archivos, si solo está viendo un archivo
-                // Ya subido y cancela no se quitara el URL de estado de la solicitud
-                // Esta condición solo aplica para cuando se ha seleccionado algún archivo
-                //Y no se subió al Storage y se dió clic en cancelar, se entiende que debe enserar el estado del archivo
-                if (!stateSolicitud.capturas[idFile].url) {
-                  setStateSolicitud({
-                    ...stateSolicitud,
-                    capturas: {
-                      ...stateSolicitud.capturas,
-                      [idFile]: {
-                        name: '',
-                        url: '',
-                      },
-                    },
-                  });
-                }
-              }}
-              style={{
-                position: 'absolute',
-                top: '1%',
-                right: '20%',
-                background: '#800000',
-                borderRadius: '50%',
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-            </button>
-            <span>
-              <input type="file" id="file" onChange={handleFile(idFile)} />
-              <div className={styles.containerPreview}>
-                <h2>
-                  {stateSolicitud.capturas[idFile].name &&
-                    `Nombre Archivo: ${stateSolicitud.capturas[idFile].name}`}
-                </h2>
-                {archivo && (
-                  <>
+                  {archivo.type.includes('image') && (
                     <img
                       src={previewImg}
                       alt={stateSolicitud.capturas[idFile].name}
                       className={styles.previewImage}
                     />
-                    {previewImg && (
-                      <>
-                        <button
-                          onClick={() => {
-                            handleStorage(idFile);
-                          }}
-                          type="button"
-                          tittle="Guardar Archivo"
+                  )}
+                  {archivo.type.includes(
+                    'officedocument.wordprocessingml.document'
+                  ) && (
+                    <span className="reactIconsFiles">
+                      <RiFileWord2Line />
+                    </span>
+                  )}
+                  {archivo.type.includes(
+                    'officedocument.spreadsheetml.sheet'
+                  ) && (
+                    <span className="reactIconsFiles">
+                      <RiFileExcel2Line />
+                    </span>
+                  )}
+                  {archivo.type.includes('application/pdf') && (
+                    <span className="reactIconsFiles">
+                      <FaRegFilePdf />
+                    </span>
+                  )}
+
+                  {archivo.type.includes('text/plain') && (
+                    <span className="reactIconsFiles">
+                      <TbFileTypeTxt />
+                    </span>
+                  )}
+                  {archivo.type.includes('text/xml') && (
+                    <span className="reactIconsFiles">
+                      <TbFileTypeXml />
+                    </span>
+                  )}
+                  {previewImg && (
+                    <>
+                      <button
+                        onClick={() => {
+                          handleStorage(idFile);
+                        }}
+                        type="button"
+                        tittle="Guardar Archivo"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                            />
-                          </svg>
-                          Subir Archivo
-                          {!isUpload && `Cargando...`}
-                        </button>
-                      </>
-                    )}
-                  </>
-                )}
-                {!archivo && stateSolicitud.capturas[idFile].url && (
-                  <>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                          />
+                        </svg>
+                        Subir Archivo
+                        {!isUpload && `Cargando...`}
+                      </button>
+                    </>
+                  )}
+                </>
+              )}
+              {!archivo && stateSolicitud.capturas[idFile].url && (
+                <>
+                  {stateSolicitud.capturas[idFile].type.includes('image') && (
                     <img
                       src={stateSolicitud.capturas[idFile].url}
                       alt={stateSolicitud.capturas[idFile].name}
                       className={styles.previewImage}
                     />
-                    <button
-                      onClick={() => {
-                        removeImage(idFile);
-                      }}
-                      className={styles.removeImage}
-                      type="button"
+                  )}
+                  {stateSolicitud.capturas[idFile].type.includes(
+                    'officedocument.wordprocessingml.document'
+                  ) && (
+                    <span className="reactIconsFiles">
+                      <RiFileWord2Line />
+                    </span>
+                  )}
+                  {stateSolicitud.capturas[idFile].type.includes(
+                    'officedocument.spreadsheetml.sheet'
+                  ) && (
+                    <span className="reactIconsFiles">
+                      <RiFileExcel2Line />
+                    </span>
+                  )}
+                  {stateSolicitud.capturas[idFile].type.includes(
+                    'application/pdf'
+                  ) && (
+                    <span className="reactIconsFiles">
+                      <FaRegFilePdf />
+                    </span>
+                  )}
+
+                  {stateSolicitud.capturas[idFile].type.includes(
+                    'text/plain'
+                  ) && (
+                    <span className="reactIconsFiles">
+                      <TbFileTypeTxt />
+                    </span>
+                  )}
+                  {stateSolicitud.capturas[idFile].type.includes(
+                    'text/xml'
+                  ) && (
+                    <span className="reactIconsFiles">
+                      <TbFileTypeXml />
+                    </span>
+                  )}
+                  <button
+                    onClick={() => {
+                      removeImage(idFile);
+                    }}
+                    className={styles.removeImage}
+                    type="button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 13.5H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
-                        />
-                      </svg>
-                      Quitar Imágen
-                    </button>
-                  </>
-                )}
-              </div>
-            </span>
-          </div>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 13.5H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+                      />
+                    </svg>
+                    Quitar Imágen
+                  </button>
+                </>
+              )}
+            </div>
+          </span>
         </div>
       )}
     </>

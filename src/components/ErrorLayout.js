@@ -9,7 +9,7 @@ const ErrorLayout = ({ messageError, statusCode, customMessage, account }) => {
       {!customMessage && <h2>Error {statusCode}</h2>}
       {/* {!customMessage && messageError[0].code !== 'ERR_NETWORK' ? ( */}
       {!customMessage ? (
-        messageError.map((error, index) => {
+        messageError?.map((error, index) => {
           return <p key={index}>{error}</p>;
         })
       ) : (

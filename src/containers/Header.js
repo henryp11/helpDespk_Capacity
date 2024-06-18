@@ -25,9 +25,11 @@ const Header = () => {
     window.location.href = '/';
   };
 
-  console.log(payloadJwt);
-
-  if (pathname === '/') {
+  if (
+    pathname === '/' ||
+    pathname === '/account' ||
+    pathname === '/recovery/recoverypass'
+  ) {
     return (
       <header className="loginView">
         <div className="logoMain">

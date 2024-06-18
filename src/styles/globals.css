@@ -74,12 +74,12 @@ h5 {
 
 .reactIconsFiles {
   background: var(--tittles-hk);
-  width: 70px;
-  height: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
+  width: 70px !important;
+  height: 70px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  border-radius: 50% !important;
 }
 
 .reactIconsFiles svg {

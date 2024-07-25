@@ -161,7 +161,7 @@ const Newregister = () => {
           >
             <span className={styles.idField}>
               <CustomInput
-                typeInput="text"
+                typeInput="number"
                 nameInput="id_per"
                 valueInput={!idSearch ? valueState.id_per : idSearch}
                 onChange={handleChange}
@@ -181,7 +181,7 @@ const Newregister = () => {
             {showSelectEmpresa && (
               <span className="gridAllColumn">
                 <CustomInput
-                  typeInput="text"
+                  typeInput="number"
                   nameInput="rucSearch"
                   placeholder="Digite RUC de la Empresa a la que pertenece y de clic en BUSCAR ➡"
                   valueInput={rucEmpresa.rucSearch}

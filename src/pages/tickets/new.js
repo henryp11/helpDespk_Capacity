@@ -533,7 +533,7 @@ const Newregister = () => {
             onClick={addSolicitud}
             className={`${styles.formButton} ${styles.formButtonShow} ${styles.formButtonAddSol}`}
           >
-            Agregar solicitud adicional para este Ticket#
+            Agregar solicitud adicional para este Ticket #
             {ticketCreated.response.id_ticket}
           </button>
         )}

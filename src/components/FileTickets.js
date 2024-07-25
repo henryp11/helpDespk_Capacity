@@ -13,8 +13,15 @@ import { RiFileExcel2Line } from 'react-icons/ri';
 import { FaRegFilePdf } from 'react-icons/fa6';
 import { TbFileTypeTxt } from 'react-icons/tb';
 import { TbFileTypeXml } from 'react-icons/tb';
-import { FaDownload } from 'react-icons/fa';
 import styles from '@/styles/forms.module.css';
+
+//Función fuera del componente para ejecutar una unica vez al cargar el componente
+const scrollUp = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+};
 
 const FileTickets = ({
   setStateSolicitud, //Para modificar el estado del componente solicitud anterior
@@ -26,6 +33,8 @@ const FileTickets = ({
   showModal,
   setShowModalFile,
 }) => {
+  //Aquí ejecuto antes de la carga del componente la función para que siempre empiece desde el principio, otra forma de usar useState.
+  useState(scrollUp);
   const [archivo, setArchivo] = useState(null); //captura archivo a subir a storage
   const [previewImg, setPreviewImg] = useState(''); //Para mostrar un preview de la imagen a subir
   const [isUpload, setIsUpload] = useState(true); //Detecta si se selecciona una imagen para obligar a subirle primero
@@ -222,6 +231,45 @@ const FileTickets = ({
               </h2>
               {archivo && (
                 <>
+                  {(archivo.type.includes('application/x-msdownload') ||
+                    archivo.name.includes('.bat') ||
+                    archivo.name.includes('.ps1') ||
+                    archivo.name.includes('.ps') ||
+                    archivo.name.includes('.cmd')) && (
+                    <p
+                      style={{
+                        color: 'red',
+                        fontSize: '24px',
+                        margin: '8px',
+                      }}
+                    >
+                      Tipo de Archivo Inválido!!
+                    </p>
+                  )}
+                  {archivo.size > 5000000 && (
+                    <p
+                      style={{
+                        color: 'white',
+                        fontSize: '20px',
+                        margin: '8px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      El Archivo no puede pesar más de 5MB, si desea enviarlo,
+                      puede usar otros medios como correo electrónico o utilizar
+                      el servicio{' '}
+                      <a
+                        href="https://wetransfer.com/"
+                        target="_blank"
+                        style={{
+                          textDecoration: 'underline',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        Wetransfer
+                      </a>
+                    </p>
+                  )}
                   {archivo.type.includes('image') && (
                     <img
                       src={previewImg}
@@ -267,6 +315,16 @@ const FileTickets = ({
                         }}
                         type="button"
                         tittle="Guardar Archivo"
+                        disabled={
+                          archivo.type.includes('application/x-msdownload') ||
+                          archivo.name.includes('.bat') ||
+                          archivo.name.includes('.ps1') ||
+                          archivo.name.includes('.ps') ||
+                          archivo.name.includes('.cmd') ||
+                          archivo.size > 5000000
+                            ? true
+                            : false
+                        }
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -281,8 +339,8 @@ const FileTickets = ({
                             d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
                           />
                         </svg>
-                        Subir Archivo
-                        {!isUpload && `Cargando...`}
+                        Subir Archivo <br />
+                        {!isUpload && `Subiendo por favor espere...`}
                       </button>
                     </>
                   )}

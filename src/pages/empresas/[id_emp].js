@@ -146,7 +146,7 @@ const Newregister = () => {
               />
             </span>
             <CustomInput
-              typeInput="text"
+              typeInput="number"
               nameInput="ruc"
               valueInput={valueState.ruc}
               onChange={handleChange}

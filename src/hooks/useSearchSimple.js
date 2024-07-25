@@ -19,7 +19,7 @@ function useSearchSimple(dataSearch, modOption) {
             fieldSearch = `${dataFilter.id_emp} ${dataFilter.nombre_emp} ${dataFilter.ruc}`;
             break;
           case 'personal':
-            fieldSearch = `${dataFilter.id_per} ${dataFilter.nombre} ${dataFilter.empresa.nombre_emp}`;
+            fieldSearch = `${dataFilter.id_per} ${dataFilter.nombre} ${dataFilter.empresa.nombre_emp} ${dataFilter.cargo}  ${dataFilter.correo}`;
             break;
           case 'planes':
             fieldSearch = `${dataFilter.id_plan} ${dataFilter.nombre_plan} ${dataFilter.dias_vigencia}`;

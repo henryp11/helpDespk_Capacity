@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }) {
         {/* Titulo por default en páginas si importa la equiqueta Head */}
         <title>HelpDesk Capacity</title>
       </Head>
-      <Header />
+      <Header {...pageProps} />
       <Component {...pageProps} />
       <Toaster reverseOrder={true} />
     </Appcontext.Provider>

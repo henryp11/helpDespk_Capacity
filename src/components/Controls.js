@@ -148,7 +148,8 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
                   Control: {dataControl.id_control}-
                   {dataControl.nivel_complejidad}
                 </b>
-                | <i>Agente:</i> {dataControl.id_agente}
+                | <i>Agente:</i> {dataControl.id_agente} -{' '}
+                {dataControl.agentes_sop?.nombre}
                 {dataControl.reasignado && (
                   <p>
                     <b>Motivo Reasignación:</b>

@@ -129,10 +129,47 @@
   color: white;
 }
 
+.dataPerfil:hover svg {
+  color: white;
+}
+
+.dataPerfil i svg {
+  width: 20px;
+  height: 20px;
+}
+
+.dataPerfil i {
+  display: flex;
+  align-items: center;
+  gap: 0px 8px;
+}
+
 .menu li {
   text-align: end;
   padding: 8px;
   margin: 4px 0;
   transition: all 0.2s ease;
   cursor: pointer;
+}
+
+.buttonLogOut {
+  background: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px;
+  transition: all 0.2s ease;
+}
+
+.buttonLogOut svg {
+  width: 30px;
+  height: 30px;
+}
+
+.buttonLogOut:hover {
+  background: var(--button-color-hk-hover);
 }

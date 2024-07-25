@@ -139,7 +139,7 @@ const Newregister = () => {
               />
             </span>
             <CustomInput
-              typeInput="text"
+              typeInput="number"
               nameInput="cedula"
               valueInput={valueState.cedula}
               onChange={handleChange}

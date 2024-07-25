@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import CustomInput from '@/components/CustomInput';
 import ErrorLayout from '@/components/ErrorLayout';
 import useApiUsuarios from '@/hooks/useApiUsuarios';
+import ReCAPTCHA from 'react-google-recaptcha';
 import styles from '../styles/forms.module.css';
 import stylesEmp from '../styles/emp.module.css';
+
+const keyRecap = process.env.NEXT_PUBLIC_SITE_CAPCHA;
 
 const Account = () => {
   const { postUsuario, error, statusError, messageError } = useApiUsuarios();
@@ -16,6 +19,9 @@ const Account = () => {
   };
 
   const [valueState, setValueState] = useState(initialState);
+  const [capchaOk, setCapchaOk] = useState(null);
+
+  const capcha = useRef(null);
 
   const handleChange = (e) => {
     setValueState({ ...valueState, [e.target.name]: e.target.value });
@@ -23,10 +29,24 @@ const Account = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    postUsuario(valueState);
+    if (capcha.current.getValue()) {
+      console.log('No eres un Robot');
+      setCapchaOk(true);
+      postUsuario(valueState);
+    } else {
+      console.log('Por Favor Acepta el Captcha');
+      setCapchaOk(false);
+    }
   };
 
-  console.log({ stateCompon: valueState });
+  const onChangeRecap = () => {
+    if (capcha.current.getValue()) {
+      console.log('No eres un Robot');
+      setCapchaOk(true);
+    }
+  };
+
+  // console.log({ stateCompon: valueState });
 
   return (
     <div className={stylesEmp.crudEmpContainer}>
@@ -65,6 +85,12 @@ const Account = () => {
             required={true}
           />
         </span>
+        <div className="captcha">
+          <ReCAPTCHA ref={capcha} sitekey={keyRecap} onChange={onChangeRecap} />
+          {capchaOk === false && (
+            <div className="captcha-error">Por favor acepta el Captcha!!!</div>
+          )}
+        </div>
         <span className={styles.buttonContainer}>
           <button title="Guardar" className={styles['formButton']}>
             <svg

@@ -267,7 +267,7 @@ const Solicitud = ({
               }}
               className={styles.addFiles}
             >
-              {valueState.capturas.file1.url && (
+              {valueState.capturas?.file1.url && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -284,7 +284,7 @@ const Solicitud = ({
                   />
                 </svg>
               )}
-              {`Archivo 1: ${valueState.capturas.file1.name}`}
+              {`Archivo 1: ${valueState.capturas?.file1.name}`}
             </span>
             {showModalFile1.active && (
               <FileTickets
@@ -307,7 +307,7 @@ const Solicitud = ({
               }}
               className={styles.addFiles}
             >
-              {valueState.capturas.file2.url && (
+              {valueState.capturas?.file2.url && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -324,7 +324,7 @@ const Solicitud = ({
                   />
                 </svg>
               )}
-              {`Archivo 2: ${valueState.capturas.file2.name}`}
+              {`Archivo 2: ${valueState.capturas?.file2.name}`}
             </span>
             {showModalFile2.active && (
               <FileTickets
@@ -347,7 +347,7 @@ const Solicitud = ({
               }}
               className={styles.addFiles}
             >
-              {valueState.capturas.file3.url && (
+              {valueState.capturas?.file3.url && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -364,7 +364,7 @@ const Solicitud = ({
                   />
                 </svg>
               )}
-              {`Archivo 3: ${valueState.capturas.file3.name}`}
+              {`Archivo 3: ${valueState.capturas?.file3.name}`}
             </span>
             {showModalFile3.active && (
               <FileTickets
@@ -387,7 +387,7 @@ const Solicitud = ({
               }}
               className={styles.addFiles}
             >
-              {valueState.capturas.file4.url && (
+              {valueState.capturas?.file4.url && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -404,7 +404,7 @@ const Solicitud = ({
                   />
                 </svg>
               )}
-              {`Archivo 4: ${valueState.capturas.file4.name}`}
+              {`Archivo 4: ${valueState.capturas?.file4.name}`}
             </span>
             {showModalFile4.active && (
               <FileTickets

@@ -2,6 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { BiSupport } from 'react-icons/bi';
+import { GrUserAdmin } from 'react-icons/gr';
+import { MdSupervisorAccount } from 'react-icons/md';
+import { BsPersonWorkspace } from 'react-icons/bs';
 import styles from '../styles/modulGeneral.module.css';
 
 const Header = () => {
@@ -349,7 +353,15 @@ const Header = () => {
           setShowMenu(!showMenu);
         }}
       >
-        {payloadJwt && `${payloadJwt.username} - ${payloadJwt.perfil}`}
+        {payloadJwt && (
+          <i>
+            {`${payloadJwt.username} - ${payloadJwt.perfil}`}
+            {payloadJwt.perfil === 'agente' && <BiSupport />}
+            {payloadJwt.perfil === 'admin' && <GrUserAdmin />}
+            {payloadJwt.perfil === 'supervisor' && <MdSupervisorAccount />}
+            {payloadJwt.perfil === 'cliente' && <BsPersonWorkspace />}
+          </i>
+        )}
         {showMenu && (
           <nav className={styles.menu}>
             <ul>
@@ -364,6 +376,29 @@ const Header = () => {
           </nav>
         )}
       </span>
+      <button
+        type="button"
+        title="Cerrar Sesión"
+        className={styles.buttonLogOut}
+        onClick={() => {
+          logOut();
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9"
+          />
+        </svg>
+      </button>
     </header>
   );
 };

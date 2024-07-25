@@ -118,7 +118,7 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
         ) : (
           <div className="generalContainerDetails">
             {!load && filteredRegs.length <= 0 && <p>No Existen Registros</p>}
-            {filteredRegs.map((register) => {
+            {filteredRegs.map((register, index) => {
               return (
                 <div
                   key={`${register.id_ticket}-${register.id_solicitud}`}
@@ -128,6 +128,7 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
                       : 'grid_solicitudes item_detail'
                   }
                 >
+                  <span className="counter">{index + 1}</span>
                   <span>
                     {register.id_ticket}-{register.id_solicitud}
                   </span>
@@ -150,7 +151,7 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
                   </span>
                   <span>{register.mtr_tickets.prioridad}</span>
                   <span>{register.mtr_tickets.descrip_tk}</span>
-                  <span>{register.agente_asig}</span>
+                  <span>{register.agentes_sop?.nombre}</span>
                   <span
                     style={{
                       border: '2px solid',

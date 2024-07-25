@@ -6,7 +6,7 @@ import { useState } from 'react';
 import axios from 'axios';
 // import { useRouter } from 'next/navigation';
 // import { toast } from 'react-hot-toast';
-const API = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/reports`;
+const API = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/reports`; //Se crea nueva ruta "/solicitudes" para generar reporte por solicitud
 
 const useApiReports = () => {
   // const router = useRouter();
@@ -49,12 +49,21 @@ const useApiReports = () => {
         headers: {
           Authorization: `Bearer ${tokenStorage}`,
         },
-        params: {},
+        params: {
+          rol: payloadStorage.perfil,
+          idemp:
+            payloadStorage.perfil === 'cliente' ||
+            payloadStorage.perfil === 'supervisor'
+              ? payloadStorage.idEmp
+              : '',
+          idclient:
+            payloadStorage.perfil === 'cliente' ? payloadStorage.idClient : '',
+        },
       };
-      if (idemp && idemp !== '') {
+      if (idemp && idemp !== '' && idemp !== 'SIN_EMPRESA') {
         axiosConfig.params.idemp = idemp;
       }
-      if (idclient && idclient !== '') {
+      if (idclient && idclient !== '' && idclient !== 'SIN_EMPRESA') {
         axiosConfig.params.idclient = idclient;
       }
       if (dateini && dateini !== '') {
@@ -68,6 +77,65 @@ const useApiReports = () => {
       }
       setLoad(true);
       const response = await axios.get(API, axiosConfig);
+      if (response) {
+        setToken(tokenStorage);
+        setPayloadJwt(payloadStorage);
+        console.log(response);
+        setDataTicket(response.data);
+        setLoad(false);
+      }
+    } catch (error) {
+      setLoad(false);
+      showError(error);
+    }
+  };
+  const getTicketsBySolicitud = async (
+    idemp,
+    idclient,
+    filter,
+    dateini,
+    datefin
+  ) => {
+    const API_SOLIC = `${API}/solicitudes`; //Nueva ruta para generar reporte por solicitud (DET_TICKETS)
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    const payloadLS = localStorage.getItem('payload');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    const payloadStorage = payloadLS && JSON.parse(payloadLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+        params: {
+          rol: payloadStorage.perfil,
+          idemp:
+            payloadStorage.perfil === 'cliente' ||
+            payloadStorage.perfil === 'supervisor'
+              ? payloadStorage.idEmp
+              : '',
+          idclient:
+            payloadStorage.perfil === 'cliente' ? payloadStorage.idClient : '',
+        },
+      };
+      if (idemp && idemp !== '' && idemp !== 'SIN_EMPRESA') {
+        axiosConfig.params.idemp = idemp;
+      }
+      if (idclient && idclient !== '' && idclient !== 'SIN_EMPRESA') {
+        axiosConfig.params.idclient = idclient;
+      }
+      if (dateini && dateini !== '') {
+        axiosConfig.params.dateini = dateini;
+      }
+      if (datefin && datefin !== '') {
+        axiosConfig.params.datefin = datefin;
+      }
+      if (filter && filter !== '') {
+        axiosConfig.params.filter = filter;
+      }
+      setLoad(true);
+      const response = await axios.get(API_SOLIC, axiosConfig);
       if (response) {
         setToken(tokenStorage);
         setPayloadJwt(payloadStorage);
@@ -195,6 +263,7 @@ const useApiReports = () => {
 
   return {
     getTickets,
+    getTicketsBySolicitud,
     getTicketById,
     getSolicitudes,
     dataTicket,

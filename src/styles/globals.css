@@ -26,8 +26,8 @@
   --font-xxl: 28px;
   /* GRIDS */
   --grid-column-items: 10% 25% 15% 10% 20% 15%;
-  --grid-column-tickets: 5% 15% 20% 7% 5% 13% 10% 10% 10%;
-  --grid-column-solicitud: 5% 11% 20% 7% 6% 21% 9% 8% 10%;
+  --grid-column-tickets: 3% 5% 14% 20% 7% 5% 13% 10% 10% 10%;
+  --grid-column-solicitud: 3% 5% 11% 19% 7% 6% 21% 9% 7% 9%;
   --grid-column-5-col: 10% 40% repeat(2, 15%) 10%;
   --grid-column-items-tablet: 13% repeat(2, 30%) 10% 15%;
   --grid-column-items-mobile: 13% repeat(2, 31%) 25%;
@@ -54,7 +54,6 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
   background: var(--background-hk2);
   color: var(--letters-hk);
   font-family: 'Inter', sans-serif;
@@ -135,6 +134,7 @@ ul {
 
 table {
   word-break: break-all;
+  overflow: auto;
 }
 
 table thead,
@@ -215,6 +215,8 @@ svg {
   border-radius: 0;
 }
 
+/* FIN Barra de busqueda */
+
 .delete svg {
   color: var(--delete-alert);
 }
@@ -275,6 +277,8 @@ svg {
   color: white;
 }
 
+/* FIN notificaciones */
+
 /* Contenedores principales */
 
 .mainContainer {
@@ -282,7 +286,7 @@ svg {
   width: 100%;
   margin: 0;
   position: relative;
-  height: 100vh;
+  height: calc(100vh - 45px);
   align-items: flex-start;
 }
 
@@ -291,7 +295,7 @@ svg {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  width: 95%;
+  width: 97%;
   margin: 0 auto;
   position: relative;
 }
@@ -304,15 +308,10 @@ svg {
   text-align: center;
 }
 
-/* h1 {
-  color: var(--general-title);
-  font-weight: bold;
-  font-size: var(--lg);
-  text-align: center;
-} */
-
 .generalContainerDetails {
   width: 100%;
+  height: 79vh;
+  overflow-y: auto;
   text-align: center;
   font-size: var(--font-nm);
 }
@@ -344,7 +343,9 @@ svg {
 }
 
 .item_detail_nulled {
-  background: var(--letters-hk2) !important;
+  /* background: var(--letters-hk2) !important; */
+  background: #a6a6a6 !important;
+  color: var(--letters-hk);
 }
 
 .grid-plan {
@@ -380,9 +381,10 @@ svg {
   word-break: break-word;
 }
 
+/* FIN Contenedores principales */
+
 /* iconos en general */
 .icons-container {
-  /* font-size: 28px; */
   color: var(--button-color-hk);
   background: none;
   border: none;
@@ -422,7 +424,7 @@ svg:active {
   background: var(--tittles-hk);
   transition: all 0.2s ease;
   position: fixed;
-  left: 3%;
+  left: 1%;
   bottom: 5px;
   border-radius: 50%;
   cursor: pointer;
@@ -459,6 +461,8 @@ svg:active {
 #returnButton:hover svg {
   color: red !important;
 }
+
+/* FIN iconos en general */
 
 /* Para iconó de busqueda de RUC en inputs de Personal_emp */
 #searchRuc {
@@ -553,7 +557,8 @@ svg:active {
 }
 
 input:disabled,
-textarea:disabled {
+textarea:disabled,
+button:disabled {
   background: rgb(206, 206, 206, 0.3) !important;
   border-color: transparent !important;
   color: black;
@@ -605,6 +610,30 @@ textarea:disabled {
 #updateMtrTK:hover svg {
   color: var(--save-button);
   scale: 1 !important;
+}
+
+/*Clase para contador de registros en pantallas de tickets*/
+
+.counter {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  border-right: 1px solid #444a8d;
+  color: #444a8d;
+}
+
+.captcha {
+  grid-column: 1/-1;
+  align-self: center;
+  justify-self: center;
+}
+
+.captcha-error {
+  color: var(--delete-alert);
+  font-weight: bold;
+  text-align: center;
 }
 
 /* RESPONSIVE DESIGN */

@@ -332,6 +332,30 @@
   padding: 8px;
   border-radius: 8px;
   box-shadow: 0 0px 8px 3px;
+  transition: 0.3s;
+  animation-name: beat;
+  animation-duration: 1.5s;
+  animation-iteration-count: 1;
+  /* animation-direction: alternate; */
+  animation-timing-function: ease;
+}
+
+@keyframes beat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .formButtonTicket {
@@ -888,6 +912,24 @@
 
 #downloadClose:hover svg {
   color: red;
+}
+
+.reportButton {
+  border-radius: 8px !important;
+  width: inherit !important;
+  height: inherit !important;
+  margin: 0 10px;
+  padding: 4px !important;
+  font-size: small;
+  gap: 8px;
+}
+.reportButton svg {
+  scale: 0.7;
+}
+
+.reportButton:hover {
+  background: #31be7d !important;
+  color: var(--button-color-hk-hover) !important;
 }
 
 /*Fin Para inputs de archivo / imagenes*/

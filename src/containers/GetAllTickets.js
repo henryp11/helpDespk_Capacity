@@ -15,6 +15,7 @@ import SectionSearch from '@/containers/SectionSearch';
 import useSearchSimple from '@/hooks/useSearchSimple';
 import useApiTickets from '@/hooks/useApiTickets';
 import { validateExpToken, timeFormat } from '@/utils/helpers';
+import { MdWidthFull } from 'react-icons/md';
 
 const GetAllTickets = ({ headersTable, enviroment }) => {
   const {
@@ -104,7 +105,7 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
         ) : (
           <div className="generalContainerDetails">
             {!load && filteredRegs.length <= 0 && <p>No Existen Registros</p>}
-            {filteredRegs.map((register) => {
+            {filteredRegs.map((register, index) => {
               return (
                 <div
                   key={register.id_ticket}
@@ -114,6 +115,7 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
                       : 'grid_tickets item_detail'
                   }
                 >
+                  <span className="counter">{index + 1}</span>
                   <span>{register.id_ticket}</span>
                   <span>
                     {register.personal_emp.empresa.nombre_emp} <br />

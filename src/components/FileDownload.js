@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { RiFileWord2Line } from 'react-icons/ri';
 import { RiFileExcel2Line } from 'react-icons/ri';
 import { FaRegFilePdf } from 'react-icons/fa6';
@@ -8,12 +8,22 @@ import { TbFileTypeXml } from 'react-icons/tb';
 import { FaDownload } from 'react-icons/fa';
 import styles from '@/styles/forms.module.css';
 
+//Función fuera del componente para ejecutar una unica vez al cargar el componente
+const scrollUp = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+};
+
 const FileDownload = ({
   idFile, //Corresponde al key del array de capturas para modificar (file1, 2,3, 4)
   stateSolicitud, //Objeto con los datos de la solicitud así como los archivos con sus respectivas URL's de Firebase
   showModal,
   setShowModalFile,
 }) => {
+  //Aquí ejecuto antes de la carga del componente la función para que siempre empiece desde el principio, otra forma de usar useState.
+  useState(scrollUp);
   return (
     <>
       {showModal.active && showModal.name === idFile && (

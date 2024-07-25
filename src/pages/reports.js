@@ -8,9 +8,17 @@ import useApiEmpresas from '@/hooks/useApiEmpresas';
 import styles from '@/styles/forms.module.css';
 
 const Reports = () => {
-  const { getTickets, dataTicket, error, statusError, messageError } =
-    useApiReports();
-  const { getEmpresas, dataEmp } = useApiEmpresas();
+  const {
+    getTickets,
+    getTicketsBySolicitud,
+    dataTicket,
+    error,
+    statusError,
+    messageError,
+    load,
+  } = useApiReports();
+  const { getEmpresas, getEmpresaById, dataEmp } = useApiEmpresas();
+  const [perfil, setPerfil] = useState('');
   const [selectEmp, setSelectEmp] = useState({ id_emp: '' });
   const [personalEmp, setPersonalEmp] = useState([]);
   const [selectCli, setSelectCli] = useState({ id_per: '' });
@@ -19,10 +27,18 @@ const Reports = () => {
     date_fin: '',
     condition: '',
   });
+  const [typeReport, setTypeReport] = useState('');
 
   useEffect(() => {
     // getTickets();
+    const payloadStorage =
+      localStorage.getItem('payload') &&
+      JSON.parse(localStorage.getItem('payload'));
     getEmpresas();
+    if (payloadStorage.perfil === 'supervisor') {
+      getEmpresaById(payloadStorage.idEmp);
+    }
+    setPerfil(payloadStorage.perfil);
   }, []);
 
   const handleChangeEmp = (e) => {
@@ -59,124 +75,153 @@ const Reports = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    getTickets(
-      selectEmp.id_emp,
-      selectCli.id_per,
-      dates.condition,
-      dates.date_ini,
-      dates.date_fin
-    );
+    if (typeReport === 'resumen') {
+      getTickets(
+        selectEmp.id_emp,
+        selectCli.id_per,
+        dates.condition,
+        dates.date_ini,
+        dates.date_fin
+      );
+    } else {
+      getTicketsBySolicitud(
+        selectEmp.id_emp,
+        selectCli.id_per,
+        dates.condition,
+        dates.date_ini,
+        dates.date_fin
+      );
+    }
   };
 
   console.log(dataTicket);
-  // console.log(dataEmp);
+  console.log(dataEmp);
   console.log(selectEmp);
   // console.log(personalEmp);
   console.log(selectCli);
   console.log(dates);
+  console.log(perfil);
   return (
     <>
       <div className={styles.reportContainer}>
         <h2>Seleccione los filtros para generar su reporte</h2>
         <h6>
-          *Si no se selecciona ningún filtro se mostrará toda la información
+          *Si no se selecciona ningún filtro se mostrará toda la información que
+          se encuentre.
         </h6>
         <form
           id="form"
           onSubmit={handleSubmit}
           className={`${styles['form-default']} ${styles.formReports}`}
         >
-          <fieldset className={styles.fieldSetCustom}>
-            <legend>Seleccionar clientes</legend>
-            <span className={styles.selectContainer}>
-              <strong>Empresa:</strong>
-              <select name="id_emp" onChange={handleChangeEmp}>
-                {!selectEmp.id_emp && (
-                  <option defaultValue="" label="Elegir Empresa:" selected>
-                    Elegir Empresa
-                  </option>
-                )}
-                {dataEmp.map((empresa) => {
-                  if (empresa.estatus) {
-                    return (
-                      <option key={empresa.id_emp} value={empresa.id_emp}>
-                        {empresa.nombre_emp}
+          {perfil !== 'cliente' && (
+            <fieldset className={styles.fieldSetCustom}>
+              <legend>
+                {perfil !== 'supervisor'
+                  ? 'Seleccionar clientes'
+                  : 'Seleccionar personal'}
+              </legend>
+              {perfil !== 'supervisor' && (
+                <span className={styles.selectContainer}>
+                  <strong>Empresa:</strong>
+                  <select name="id_emp" onChange={handleChangeEmp}>
+                    {!selectEmp.id_emp && (
+                      <option defaultValue="" label="Elegir Empresa:" selected>
+                        Elegir Empresa
                       </option>
-                    );
-                  }
-                })}
-              </select>
-              <button
-                type="button"
-                onClick={clearEmp}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
+                    )}
+                    {dataEmp.map((empresa) => {
+                      if (empresa.estatus) {
+                        return (
+                          <option key={empresa.id_emp} value={empresa.id_emp}>
+                            {empresa.nombre_emp}
+                          </option>
+                        );
+                      }
+                    })}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={clearEmp}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                  </button>
+                </span>
+              )}
+              <span className={styles.selectContainer}>
+                <strong>Personal:</strong>
+                <select
+                  name="id_per"
+                  onChange={handleChangePersonal}
+                  // disabled={!selectEmp.id_emp && true}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-              </button>
-            </span>
-            <span className={styles.selectContainer}>
-              <strong>Personal:</strong>
-              <select
-                name="id_per"
-                onChange={handleChangePersonal}
-                disabled={!selectEmp.id_emp && true}
-              >
-                {!selectCli.id_per && (
-                  <option defaultValue="" label="Elegir Personal:" selected>
-                    Elegir Personal
-                  </option>
-                )}
-                {personalEmp.map((personal) => {
-                  return (
-                    <option key={personal.id_per} value={personal.id_per}>
-                      {personal.nombre}
+                  {!selectCli.id_per && (
+                    <option defaultValue="" label="Elegir Personal:" selected>
+                      Elegir Personal
                     </option>
-                  );
-                })}
-              </select>
-              <button
-                type="button"
-                onClick={clearPersonal}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
+                  )}
+                  {perfil !== 'supervisor'
+                    ? personalEmp.map((personal) => {
+                        return (
+                          <option key={personal.id_per} value={personal.id_per}>
+                            {personal.nombre}
+                          </option>
+                        );
+                      })
+                    : dataEmp.personal_emp?.map((personal) => {
+                        return (
+                          <option key={personal.id_per} value={personal.id_per}>
+                            {personal.nombre}
+                          </option>
+                        );
+                      })}
+                </select>
+                <button
+                  type="button"
+                  onClick={clearPersonal}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-              </button>
-            </span>
-          </fieldset>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </button>
+              </span>
+            </fieldset>
+          )}
+
           <fieldset className={styles.fieldSetCustom}>
             <legend>Filtro de fecha</legend>
             <span className={styles.selectContainer}>
@@ -245,27 +290,63 @@ const Reports = () => {
             </span>
           </fieldset>
 
-          <span className={styles.buttonContainer}>
-            <button title="Emitir Reporte" className={styles['formButton']}>
+          <span
+            className={styles.buttonContainer}
+            style={{ width: '50%', alignItems: 'center' }}
+          >
+            <button
+              title="Reporte Resumen"
+              className={`${styles.formButton} ${styles.reportButton}`}
+              reportButton
+              onClick={() => {
+                setTypeReport('resumen');
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
+                className="size-6"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
                 />
               </svg>
+              Reporte Resumido por Tickets
+            </button>
+            <button
+              title="Reporte Detallado"
+              className={`${styles.formButton} ${styles.reportButton}`}
+              onClick={() => {
+                setTypeReport('detalle');
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
+                />
+              </svg>
+              Reporte Detallado por Solicitud
             </button>
 
             <button
               tittle="Cancelar"
               className={`${styles.formButton}`}
               id="cancelButton"
+              type="button"
             >
               <Link href="/" className={`${styles.cancelButton}`}>
                 <svg
@@ -286,11 +367,17 @@ const Reports = () => {
           </span>
         </form>
 
-        {dataTicket.length > 0 ? (
-          <TableReport dataTicket={dataTicket} />
-        ) : (
+        {dataTicket.length > 0 && !load && (
+          <TableReport
+            dataTicket={dataTicket}
+            typeReport={typeReport}
+            loadData={load}
+          />
+        )}
+        {dataTicket.length === 0 && !load && (
           <h4>No se hallaron registros con el criterio dado</h4>
         )}
+        {typeReport && load && <h4>Cargando...</h4>}
       </div>
 
       {error && (

@@ -78,6 +78,8 @@ const useApiEmpresas = () => {
       const response = await axios.get(API_PARAMS, axiosConfig);
       if (response) {
         // setToken(tokenStorage);
+        console.log(response.data);
+        setDataEmp(response.data);
         //En este caso retorno la promesa de la respuesta a la API la cual me entrega los datos de la consulta
         return response.data;
       }

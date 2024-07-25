@@ -93,7 +93,9 @@ const PersonalEmp = () => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Personal por su Cédula / Nombre / Empresa'}
+          placeholder={
+            'Buscar Personal por su Cédula / Nombre / Empresa / Correo / Cargo'
+          }
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

@@ -1,16 +1,50 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import moment from 'moment';
 import { timeFormat } from '@/utils/helpers';
 import styles from '@/styles/forms.module.css';
 
-const TableReport = ({ dataTicket }) => {
-  const tableRef = useRef();
+const TableReport = ({ dataTicket, typeReport, loadData }) => {
+  const tableRefResumen = useRef();
+  const tableRefDetalle = useRef();
   const { onDownload } = useDownloadExcel({
-    currentTableRef: tableRef.current,
-    filename: `Detalle tiempos soporte`,
+    // currentTableRef: tableRefResumen.current,
+    currentTableRef:
+      typeReport === 'resumen'
+        ? tableRefResumen.current
+        : tableRefDetalle.current,
+    filename:
+      typeReport === 'resumen'
+        ? `Resumen tiempos soporte x Ticket`
+        : `Detalle tiempos soporte x Solicitud`,
     sheet: 'Detalle',
   });
+
+  //Este estado sirve para extraer los tickets unicos cuando se genere reporte por detalle, ya que en ese caso
+  //Se tiene cada solicitud y dentro de ella se repite el MTR_TICKET por lo que para tener la sumatoria total de tiempo
+  //Se duplicaria si existiera varias solicitudes en un solo ticket, por ende se extrae los tickets únicos para ese caso
+  //Y usar el nuevo array para que este realiza la sumatoria en el caso de reporte detallado por solicitud.
+  const [ticketsUnique, setTicketsUnique] = useState([]);
+
+  useEffect(() => {
+    if (typeReport === 'detalle') {
+      const ids = new Set(); //Clase de Javascript en cargada de excluir valores duplicados
+      const unique = [];
+      //Se itera sobre cada solicitud, con la función has() de Set se verifica si existe el id_ticket
+      //Si no existe con la funciñon add() se añade al listado del Set y se agrega el objeto al nuevo array
+      dataTicket.forEach((ticket) => {
+        if (!ids.has(ticket.id_ticket)) {
+          ids.add(ticket.id_ticket);
+          unique.push(ticket);
+        }
+      });
+      setTicketsUnique(unique);
+    }
+  }, [typeReport]);
+
+  console.log(typeReport);
+  console.log(loadData);
+  console.log(ticketsUnique);
   return (
     <div className={styles.previewReports}>
       <div
@@ -80,56 +114,185 @@ const TableReport = ({ dataTicket }) => {
         <h4>
           Tiempo Total:{' '}
           <b style={{ color: '#444a8d' }}>
-            {timeFormat(
-              dataTicket.reduce((acumulador, ticket) => {
-                return acumulador + Number(ticket.tiempo_real_sop * 1000);
-              }, 0)
-            )}
+            {typeReport === 'resumen' &&
+              timeFormat(
+                dataTicket.reduce((acumulador, ticket) => {
+                  return acumulador + Number(ticket.tiempo_real_sop * 1000);
+                }, 0)
+              )}
+            {typeReport === 'detalle' &&
+              timeFormat(
+                ticketsUnique.reduce((acumulador, ticket) => {
+                  return (
+                    acumulador +
+                    Number(ticket.mtr_tickets.tiempo_real_sop * 1000)
+                  );
+                }, 0)
+              )}
           </b>
         </h4>
       </div>
-      <table ref={tableRef}>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Empresa</th>
-            <th>Solicitante</th>
-            <th>Fecha Reg. Ticket</th>
-            <th>Descripción General Ticket</th>
-            <th>F. Inicio Atención</th>
-            <th>F. Fin Atención</th>
-            <th>Tiempo Total</th>
-            <th>Cant. Solic</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dataTicket.map((register, index) => {
-            return (
-              <tr key={register.id_ticket}>
-                <td>{index + 1}</td>
-                <td>{register.personal_emp.empresa.nombre_emp}</td>
-                <td>{register.personal_emp.nombre}</td>
-                <td>{moment(register.fecha_reg).format('DD/MM/YYYY')}</td>
-                <td>{register.descrip_tk}</td>
-                <td>
-                  {moment(register.fecha_ini_sop).format(
-                    'DD/MM/YYYY - kk:mm:ss'
-                  )}
-                </td>
-                <td>
-                  {moment(register.fecha_fin_sop).format(
-                    'DD/MM/YYYY - kk:mm:ss'
-                  )}
-                </td>
-                <td>{timeFormat(register.tiempo_real_sop * 1000)}</td>
-                <td>
-                  {register.det_tickets ? register.det_tickets.length : 0}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {typeReport === 'resumen' && !loadData && (
+        <table ref={tableRefResumen}>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Empresa</th>
+              <th>Solicitante</th>
+              <th>ID.Ticket</th>
+              <th>Fecha Reg. Ticket</th>
+              <th>Descripción General Ticket</th>
+              <th>F. Inicio Atención</th>
+              <th>F. Fin Atención</th>
+              <th>Tiempo Total</th>
+              <th>Cant. Solic</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dataTicket.map((register, index) => {
+              return (
+                <tr key={register.id_ticket}>
+                  <td>{index + 1}</td>
+                  <td>{register.personal_emp?.empresa.nombre_emp}</td>
+                  <td>{register.personal_emp?.nombre}</td>
+                  <td>{register.id_ticket}</td>
+                  <td>{moment(register.fecha_reg).format('DD/MM/YYYY')}</td>
+                  <td>{register.descrip_tk}</td>
+                  <td>
+                    {moment(register.fecha_ini_sop).format(
+                      'DD/MM/YYYY - kk:mm:ss'
+                    )}
+                  </td>
+                  <td>
+                    {moment(register.fecha_fin_sop).format(
+                      'DD/MM/YYYY - kk:mm:ss'
+                    )}
+                  </td>
+                  <td>{timeFormat(register.tiempo_real_sop * 1000)}</td>
+                  <td>
+                    {register.det_tickets ? register.det_tickets.length : 0}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+          <tfoot>
+            <tr align="center" bgcolor="#d0cfd2">
+              <td colSpan="8">
+                <strong>Tiempo Total:</strong>
+              </td>
+              <td colSpan="2">
+                <strong>
+                  {typeReport === 'resumen' &&
+                    timeFormat(
+                      dataTicket.reduce((acumulador, ticket) => {
+                        return (
+                          acumulador + Number(ticket.tiempo_real_sop * 1000)
+                        );
+                      }, 0)
+                    )}
+                </strong>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      )}
+
+      {typeReport === 'detalle' && !loadData && (
+        <table ref={tableRefDetalle}>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Empresa</th>
+              <th>Solicitante</th>
+              <th>ID.Ticket</th>
+              <th>Fecha Reg. Ticket</th>
+              <th>Descripción General Ticket</th>
+              <th>F. Inicio Atención Ticket</th>
+              <th>F. Fin Atención Ticket</th>
+              {/* <th>Tiempo Total Ticket</th> */}
+              <th>Id.Solicitud</th>
+              <th>Detalle Solicitud</th>
+              <th>Agente Asignado</th>
+              <th>Tiempo Solicitud</th>
+              <th>Detalle Solución</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dataTicket.map((register, index) => {
+              return (
+                <tr key={register.id_solicitud}>
+                  <td>{index + 1}</td>
+                  <td>
+                    {register.mtr_tickets?.personal_emp.empresa.nombre_emp}
+                  </td>
+                  <td>{register.mtr_tickets?.personal_emp.nombre}</td>
+                  <td>{register.id_ticket}</td>
+                  <td>
+                    {moment(register.mtr_tickets?.fecha_reg).format(
+                      'DD/MM/YYYY'
+                    )}
+                  </td>
+                  <td>{register.mtr_tickets?.descrip_tk}</td>
+                  <td>
+                    {moment(register.mtr_tickets?.fecha_ini_sop).format(
+                      'DD/MM/YYYY - kk:mm:ss'
+                    )}
+                  </td>
+                  <td>
+                    {moment(register.mtr_tickets?.fecha_fin_sop).format(
+                      'DD/MM/YYYY - kk:mm:ss'
+                    )}
+                  </td>
+                  {/* <td>
+                    {timeFormat(register.mtr_tickets?.tiempo_real_sop * 1000)}
+                  </td> */}
+                  <td>{register.id_solicitud}</td>
+                  <td>{register.descripcion}</td>
+                  <td>{register.agentes_sop?.nombre}</td>
+                  <td>
+                    {timeFormat(
+                      register.control_tickets
+                        ?.filter((control) => {
+                          return (
+                            control.id_solicitud === register.id_solicitud &&
+                            control.id_ticket === register.id_ticket
+                          );
+                        })
+                        .reduce((acumulador, control) => {
+                          return (
+                            acumulador + Number(control.tiempo_calc * 1000)
+                          );
+                        }, 0)
+                    )}
+                  </td>
+                  <td>{register.solucion}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+          <tfoot>
+            <tr align="center" bgcolor="#d0cfd2">
+              <td colSpan="11">
+                <strong>Tiempo Total:</strong>
+              </td>
+              <td colSpan="2">
+                <strong>
+                  {typeReport === 'detalle' &&
+                    timeFormat(
+                      ticketsUnique.reduce((acumulador, ticket) => {
+                        return (
+                          acumulador +
+                          Number(ticket.mtr_tickets.tiempo_real_sop * 1000)
+                        );
+                      }, 0)
+                    )}
+                </strong>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      )}
     </div>
   );
 };

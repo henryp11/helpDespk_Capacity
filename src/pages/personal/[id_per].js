@@ -167,7 +167,7 @@ const Newregister = () => {
                 onChange={handleChange}
                 nameLabel="Cédula"
                 required={true}
-                disabled={idSearch !== 'new' && true}
+                // disabled={idSearch !== 'new' && true}
               />
               <CustomInput
                 typeInput="text"

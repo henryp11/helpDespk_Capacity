@@ -73,6 +73,7 @@ const Newregister = () => {
           //solo extraigo los datos que me interesan para armar el objeto del estado y de esa forma actualizar
           //Solo los datos que pertenecen a la tabla que requiero, en este caso la tabla de personal_emp, no envio el id_per e id_emp por ser las PK.
           const dataEdit = {
+            // id_per: data.id_per,
             nombre: data.nombre,
             telf1: data.telf1,
             telf2: data.telf2 === null ? undefined : data.telf2,
@@ -167,7 +168,7 @@ const Newregister = () => {
                 onChange={handleChange}
                 nameLabel="Cédula"
                 required={true}
-                // disabled={idSearch !== 'new' && true}
+                disabled={idSearch !== 'new' && true}
               />
               <CustomInput
                 typeInput="text"

@@ -118,9 +118,9 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
                   <span className="counter">{index + 1}</span>
                   <span>{register.id_ticket}</span>
                   <span>
-                    {register.personal_emp.empresa.nombre_emp} <br />
+                    {register.personal_emp?.empresa.nombre_emp} <br />
                     <em>
-                      <strong>{register.personal_emp.nombre}</strong>
+                      <strong>{register.personal_emp?.nombre}</strong>
                     </em>
                   </span>
                   <span>{register.descrip_tk}</span>

@@ -139,10 +139,10 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
                   </span>
                   <span>
                     <i>
-                      {register.mtr_tickets.personal_emp.empresa.nombre_emp}
+                      {register.mtr_tickets.personal_emp?.empresa.nombre_emp}
                     </i>{' '}
                     <br />
-                    <b>{register.mtr_tickets.personal_emp.nombre}</b>
+                    <b>{register.mtr_tickets.personal_emp?.nombre}</b>
                   </span>
                   <span>
                     {register.mtr_tickets.categorias_sop
@@ -227,7 +227,7 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
                             true,
                             false,
                             {
-                              email: register.mtr_tickets.personal_emp.correo,
+                              email: register.mtr_tickets.personal_emp?.correo,
                               nameAgente: payloadJwt.nameAgSop,
                               estatus: 1,
                               descripSolic: register.descripcion,

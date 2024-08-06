@@ -94,7 +94,9 @@ const PersonalEmp = () => {
           query={query}
           setQuery={setQuery}
           placeholder={
-            'Buscar Personal por su Cédula / Nombre / Empresa / Correo / Cargo'
+            !isMobile
+              ? 'Buscar por: Cédula / Nombre / Empresa / Correo / Cargo'
+              : 'Buscar por: Cédula / Nombre / Empresa'
           }
         />
         <HeadersColumns
@@ -102,7 +104,8 @@ const PersonalEmp = () => {
           columnTitles={
             isMobile
               ? moduleHeaders.columnTitles.map((column) => {
-                  if (column.id !== 'col4') return column;
+                  if (column.id !== 'col4' && column.id !== 'col5')
+                    return column;
                   return { ...column, show: false };
                 })
               : moduleHeaders.columnTitles
@@ -143,7 +146,7 @@ const PersonalEmp = () => {
                   <span>{register.id_per}</span>
                   <span>{register.empresa.nombre_emp}</span>
                   <span>{register.nombre}</span>
-                  <span>{register.cargo}</span>
+                  <span className="hideElement"> {register.cargo}</span>
                   <span className="hideElement">{register.correo}</span>
                   <span className="icons-container">
                     <button

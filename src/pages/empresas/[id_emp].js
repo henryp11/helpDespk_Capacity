@@ -137,20 +137,20 @@ const Newregister = () => {
               />
 
               <CustomInput
-                typeInput="text"
-                nameInput="nombre_emp"
-                valueInput={valueState.nombre_emp}
+                typeInput="number"
+                nameInput="ruc"
+                valueInput={valueState.ruc}
                 onChange={handleChange}
-                nameLabel="Nombre / Razón Social"
+                nameLabel="RUC"
                 required={true}
               />
             </span>
             <CustomInput
-              typeInput="number"
-              nameInput="ruc"
-              valueInput={valueState.ruc}
+              typeInput="text"
+              nameInput="nombre_emp"
+              valueInput={valueState.nombre_emp}
               onChange={handleChange}
-              nameLabel="RUC"
+              nameLabel="Nombre / Razón Social"
               required={true}
             />
             <CustomInput

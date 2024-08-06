@@ -92,14 +92,15 @@ const Empresas = () => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Empresa por su código / Nombre / RUC'}
+          placeholder={'Buscar por: Código / Nombre / RUC'}
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}
           columnTitles={
             isMobile
               ? moduleHeaders.columnTitles.map((column) => {
-                  if (column.id !== 'col4') return column;
+                  if (column.id !== 'col4' && column.id !== 'col5')
+                    return column;
                   return { ...column, show: false };
                 })
               : moduleHeaders.columnTitles
@@ -140,7 +141,7 @@ const Empresas = () => {
                   <span>{register.id_emp}</span>
                   <span>{register.nombre_emp}</span>
                   <span>{register.ruc}</span>
-                  <span>{register.telefono}</span>
+                  <span className="hideElement">{register.telefono}</span>
                   <span className="hideElement">{register.correo}</span>
                   <span className="icons-container">
                     <button

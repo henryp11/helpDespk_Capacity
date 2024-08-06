@@ -83,14 +83,18 @@ const Planes = () => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Plan por Nombre / Id / Días vigencia'}
+          placeholder={
+            !isMobile
+              ? 'Buscar Plan por Nombre / Id / Horas Soporte/ Días vigencia'
+              : 'Buscar Plan por Nombre / Id / Horas Soporte'
+          }
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}
           columnTitles={
             isMobile
               ? moduleHeaders.columnTitles.map((column) => {
-                  if (column.id !== 'col5') return column;
+                  if (column.id !== 'col3') return column;
                   return { ...column, show: false };
                 })
               : moduleHeaders.columnTitles
@@ -130,7 +134,7 @@ const Planes = () => {
                 >
                   <span>{register.id_plan}</span>
                   <span>{`${register.nombre_plan} [${register.abrev}]`}</span>
-                  <span>{register.dias_vigencia}</span>
+                  <span className="hideElement">{register.dias_vigencia}</span>
                   <span>{register.horas_sop}</span>
                   <span className="icons-container">
                     <Link href={`/planes/${register.id_plan}?edit=true`}>

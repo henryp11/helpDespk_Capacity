@@ -98,7 +98,8 @@ const Contratos = () => {
           columnTitles={
             isMobile
               ? moduleHeaders.columnTitles.map((column) => {
-                  if (column.id !== 'col6') return column;
+                  if (column.id !== 'col4' && column.id !== 'col5')
+                    return column;
                   return { ...column, show: false };
                 })
               : moduleHeaders.columnTitles
@@ -139,8 +140,8 @@ const Contratos = () => {
                   <span>{register.id_contrato}</span>
                   <span>{register.empresa.nombre_emp}</span>
                   <span>{register.planes_mant.nombre_plan}</span>
-                  <span>{register.fecha_inicio}</span>
-                  <span>{register.fecha_fin}</span>
+                  <span className="hideElement">{register.fecha_inicio}</span>
+                  <span className="hideElement">{register.fecha_fin}</span>
                   <span className="icons-container">
                     <button
                       title="Ver Detalles"

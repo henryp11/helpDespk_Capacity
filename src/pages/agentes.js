@@ -88,14 +88,19 @@ const Agentes = () => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Agente por Id / Nombre / Cargo / Nivel'}
+          placeholder={
+            !isMobile
+              ? 'Buscar Agente por Id / Nombre / Cargo / Nivel'
+              : 'Buscar Agente por Id / Nombre / Cargo'
+          }
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}
           columnTitles={
             isMobile
               ? moduleHeaders.columnTitles.map((column) => {
-                  if (column.id !== 'col5') return column;
+                  if (column.id !== 'col4' && column.id !== 'col5')
+                    return column;
                   return { ...column, show: false };
                 })
               : moduleHeaders.columnTitles
@@ -136,8 +141,8 @@ const Agentes = () => {
                   <span>{register.id_agente}</span>
                   <span>{register.nombre}</span>
                   <span>{register.cargo}</span>
-                  <span>{register.nivel_atencion}</span>
-                  <span>{register.fecha_ingreso}</span>
+                  <span className="hideElement">{register.nivel_atencion}</span>
+                  <span className="hideElement">{register.fecha_ingreso}</span>
                   <span className="icons-container">
                     <button
                       title="Ver Detalles"

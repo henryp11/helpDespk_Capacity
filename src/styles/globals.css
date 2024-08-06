@@ -27,10 +27,11 @@
   /* GRIDS */
   --grid-column-items: 10% 25% 15% 10% 20% 15%;
   --grid-column-tickets: 3% 5% 14% 20% 7% 5% 13% 10% 10% 10%;
+  --grid-column-items-tablet: 8% 24% 15% 15% 17% 17%;
+  --grid-column-items-mobile: 15% 32% 24% 25%;
+  --grid-column-items-mobile-small: 8% 35% 25% 25%;
   --grid-column-solicitud: 3% 5% 11% 19% 7% 6% 21% 9% 7% 9%;
   --grid-column-5-col: 10% 40% repeat(2, 15%) 10%;
-  --grid-column-items-tablet: 13% repeat(2, 30%) 10% 15%;
-  --grid-column-items-mobile: 13% repeat(2, 31%) 25%;
   /*ESTATUS*/
   --estatus-mtr-solicitado: rgb(252, 192, 82);
   --estatus-mtr-proceso: rgb(41 185 125);
@@ -115,6 +116,11 @@ header svg {
   padding: 4px;
   width: 100%;
   flex-wrap: wrap;
+}
+
+.logoMain h2,
+h5 {
+  text-align: center;
 }
 
 .logoMain h2 {
@@ -306,6 +312,7 @@ svg {
   font-size: var(--font-md);
   border-bottom: 2px solid var(--dark-transparent);
   text-align: center;
+  word-break: normal !important;
 }
 
 .generalContainerDetails {
@@ -328,7 +335,7 @@ svg {
   gap: 4px;
   justify-content: center;
   align-items: center;
-  /* word-break: break-all; */
+  word-break: break-word;
 }
 
 .item_detail {
@@ -356,7 +363,7 @@ svg {
   gap: 4px;
   justify-content: center;
   align-items: center;
-  /* word-break: break-all; */
+  word-break: break-word;
 }
 
 .grid_tickets {
@@ -636,6 +643,71 @@ button:disabled {
   text-align: center;
 }
 
+/*Clases para menu en mobile*/
+
+.mobileMenu {
+  position: absolute;
+  background: rgb(85, 95, 194, 0.9);
+  z-index: 20;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  top: 0;
+  left: -100%;
+  right: 0;
+  bottom: 0;
+  transition: 0.3s;
+  animation-name: showMobile;
+  animation-duration: 0.3s;
+  animation-iteration-count: 1;
+  /* animation-direction: alternate; */
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.mobileMenu li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 12px;
+}
+
+.mobileMenu li:hover {
+  background: var(--button-color-hk-hover);
+}
+
+.mobileMenu li a {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.mobileMenu svg {
+  color: var(--tittles-hk);
+  margin-right: 12px;
+}
+
+/* .formButtonAddSol {
+  background: var(--tittles-hk);
+  color: var(--button-color-hk-hover);
+  font-size: larger;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 0px 8px 3px;
+} */
+
+@keyframes showMobile {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 0;
+  }
+}
+
 /* RESPONSIVE DESIGN */
 @media screen and (max-width: 768px) {
   /* Tablet  */
@@ -649,6 +721,11 @@ button:disabled {
     padding: 2px 0;
     gap: 3px;
   }
+
+  .icons-container {
+    gap: 3px;
+    flex-wrap: nowrap;
+  }
 }
 
 /* Mobile  Normal*/
@@ -660,7 +737,7 @@ button:disabled {
     width: 98%;
     border-radius: 6px;
     padding: 3px;
-    font-size: 0.9em;
+    font-size: 0.8em;
     transition: 0.2s ease;
     color: var(--background-hk);
   }
@@ -673,11 +750,6 @@ button:disabled {
     grid-template-columns: var(--grid-column-items-mobile);
   }
 
-  .icons-container {
-    justify-content: flex-start;
-    gap: 5px;
-  }
-
   .hideElement {
     display: none;
   }
@@ -685,12 +757,45 @@ button:disabled {
   .item_detail {
     font-size: var(--font-sm);
   }
-}
-/* Mobile  Small*/
-@media screen and (max-width: 320px) {
+
   svg {
     width: 30px;
     height: 30px;
+  }
+
+  header {
+    justify-content: space-between;
+  }
+
+  .loginView {
+    height: 60px;
+  }
+
+  .logoMain {
+    justify-content: space-between;
+  }
+
+  .logoMain h2 {
+    font-size: var(--font-md);
+  }
+
+  .logoMain h5 {
+    font-size: var(--font-nm);
+  }
+}
+/* Mobile  Small*/
+@media screen and (max-width: 320px) {
+  /* .item_grid {
+    grid-template-columns: var(--grid-column-items-mobile-small);
+  } */
+
+  .loginView {
+    height: 55px;
+  }
+
+  svg {
+    width: 25px;
+    height: 25px;
   }
 
   #searchRuc {

@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import useScreenSize from '@/hooks/useScreenSize';
+import MobileMenu from '@/components/MobileMenu';
 import { usePathname } from 'next/navigation';
 import { BiSupport } from 'react-icons/bi';
 import { GrUserAdmin } from 'react-icons/gr';
@@ -10,9 +12,12 @@ import styles from '../styles/modulGeneral.module.css';
 
 const Header = () => {
   const pathname = usePathname();
+  const isMobile = useScreenSize();
 
   const [payloadJwt, setPayloadJwt] = useState({});
   const [showMenu, setShowMenu] = useState(false);
+  const [showMovilMenu, setShowMovilMenu] = useState(false);
+  const [showButtonMovil, setShowButtonMovil] = useState(false);
 
   useEffect(() => {
     //Obtengo las variables del LocalStorage
@@ -20,7 +25,13 @@ const Header = () => {
     //Si existen las variables, se las transforma en JSON para su uso
     const payloadStorage = payloadLS && JSON.parse(payloadLS);
     payloadLS && setPayloadJwt(payloadStorage);
-  }, [pathname]);
+    if (isMobile) {
+      setShowButtonMovil(true);
+      setShowMovilMenu(false);
+    } else {
+      setShowButtonMovil(false);
+    }
+  }, [pathname, isMobile]);
 
   const logOut = () => {
     localStorage.removeItem('jwt');
@@ -40,9 +51,13 @@ const Header = () => {
           <img src="./logo_app_mini.jpg" alt="Logo_app" />
           <span>
             <h2>HelpDesk - CapSoft</h2>
-            <h5>App Web de Atención y Soporte Técnico</h5>
+            <h5>AppWeb Atención y Soporte Técnico</h5>
           </span>
-          <img src="./Capacity_Logo.png" alt="Logo_big" />
+          {showButtonMovil ? (
+            <img src="./Capacity_Logo_single.png" alt="Logo_small" />
+          ) : (
+            <img src="./Capacity_Logo.png" alt="Logo_big" />
+          )}
         </div>
       </header>
     );
@@ -77,7 +92,23 @@ const Header = () => {
           />
         </svg>
       </Link>
-      {payloadJwt.perfil === 'admin' && (
+      <Link href="/reports" title="reportes">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+          />
+        </svg>
+      </Link>
+      {payloadJwt.perfil === 'admin' && !showButtonMovil && (
         <figure className={styles.headerModules}>
           <Link href="/empresas" title="Gestión Empresas">
             <svg
@@ -139,22 +170,6 @@ const Header = () => {
               />
             </svg>
           </Link>
-          <Link href="/reports" title="reportes">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-              />
-            </svg>
-          </Link>
           <Link href="/" title="config">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +186,7 @@ const Header = () => {
           </Link>
         </figure>
       )}
-      {payloadJwt.perfil === 'supervisor' && (
+      {payloadJwt.perfil === 'supervisor' && !showButtonMovil && (
         <figure className={styles.headerModules}>
           <Link href="/personalEmp" title="Gestión Personal">
             <svg
@@ -219,25 +234,9 @@ const Header = () => {
               />
             </svg>
           </Link>
-          <Link href="/reports" title="reportes">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-              />
-            </svg>
-          </Link>
         </figure>
       )}
-      {payloadJwt.perfil === 'cliente' && (
+      {payloadJwt.perfil === 'cliente' && !showButtonMovil && (
         <figure className={styles.headerModules}>
           <Link href="/tickets/new" title="Registrar Ticket">
             <svg
@@ -270,25 +269,9 @@ const Header = () => {
               />
             </svg>
           </Link>
-          <Link href="/reports" title="reportes">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-              />
-            </svg>
-          </Link>
         </figure>
       )}
-      {payloadJwt.perfil === 'agente' && (
+      {payloadJwt.perfil === 'agente' && !showButtonMovil && (
         <figure className={styles.headerModules}>
           <Link
             href="/support/allTickets"
@@ -328,22 +311,6 @@ const Header = () => {
               />
             </svg>
           </Link>
-          <Link href="/reports" title="reportes">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-              />
-            </svg>
-          </Link>
         </figure>
       )}
 
@@ -365,6 +332,11 @@ const Header = () => {
         {showMenu && (
           <nav className={styles.menu}>
             <ul>
+              <li>
+                <Link href="/reports" title="reportes">
+                  Reportes
+                </Link>
+              </li>
               <li
                 onClick={() => {
                   logOut();
@@ -376,29 +348,76 @@ const Header = () => {
           </nav>
         )}
       </span>
-      <button
-        type="button"
-        title="Cerrar Sesión"
-        className={styles.buttonLogOut}
-        onClick={() => {
-          logOut();
-        }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
+      {!showButtonMovil && (
+        <button
+          type="button"
+          title="Cerrar Sesión"
+          className={styles.buttonLogOut}
+          onClick={() => {
+            logOut();
+          }}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9"
-          />
-        </svg>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9"
+            />
+          </svg>
+        </button>
+      )}
+
+      {showButtonMovil && (
+        <button
+          type="button"
+          title="MenuMobil"
+          className={styles.buttonLogOut}
+          onClick={() => {
+            setShowMovilMenu(!showMovilMenu);
+          }}
+          style={{ zIndex: '99', border: '1px solid white' }}
+        >
+          {!showMovilMenu ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          )}
+        </button>
+      )}
+      {showMovilMenu && <MobileMenu perfil={payloadJwt.perfil} />}
     </header>
   );
 };

@@ -247,7 +247,8 @@
   padding: 4px;
   border-color: var(--tittles-hk);
   outline: none;
-  min-width: 80%;
+  /* min-width: 80%; */
+  width: 90%;
 }
 
 .selectContainer option:checked {
@@ -949,7 +950,8 @@
     padding: 8px;
   }
   .loginContainer {
-    width: 90%;
+    width: 95%;
+    padding: 2px;
   }
 
   .input-container {
@@ -993,6 +995,17 @@
   }
 
   .cancelButton {
+    width: 100%;
+  }
+
+  .selectContainer {
+    font-size: var(--font-sm);
+    width: 95%;
+    gap: 0 2px;
+    margin: 2px;
+  }
+
+  .selectContainer select {
     width: 100%;
   }
 }

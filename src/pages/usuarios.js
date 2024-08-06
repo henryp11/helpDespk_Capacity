@@ -92,7 +92,9 @@ const Usuarios = () => {
           query={query}
           setQuery={setQuery}
           placeholder={
-            'Buscar por UserName / Empresa / Nombre personal / Correo / Rol'
+            !isMobile
+              ? 'Buscar por: UserName / Empresa / Nombre personal / Correo / Rol'
+              : 'Buscar por: UserName / Empresa / Nombre p.'
           }
         />
         <HeadersColumns
@@ -100,7 +102,8 @@ const Usuarios = () => {
           columnTitles={
             isMobile
               ? moduleHeaders.columnTitles.map((column) => {
-                  if (column.id !== 'col2') return column;
+                  if (column.id !== 'col4' && column.id !== 'col5')
+                    return column;
                   return { ...column, show: false };
                 })
               : moduleHeaders.columnTitles
@@ -139,14 +142,14 @@ const Usuarios = () => {
                   }
                 >
                   <span>{register.id_user}</span>
-                  <span className="hideElement">
+                  <span>
                     {register.personalEmp
                       ? `${register.personalEmp.empresa.nombre_emp} | ${register.personalEmp.nombre}`
                       : '-'}
                   </span>
                   <span>{register.username}</span>
-                  <span>{register.mail}</span>
-                  <span>{register.rol}</span>
+                  <span className="hideElement">{register.mail}</span>
+                  <span className="hideElement">{register.rol}</span>
                   <span className="icons-container">
                     <button
                       title="Ver Detalles"

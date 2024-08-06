@@ -72,7 +72,6 @@
 }
 
 .titleCard {
-  width: 100%;
   display: grid;
   gap: 8px;
   grid-template-columns: auto auto auto;
@@ -109,6 +108,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  font-size: small;
 }
 
 .menu {
@@ -172,4 +172,26 @@
 
 .buttonLogOut:hover {
   background: var(--button-color-hk-hover);
+}
+
+/* Mobile  Normal*/
+@media screen and (max-width: 480px) {
+  .containerModGeneral {
+    width: 90%;
+  }
+
+  .containerModGeneral h4 {
+    font-size: var(--font-nm);
+  }
+  .containerModGeneral h3 {
+    font-size: var(--font-md);
+  }
+
+  .containerCardMod {
+    min-height: 150px;
+  }
+
+  .containerCardMod .titleCard {
+    justify-content: center;
+  }
 }

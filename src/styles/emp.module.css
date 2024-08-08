@@ -74,9 +74,9 @@
   grid-template-columns: 50% 50%;
 }
 
-#formSolicitud {
+/* #formSolicitud {
   grid-template-columns: 5% 1fr 10%;
-}
+} */
 
 .gridMtrTicket {
   grid-column: 1/-1;

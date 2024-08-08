@@ -71,6 +71,10 @@
 
 .crudEmpContainer form {
   display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+#formSolicitud {
   grid-template-columns: 5% 1fr 10%;
 }
 
@@ -131,6 +135,10 @@
     width: 98%;
     gap: 4px;
     flex-direction: column;
+  }
+
+  .crudEmpContainer form {
+    grid-template-columns: 100%;
   }
 
   .gridMtrTicket {

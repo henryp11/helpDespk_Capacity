@@ -293,7 +293,7 @@ const Newregister = () => {
         )}
         {ticketCreated.isCreated && (
           <form
-            id="formSolicitud"
+            id={stylesEmp.formSolicitud}
             onSubmit={handleSubmitSolic}
             className={styles['form-default']}
           >

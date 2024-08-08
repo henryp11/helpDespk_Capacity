@@ -93,7 +93,7 @@
 
 /* Acceso a modulos desde el menú superior */
 .headerModules {
-  width: 60%;
+  width: 50%;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -102,13 +102,27 @@
 
 .dataPerfil {
   border: 1px solid var(--button-color-hk-hover);
-  padding: 4px 8px;
+  padding: 2px 5px;
   border-radius: 4px;
   color: var(--button-color-hk);
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
   font-size: small;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.dataPerfil svg {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+}
+
+.dataPerfil i {
+  width: 100%;
 }
 
 .menu {

@@ -86,11 +86,11 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
         style={{
           display: 'flex',
           width: '100%',
-          margin: '8px',
+          // margin: '2px',
           padding: '4px',
           justifyContent: 'flex-start',
           alignItems: 'center',
-          gap: '12px',
+          gap: '8px',
           borderBottom: '1px solid #444a8d',
           fontSize: '1.1em',
         }}
@@ -125,14 +125,15 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
             <form
               key={dataControl.id_control}
               className={styles['form-default']}
+              id={styles.gridControles}
               onSubmit={handleSubmit}
-              style={{
-                borderRadius: '1px',
-                boxShadow: 'inset 2px -2px 0px #1a73e8',
-                gridTemplateColumns: '37% 37% 15% 10%',
-                alignItems: 'center',
-                padding: '8px',
-              }}
+              // style={{
+              //   borderRadius: '1px',
+              //   boxShadow: 'inset 2px -2px 0px #1a73e8',
+              //   gridTemplateColumns: '37% 37% 15% 10%',
+              //   alignItems: 'center',
+              //   padding: '8px',
+              // }}
             >
               <span
                 className="gridAllColumn"

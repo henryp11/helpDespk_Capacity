@@ -51,7 +51,9 @@ const Header = () => {
           <img src="./logo_app_mini.jpg" alt="Logo_app" />
           <span>
             <h2>HelpDesk - CapSoft</h2>
-            <h5>AppWeb Atención y Soporte Técnico</h5>
+            <h5>
+              AppWeb Atención y Soporte Técnico <i>v1.1</i>
+            </h5>
           </span>
           {showButtonMovil ? (
             <img src="./Capacity_Logo_single.png" alt="Logo_small" />
@@ -321,13 +323,13 @@ const Header = () => {
         }}
       >
         {payloadJwt && (
-          <i>
-            {`${payloadJwt.username} - ${payloadJwt.perfil}`}
+          <>
+            <i>{`${payloadJwt.username} - ${payloadJwt.perfil}`}</i>
             {payloadJwt.perfil === 'agente' && <BiSupport />}
             {payloadJwt.perfil === 'admin' && <GrUserAdmin />}
             {payloadJwt.perfil === 'supervisor' && <MdSupervisorAccount />}
             {payloadJwt.perfil === 'cliente' && <BsPersonWorkspace />}
-          </i>
+          </>
         )}
         {showMenu && (
           <nav className={styles.menu}>
@@ -382,7 +384,7 @@ const Header = () => {
           onClick={() => {
             setShowMovilMenu(!showMovilMenu);
           }}
-          style={{ zIndex: '99', border: '1px solid white' }}
+          style={{ zIndex: '10', border: '1px solid white' }}
         >
           {!showMovilMenu ? (
             <svg

@@ -2,9 +2,11 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import moment from 'moment';
 import { timeFormat } from '@/utils/helpers';
+import useScreenSize from '@/hooks/useScreenSize';
 import styles from '@/styles/forms.module.css';
 
 const TableReport = ({ dataTicket, typeReport, loadData }) => {
+  const isMobile = useScreenSize();
   const tableRefResumen = useRef();
   const tableRefDetalle = useRef();
   const { onDownload } = useDownloadExcel({
@@ -25,6 +27,7 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
   //Se duplicaria si existiera varias solicitudes en un solo ticket, por ende se extrae los tickets únicos para ese caso
   //Y usar el nuevo array para que este realiza la sumatoria en el caso de reporte detallado por solicitud.
   const [ticketsUnique, setTicketsUnique] = useState([]);
+  const [showColumn, setShowColumn] = useState(true);
 
   useEffect(() => {
     if (typeReport === 'detalle') {
@@ -40,11 +43,15 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
       });
       setTicketsUnique(unique);
     }
-  }, [typeReport]);
+    if (isMobile) {
+      setShowColumn(false);
+    }
+  }, [typeReport, isMobile]);
 
   console.log(typeReport);
   console.log(loadData);
   console.log(ticketsUnique);
+  console.log(showColumn);
   return (
     <div className={styles.previewReports}>
       <div
@@ -52,7 +59,7 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
           display: 'flex',
           width: '100%',
           padding: '4px',
-          justifyContent: 'space-evenly',
+          justifyContent: 'center',
           alignItems: 'center',
           gap: '12px',
           borderBottom: '1px solid #444a8d',
@@ -139,13 +146,15 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
               <th>#</th>
               <th>Empresa</th>
               <th>Solicitante</th>
-              <th>ID.Ticket</th>
-              <th>Fecha Reg. Ticket</th>
+              <th className={!showColumn && 'hideElement'}>ID.Ticket</th>
+              <th className={!showColumn && 'hideElement'}>
+                Fecha Reg. Ticket
+              </th>
               <th>Descripción General Ticket</th>
               <th>F. Inicio Atención</th>
               <th>F. Fin Atención</th>
               <th>Tiempo Total</th>
-              <th>Cant. Solic</th>
+              <th className={!showColumn && 'hideElement'}>Cant. Solic</th>
             </tr>
           </thead>
           <tbody>
@@ -155,8 +164,12 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
                   <td>{index + 1}</td>
                   <td>{register.personal_emp?.empresa.nombre_emp}</td>
                   <td>{register.personal_emp?.nombre}</td>
-                  <td>{register.id_ticket}</td>
-                  <td>{moment(register.fecha_reg).format('DD/MM/YYYY')}</td>
+                  <td className={!showColumn && 'hideElement'}>
+                    {register.id_ticket}
+                  </td>
+                  <td className={!showColumn && 'hideElement'}>
+                    {moment(register.fecha_reg).format('DD/MM/YYYY')}
+                  </td>
                   <td>{register.descrip_tk}</td>
                   <td>
                     {moment(register.fecha_ini_sop).format(
@@ -169,7 +182,7 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
                     )}
                   </td>
                   <td>{timeFormat(register.tiempo_real_sop * 1000)}</td>
-                  <td>
+                  <td className={!showColumn && 'hideElement'}>
                     {register.det_tickets ? register.det_tickets.length : 0}
                   </td>
                 </tr>
@@ -178,10 +191,10 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
           </tbody>
           <tfoot>
             <tr align="center" bgcolor="#d0cfd2">
-              <td colSpan="8">
+              <td colSpan="5">
                 <strong>Tiempo Total:</strong>
               </td>
-              <td colSpan="2">
+              <td colSpan="1">
                 <strong>
                   {typeReport === 'resumen' &&
                     timeFormat(
@@ -203,17 +216,21 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Empresa</th>
+              <th className={!showColumn && 'hideElement'}>Empresa</th>
               <th>Solicitante</th>
-              <th>ID.Ticket</th>
-              <th>Fecha Reg. Ticket</th>
-              <th>Descripción General Ticket</th>
+              <th className={!showColumn && 'hideElement'}>
+                Id.Ticket | Id.solic.
+              </th>
+              <th className={!showColumn && 'hideElement'}>
+                Fecha Reg. Ticket
+              </th>
+              <th className={!showColumn && 'hideElement'}>
+                Descripción General Ticket
+              </th>
               <th>F. Inicio Atención Ticket</th>
               <th>F. Fin Atención Ticket</th>
-              {/* <th>Tiempo Total Ticket</th> */}
-              <th>Id.Solicitud</th>
               <th>Detalle Solicitud</th>
-              <th>Agente Asignado</th>
+              <th className={!showColumn && 'hideElement'}>Agente Asignado</th>
               <th>Tiempo Solicitud</th>
               <th>Detalle Solución</th>
             </tr>
@@ -223,17 +240,21 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
               return (
                 <tr key={register.id_solicitud}>
                   <td>{index + 1}</td>
-                  <td>
+                  <td className={!showColumn && 'hideElement'}>
                     {register.mtr_tickets?.personal_emp.empresa.nombre_emp}
                   </td>
                   <td>{register.mtr_tickets?.personal_emp.nombre}</td>
-                  <td>{register.id_ticket}</td>
-                  <td>
+                  <td
+                    className={!showColumn && 'hideElement'}
+                  >{`${register.id_ticket} | ${register.id_solicitud}`}</td>
+                  <td className={!showColumn && 'hideElement'}>
                     {moment(register.mtr_tickets?.fecha_reg).format(
                       'DD/MM/YYYY'
                     )}
                   </td>
-                  <td>{register.mtr_tickets?.descrip_tk}</td>
+                  <td className={!showColumn && 'hideElement'}>
+                    {register.mtr_tickets?.descrip_tk}
+                  </td>
                   <td>
                     {moment(register.mtr_tickets?.fecha_ini_sop).format(
                       'DD/MM/YYYY - kk:mm:ss'
@@ -244,12 +265,10 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
                       'DD/MM/YYYY - kk:mm:ss'
                     )}
                   </td>
-                  {/* <td>
-                    {timeFormat(register.mtr_tickets?.tiempo_real_sop * 1000)}
-                  </td> */}
-                  <td>{register.id_solicitud}</td>
                   <td>{register.descripcion}</td>
-                  <td>{register.agentes_sop?.nombre}</td>
+                  <td className={!showColumn && 'hideElement'}>
+                    {register.agentes_sop?.nombre}
+                  </td>
                   <td>
                     {timeFormat(
                       register.control_tickets
@@ -273,10 +292,10 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
           </tbody>
           <tfoot>
             <tr align="center" bgcolor="#d0cfd2">
-              <td colSpan="11">
+              <td colSpan="6">
                 <strong>Tiempo Total:</strong>
               </td>
-              <td colSpan="2">
+              <td colSpan="1">
                 <strong>
                   {typeReport === 'detalle' &&
                     timeFormat(

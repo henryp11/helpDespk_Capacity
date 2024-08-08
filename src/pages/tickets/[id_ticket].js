@@ -376,9 +376,9 @@ const Newregister = () => {
                   style={{
                     display: 'flex',
                     margin: '5px 10px',
-                    justifyContent: 'flex-start',
+                    justifyContent: 'space-evenly',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '4px',
                     color: '#444a8d',
                   }}
                 >

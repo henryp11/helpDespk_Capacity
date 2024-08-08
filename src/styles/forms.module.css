@@ -4,7 +4,7 @@
   flex-direction: column;
   width: 100%;
   background: white;
-  padding: 12px;
+  padding: 8px;
   border-radius: 8px;
 }
 
@@ -123,7 +123,7 @@
   margin: 12px auto 0 auto;
   grid-column: 1 / -1;
   display: flex;
-  /* flex-wrap: wrap; */
+  flex-wrap: wrap;
 }
 
 .buttonContainer button {
@@ -324,6 +324,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  grid-column: 2 span;
 }
 
 .formButtonAddSol {
@@ -451,6 +452,10 @@
   grid-template-columns: 95% 5%;
 }
 
+.inputContainer1_1Atention {
+  grid-template-columns: 77% 23%;
+}
+
 .fieldSetCustom {
   grid-column: 1 / -1;
   display: grid;
@@ -516,6 +521,7 @@
 #buttonTicket button,
 #buttonSolicitud button {
   background: transparent;
+  z-index: 2;
 }
 
 #buttonSolicitud button svg {
@@ -601,9 +607,12 @@
 }
 
 .formReports {
-  display: grid;
-  grid-template-columns: repeat(2, 50%);
+  display: flex;
+  /* grid-template-columns: repeat(2, 50%); */
   gap: 0 8px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .formReports .fieldSetCustom {
@@ -611,6 +620,7 @@
   grid-column: auto;
   justify-content: stretch;
   padding: 0 4px;
+  width: 600px;
 }
 .formReports .selectContainer {
   display: grid;
@@ -675,6 +685,12 @@
   padding: 2px;
 }
 
+.containerButtonReports {
+  width: 70%;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
 /*Para inputs de archivo e imagenes*/
 
 .inputImage {
@@ -698,13 +714,20 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  z-index: 5;
+  z-index: 11;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   background: var(--dark);
   padding-top: 18px;
+}
+
+.inputImageModal h1 {
+  position: absolute;
+  top: 0;
+  text-align: center;
+  margin-top: 12px;
 }
 
 .inputImageModal h2 {
@@ -716,8 +739,12 @@
   display: inline-block;
   cursor: pointer;
   border: 3px dashed white;
-  width: 90%;
+  width: 95%;
   height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 .inputImage span::before {
   color: white;
@@ -726,7 +753,6 @@
   align-items: flex-start;
   font-size: x-large;
   border-radius: 4px;
-  /* content: 'Para añadir, de click o arrastre su archivo'; */
   position: absolute;
   left: 0;
   right: 0;
@@ -749,6 +775,7 @@
   right: 0;
   top: 0;
   bottom: 0;
+  z-index: 4;
 }
 
 .inputImage button {
@@ -800,12 +827,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
   height: 100%;
 }
 
 .inputImageModal .containerPreview {
-  z-index: 4;
+  z-index: 3;
   flex-direction: column;
 }
 
@@ -848,37 +874,48 @@
   color: white;
   padding: 2px;
   display: flex;
-  width: 110%;
+  width: 101%;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  /* height: 100vh; */
+  /* gap: 4px; */
+  height: calc(100vh - 40px);
+}
+
+.downloadFilePreview {
+  height: 80%;
+}
+
+.downloadFilePreview img {
+  height: 100%;
+  width: 100%;
 }
 
 .downloadFile h3 {
   color: var(--tittles-hk);
-  margin-top: 1em;
+  margin-top: 0.1em;
 }
 
 .downloadLink {
   color: white;
-  font-size: 1.2em;
+  font-size: 1em;
   background: var(--acept-button);
-  padding: 8px;
+  padding: 8px 4px;
   border-radius: 6px;
-  font-weight: bolder;
+  font-weight: 500;
   box-shadow: inset 0 -3px 5px 0 var(--dark);
   transition: all 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .downloadLink svg {
   color: var(--tittles-hk);
+  width: 25px;
+  height: 25px;
 }
 
 .downloadLink:hover {
@@ -935,11 +972,65 @@
 
 /*Fin Para inputs de archivo / imagenes*/
 
+/*Detalle de controles*/
+
+#gridControles {
+  display: grid;
+  border-radius: 1px;
+  box-shadow: inset 2px -2px 0px #1a73e8;
+  grid-template-columns: 37% 37% 15% 10%;
+  align-items: center;
+  padding: 8px;
+}
+
 /* RESPONSIVE DESIGN */
+@media screen and (max-width: 1024px) {
+  /*Laptop 1024*/
+  .formReports .fieldSetCustom {
+    width: 480px;
+  }
+
+  .previewReports table {
+    word-break: break-all;
+  }
+}
+
 @media screen and (max-width: 768px) {
   /* Tablet  */
+  .form-default {
+    font-size: smaller;
+  }
+
+  .input-container input {
+    font-size: 11px;
+  }
+
   .loginContainer {
     width: 70%;
+  }
+
+  .inputImageModal h1 {
+    font-size: var(--font-xl);
+  }
+  .inputImageModal h2 {
+    font-size: var(--font-md);
+  }
+
+  .numberReg {
+    width: 20px;
+    height: 20px;
+    font-size: small;
+  }
+
+  .formReports .fieldSetCustom {
+    width: 360px;
+  }
+
+  .previewReports table {
+    font-size: 10px;
+  }
+  .previewReports table thead {
+    font-size: 10px;
   }
 }
 
@@ -949,9 +1040,26 @@
   .form-default {
     padding: 8px;
   }
+
+  .textArea {
+    font-size: 12px;
+  }
+
+  .formButtonShow {
+    padding: 0 4px;
+    font-size: 14px;
+  }
+
   .loginContainer {
     width: 95%;
     padding: 2px;
+  }
+
+  .inputImageModal h1 {
+    font-size: var(--font-nm);
+  }
+  .inputImageModal h2 {
+    font-size: var(--font-nm);
   }
 
   .input-container {
@@ -986,14 +1094,11 @@
   }
 
   .buttonContainer button {
-    width: 45px;
-    height: 45px;
+    font-size: 14px;
   }
-
-  .buttonContainer svg {
+  /*   .buttonContainer svg {
     transform: scale(1.5);
-  }
-
+  } */
   .cancelButton {
     width: 100%;
   }
@@ -1008,35 +1113,94 @@
   .selectContainer select {
     width: 100%;
   }
+
+  .formButtonAddSol {
+    font-size: medium;
+    padding: 4px;
+  }
+
+  .inputContainer2_1 {
+    grid-template-columns: repeat(2, 40%) 15%;
+  }
+  .inputContainer3_1 {
+    grid-template-columns: repeat(2, 48%);
+  }
+  .inputContainer1_3 {
+    grid-template-columns: repeat(2, 48%);
+  }
+  .inputContainer1_1 {
+    grid-template-columns: 93% 6%;
+  }
+
+  #gridControles {
+    grid-template-columns: 48% 48%;
+  }
+
+  .fieldSetCustom {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .controlsTable {
+    font-size: var(--font-sm);
+  }
+
+  .inputContainer1_1Atention {
+    grid-template-columns: 100%;
+  }
+  .inputContainer1_1AtentionDates {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+
+  .downloadFile {
+    top: -22px;
+  }
+
+  .containerButtonReports {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .containerButtonReports button {
+    font-size: 11px;
+  }
 }
 
 @media screen and (max-width: 320px) {
   .idField {
     grid-template-columns: auto;
   }
-}
 
-/* .icon-container--create {
-  display: flex;
-  width: 100%;
-  justify-content: space-evenly;
-  align-items: center;
-}
+  .inputImageModal h1 {
+    font-size: var(--font-sm);
+  }
 
-.icon-container--create .icons {
-  font-size: 40px;
-  padding: 2px;
-}
+  .buttonContainer button {
+    width: 30px;
+    height: 30px;
+    font-size: small;
+  }
+  .formButtonAddSol {
+    font-size: medium;
+    padding: 2px;
+  }
 
-.icon-container--create .icons:hover {
-  box-shadow: inset 0 -5px var(--very-light-pink);
-  transform: scale(1.2);
-}
+  .fieldSetCustom {
+    grid-template-columns: 100%;
+  }
 
-.icon-container--create .icons:first-child {
-  color: rgb(51, 136, 70);
-}
+  .inputContainer1_1AtentionDates {
+    grid-template-columns: auto;
+  }
 
-.icon-container--create .icons:last-child {
-  color: rgb(117, 22, 22);
-} */
+  .containerButtonReports button {
+    font-size: 10px;
+  }
+
+  .previewReports table {
+    font-size: 8px;
+  }
+  .previewReports table thead {
+    font-size: 8px;
+  }
+}

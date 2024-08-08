@@ -18,7 +18,7 @@ const modEmpresasAdmin = [
   {
     idOption: 3,
     descrip: 'Detalle soporte recibido',
-    route: '/detalle-soporte',
+    route: '/reports',
   },
 ];
 const modEmpresasSup = [
@@ -30,7 +30,7 @@ const modEmpresasSup = [
   {
     idOption: 2,
     descrip: 'Detalle soporte recibido',
-    route: '/detalle-soporte',
+    route: '/reports',
   },
 ];
 //Opciones a mostrar para el modulo de Tickets por perfil
@@ -165,7 +165,7 @@ const ModulesMain = ({ userName }) => {
             {
               idOption: 3,
               descrip: 'Detalle Soporte de todas las empresas',
-              route: '/soporte-global',
+              route: '/reports',
             },
           ]}
         />
@@ -204,7 +204,7 @@ const ModulesMain = ({ userName }) => {
             {
               idOption: 3,
               descrip: 'Control Soporte por Agente',
-              route: '/soporte',
+              route: '/reports',
             },
           ]}
         />

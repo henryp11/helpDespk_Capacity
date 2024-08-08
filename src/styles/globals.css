@@ -25,12 +25,21 @@
   --font-xl: 20px;
   --font-xxl: 28px;
   /* GRIDS */
-  --grid-column-items: 10% 25% 15% 10% 20% 15%;
+  /*Grids Pantallas de visualización de todos los Tickets */
   --grid-column-tickets: 3% 5% 14% 20% 7% 5% 13% 10% 10% 10%;
+  --grid-column-tickets-tablet: 3% 5% 13% 17% 7% 5% 13% 8% 10% 13%;
+  --grid-column-tickets-mobile: 5% 6% 19% 17% 14% 15% 18%;
+  --grid-column-tickets-mobile-small: 5% 6% 19% 15% 14% 16% 18%;
+  /*Grids Pantallas de visualización de todos los módulos en general */
+  --grid-column-items: 10% 25% 15% 10% 20% 15%;
   --grid-column-items-tablet: 8% 24% 15% 15% 17% 17%;
   --grid-column-items-mobile: 15% 32% 24% 25%;
   --grid-column-items-mobile-small: 8% 35% 25% 25%;
+  /*Grids Pantallas de visualización de todas las solcitudes (agentes)*/
   --grid-column-solicitud: 3% 5% 11% 19% 7% 6% 21% 9% 7% 9%;
+  --grid-column-solicitud-tablet: 3% 5% 10% 18% 7% 6% 19% 9% 8% 9%;
+  --grid-column-solicitud-mobile: 5% 13% 17% 29% 15% 15%;
+  --grid-column-solicitud-mobile-small: 7% 13% 17% 29% 16% 15%;
   --grid-column-5-col: 10% 40% repeat(2, 15%) 10%;
   /*ESTATUS*/
   --estatus-mtr-solicitado: rgb(252, 192, 82);
@@ -396,7 +405,7 @@ svg {
   background: none;
   border: none;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
@@ -648,7 +657,7 @@ button:disabled {
 .mobileMenu {
   position: absolute;
   background: rgb(85, 95, 194, 0.9);
-  z-index: 20;
+  z-index: 9;
   color: white;
   display: flex;
   align-items: center;
@@ -711,6 +720,10 @@ button:disabled {
 /* RESPONSIVE DESIGN */
 @media screen and (max-width: 768px) {
   /* Tablet  */
+  h2 {
+    font-size: var(--font-xl);
+  }
+
   #iconAdd {
     width: 55px;
     height: 55px;
@@ -724,12 +737,55 @@ button:disabled {
 
   .icons-container {
     gap: 3px;
-    flex-wrap: nowrap;
+    /* flex-wrap: nowrap; */
+  }
+
+  .icons-container svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .generalContainerDetails {
+    font-size: var(--font-sm);
+  }
+
+  .generalTitle {
+    font-size: var(--font-nm);
+    word-break: break-word !important;
+  }
+
+  .grid_tickets {
+    grid-template-columns: var(--grid-column-tickets-tablet);
+  }
+
+  .grid_solicitudes {
+    grid-template-columns: var(--grid-column-solicitud-tablet);
   }
 }
 
 /* Mobile  Normal*/
 @media screen and (max-width: 480px) {
+  h2 {
+    font-size: var(--font-md);
+  }
+  h3 {
+    font-size: var(--font-nm);
+  }
+  h4 {
+    font-size: var(--font-nm);
+  }
+
+  #cancelButtonEditTicket {
+    top: -4px;
+    right: -2px;
+    width: 30px;
+    height: 30px;
+  }
+
+  #updateMtrTK {
+    right: -10px;
+  }
+
   .search_container {
     width: 98%;
   }
@@ -742,8 +798,13 @@ button:disabled {
     color: var(--background-hk);
   }
 
+  .counter {
+    font-size: 8px;
+  }
+
   .generalTitle {
     font-size: var(--font-nm);
+    word-break: break-word !important;
   }
 
   .item_grid {
@@ -765,14 +826,16 @@ button:disabled {
 
   header {
     justify-content: space-between;
+    padding: 2px;
   }
 
   .loginView {
-    height: 60px;
+    height: 55px;
   }
 
   .logoMain {
     justify-content: space-between;
+    gap: 0;
   }
 
   .logoMain h2 {
@@ -780,7 +843,31 @@ button:disabled {
   }
 
   .logoMain h5 {
-    font-size: var(--font-nm);
+    font-size: var(--font-sm);
+  }
+
+  .grid_tickets {
+    grid-template-columns: var(--grid-column-tickets-mobile);
+  }
+
+  .grid_solicitudes {
+    grid-template-columns: var(--grid-column-solicitud-mobile);
+  }
+
+  .icons-container svg {
+    width: 22px;
+  }
+
+  .generalTitle {
+    font-size: var(--font-sm);
+  }
+
+  .timerContainer {
+    grid-column: 1/-1;
+  }
+
+  #returnButton {
+    right: -2px;
   }
 }
 /* Mobile  Small*/
@@ -788,6 +875,17 @@ button:disabled {
   /* .item_grid {
     grid-template-columns: var(--grid-column-items-mobile-small);
   } */
+  h2 {
+    font-size: var(--font-nm);
+  }
+
+  h5 {
+    font-size: var(--font-nm);
+  }
+
+  #cancelButtonEditTicket {
+    top: -20px;
+  }
 
   .loginView {
     height: 55px;
@@ -801,5 +899,17 @@ button:disabled {
   #searchRuc {
     background: white;
     border-radius: 50%;
+  }
+
+  .item_detail {
+    font-size: 9px;
+  }
+
+  .grid_tickets {
+    grid-template-columns: var(--grid-column-tickets-mobile-small);
+  }
+
+  .grid_solicitudes {
+    grid-template-columns: var(--grid-column-solicitud-mobile-small);
   }
 }

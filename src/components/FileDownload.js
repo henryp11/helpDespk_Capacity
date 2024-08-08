@@ -34,7 +34,7 @@ const FileDownload = ({
           </h3>
           <div className={styles.downloadFilePreview}>
             {stateSolicitud.capturas[idFile].url && (
-              <span style={{ height: '70vh' }}>
+              <span style={{ height: '100%' }}>
                 {stateSolicitud.capturas[idFile].type.includes('image') && (
                   <img
                     src={stateSolicitud.capturas[idFile].url}

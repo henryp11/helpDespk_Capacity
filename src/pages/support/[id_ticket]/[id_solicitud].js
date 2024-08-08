@@ -269,8 +269,7 @@ const Newregister = () => {
             <fieldset className={`${styles.fieldSetCustom}`}>
               <legend>Atención / Soporte</legend>
               <span
-                className={`${styles.inputContainer1_1} ${styles.inputContainer1_1v}`}
-                style={{ gridTemplateColumns: '80% 20%' }}
+                className={`${styles.inputContainer1_1} ${styles.inputContainer1_1v} ${styles.inputContainer1_1Atention}`}
               >
                 <span className={styles['input-container']}>
                   <textarea
@@ -278,7 +277,7 @@ const Newregister = () => {
                     onChange={handleChange}
                     defaultValue={valueState.descripcion}
                     cols="30"
-                    rows="4"
+                    rows="6"
                     className={styles.textArea}
                     disabled={true}
                   ></textarea>
@@ -286,7 +285,7 @@ const Newregister = () => {
                     Solicitud del Cliente
                   </label>
                 </span>
-                <span>
+                <span className={styles.inputContainer1_1AtentionDates}>
                   <CustomInput
                     typeInput="text"
                     nameInput="fecha_ini_solucion"

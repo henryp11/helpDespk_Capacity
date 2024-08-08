@@ -167,16 +167,7 @@ const FileTickets = ({
     <>
       {showModal.active && showModal.name === idFile && (
         <div className={`${styles.inputImage} ${styles.inputImageModal}`}>
-          <h1
-            style={{
-              position: 'absolute',
-              top: '0',
-              textAlign: 'center',
-              marginTop: '12px',
-            }}
-          >
-            Para añadir un archivo, de click en el recuadro o arrastrelo
-          </h1>
+          <h1>Para añadir un archivo, de click en el recuadro o arrastrelo</h1>
           <button
             tittle="Cancelar"
             type="button"
@@ -201,8 +192,8 @@ const FileTickets = ({
             }}
             style={{
               position: 'absolute',
-              top: '10px',
-              right: '50px',
+              top: '25px',
+              right: '1%',
               background: '#800000',
               borderRadius: '50%',
             }}
@@ -307,45 +298,9 @@ const FileTickets = ({
                       <TbFileTypeXml />
                     </span>
                   )}
-                  {previewImg && (
-                    <>
-                      <button
-                        onClick={() => {
-                          handleStorage(idFile);
-                        }}
-                        type="button"
-                        tittle="Guardar Archivo"
-                        disabled={
-                          archivo.type.includes('application/x-msdownload') ||
-                          archivo.name.includes('.bat') ||
-                          archivo.name.includes('.ps1') ||
-                          archivo.name.includes('.ps') ||
-                          archivo.name.includes('.cmd') ||
-                          archivo.size > 5000000
-                            ? true
-                            : false
-                        }
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                          />
-                        </svg>
-                        Subir Archivo <br />
-                        {!isUpload && `Subiendo por favor espere...`}
-                      </button>
-                    </>
-                  )}
                 </>
               )}
+
               {!archivo && stateSolicitud.capturas[idFile].url && (
                 <>
                   {stateSolicitud.capturas[idFile].type.includes('image') && (
@@ -391,31 +346,68 @@ const FileTickets = ({
                       <TbFileTypeXml />
                     </span>
                   )}
-                  <button
-                    onClick={() => {
-                      removeImage(idFile);
-                    }}
-                    className={styles.removeImage}
-                    type="button"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 13.5H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
-                      />
-                    </svg>
-                    Quitar Imágen
-                  </button>
                 </>
               )}
             </div>
+            {previewImg && (
+              <button
+                onClick={() => {
+                  handleStorage(idFile);
+                }}
+                type="button"
+                tittle="Guardar Archivo"
+                disabled={
+                  archivo.type.includes('application/x-msdownload') ||
+                  archivo.name.includes('.bat') ||
+                  archivo.name.includes('.ps1') ||
+                  archivo.name.includes('.ps') ||
+                  archivo.name.includes('.cmd') ||
+                  archivo.size > 5000000
+                    ? true
+                    : false
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                  />
+                </svg>
+                Subir Archivo <br />
+                {!isUpload && `Subiendo por favor espere...`}
+              </button>
+            )}
+            {!archivo && stateSolicitud.capturas[idFile].url && (
+              <button
+                onClick={() => {
+                  removeImage(idFile);
+                }}
+                className={styles.removeImage}
+                type="button"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 13.5H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+                  />
+                </svg>
+                Quitar Imágen
+              </button>
+            )}
           </span>
         </div>
       )}

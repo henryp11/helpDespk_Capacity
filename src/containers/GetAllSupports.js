@@ -99,7 +99,9 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
           query={query}
           setQuery={setQuery}
           placeholder={
-            'Buscar Solicitud por #Ticket / #Solicitud / Empresa / Solicitante / Descrip. General'
+            !isMobile
+              ? 'Buscar por: #Ticket / #Solicitud / Empresa / Solicitante / Descrip. General'
+              : 'Buscar por: #Ticket / #Solicitud / Empresa / Solicitante'
           }
         />
         <HeadersColumns
@@ -107,7 +109,13 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
           columnTitles={
             isMobile
               ? headersTable.columnTitles.map((column) => {
-                  if (column.id !== 'col4') return column;
+                  if (
+                    column.id !== 'col4' &&
+                    column.id !== 'col5' &&
+                    column.id !== 'col6' &&
+                    column.id !== 'col7'
+                  )
+                    return column;
                   return { ...column, show: false };
                 })
               : headersTable.columnTitles
@@ -144,14 +152,20 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
                     <br />
                     <b>{register.mtr_tickets.personal_emp?.nombre}</b>
                   </span>
-                  <span>
+                  <span className="hideElement">
                     {register.mtr_tickets.categorias_sop
                       ? register.mtr_tickets.categorias_sop.descrip
                       : '-'}
                   </span>
-                  <span>{register.mtr_tickets.prioridad}</span>
-                  <span>{register.mtr_tickets.descrip_tk}</span>
-                  <span>{register.agentes_sop?.nombre}</span>
+                  <span className="hideElement">
+                    {register.mtr_tickets.prioridad}
+                  </span>
+                  <span className="hideElement">
+                    {register.mtr_tickets.descrip_tk}
+                  </span>
+                  <span className="hideElement">
+                    {register.agentes_sop?.nombre}
+                  </span>
                   <span
                     style={{
                       border: '2px solid',

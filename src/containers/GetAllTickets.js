@@ -15,7 +15,6 @@ import SectionSearch from '@/containers/SectionSearch';
 import useSearchSimple from '@/hooks/useSearchSimple';
 import useApiTickets from '@/hooks/useApiTickets';
 import { validateExpToken, timeFormat } from '@/utils/helpers';
-import { MdWidthFull } from 'react-icons/md';
 
 const GetAllTickets = ({ headersTable, enviroment }) => {
   const {
@@ -87,14 +86,19 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar Ticket por su #Ticket / Empresa / Solicitante'}
+          placeholder={'Buscar por: #Ticket / Empresa / Solicitante'}
         />
         <HeadersColumns
           classEsp={headersTable.classEspec}
           columnTitles={
             isMobile
               ? headersTable.columnTitles.map((column) => {
-                  if (column.id !== 'col4') return column;
+                  if (
+                    column.id !== 'col4' &&
+                    column.id !== 'col5' &&
+                    column.id !== 'col7'
+                  )
+                    return column;
                   return { ...column, show: false };
                 })
               : headersTable.columnTitles
@@ -124,20 +128,24 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
                     </em>
                   </span>
                   <span>{register.descrip_tk}</span>
-                  <span>
+                  <span className="hideElement">
                     {register.categorias_sop
                       ? register.categorias_sop.descrip
                       : '-'}
                   </span>
                   {register.det_tickets ? (
-                    <span>{register.det_tickets.length}</span>
+                    <span className="hideElement">
+                      {register.det_tickets.length}
+                    </span>
                   ) : (
-                    <span>0</span>
+                    <span className="hideElement">0</span>
                   )}
                   <span>
                     {moment(register.fecha_reg).format('DD/MM/YYYY - kk:mm:ss')}
                   </span>
-                  <span>{timeFormat(register.tiempo_real_sop * 1000)}</span>
+                  <span className="hideElement">
+                    {timeFormat(register.tiempo_real_sop * 1000)}
+                  </span>
                   <span
                     style={{
                       border: '2px solid',
@@ -155,10 +163,7 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
                   >
                     {register.estatus}
                   </span>
-                  <span
-                    className="icons-container"
-                    style={{ justifyContent: 'flex-start', gap: '0 14px' }}
-                  >
+                  <span className="icons-container">
                     <button
                       title="Desplegar Info adicional"
                       onClick={() => {

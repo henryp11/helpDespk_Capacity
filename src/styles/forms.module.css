@@ -395,7 +395,7 @@
 }
 
 .resumenSolicitudes {
-  width: 60%;
+  width: 90%;
   background: var(--letters-hk);
   color: darkblue;
   display: flex;
@@ -412,6 +412,7 @@
   margin: 4px;
   padding: 0 8px;
   border-bottom: 1px solid var(--button-color-hk-hover);
+  font-size: small;
 }
 
 .resumenSolicitudes h4 {
@@ -1036,7 +1037,6 @@
 
 @media screen and (max-width: 480px) {
   /* Movil  */
-
   .form-default {
     padding: 8px;
   }
@@ -1156,6 +1156,10 @@
     top: -22px;
   }
 
+  .inputContainer1_1AtentionDates {
+    grid-template-columns: 100%;
+  }
+
   .containerButtonReports {
     width: 100%;
     margin: 0 auto;
@@ -1187,10 +1191,6 @@
 
   .fieldSetCustom {
     grid-template-columns: 100%;
-  }
-
-  .inputContainer1_1AtentionDates {
-    grid-template-columns: auto;
   }
 
   .containerButtonReports button {

@@ -34,7 +34,8 @@ const useApiTickets = () => {
     }
   };
 
-  //Consulta a todas las empresas
+  //Obtiene todos los tickets, usa como parámetro "tracking" el cual
+  //si es true quita los tickets finalizados y anulados (para ver tickets en proceso), si es false muestra todos (para historial).
   const getTickets = async (tracking, limit, offset) => {
     //Obtengo las variables del LocalStorage
     const tokenLS = localStorage.getItem('jwt');
@@ -55,6 +56,7 @@ const useApiTickets = () => {
           tracking: tracking || false, //Se usa el estatus (de la BD) cuando quiero quitar los tickets finalizados y anulados caso de tracking
         },
       };
+      //Para Paginación
       if (limit) {
         axiosConfig.params.limit = limit;
         axiosConfig.params.offset = offset;
@@ -74,6 +76,10 @@ const useApiTickets = () => {
     }
   };
 
+  //Obtiene todas los solicitudes, usa como parámetro:
+  //"tracking": si es true quita los tickets finalizados y anulados (para ver tickets en proceso), si es false muestra todos (para historial).
+  //"assigment": muestra las solicitudes asignadas a un agente, si es false muestra las solicitudes pendientes de asignar
+  //"agent": obtiene del Storage el id del agente para su filtro
   const getSolicitudes = async (tracking, assigment, agent) => {
     //Obtengo las variables del LocalStorage
     const tokenLS = localStorage.getItem('jwt');
@@ -187,7 +193,6 @@ const useApiTickets = () => {
         );
         const ticketNew = response.data.newRegister;
         return ticketNew;
-        // router.push('/solicitud/new');
       }
     } catch (error) {
       showError(error);
@@ -216,7 +221,6 @@ const useApiTickets = () => {
         console.log(response.data.newRegister);
         const solicitudNew = response.data.newRegister;
         return solicitudNew;
-        // router.push('/solicitud/new');
       }
     } catch (error) {
       showError(error);
@@ -245,7 +249,6 @@ const useApiTickets = () => {
         console.log(response.data.newRegister);
         const solicitudNew = response.data.newRegister;
         return solicitudNew;
-        // router.push('/solicitud/new');
       }
     } catch (error) {
       showError(error);

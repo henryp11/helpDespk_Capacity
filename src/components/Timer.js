@@ -100,7 +100,7 @@ const Timer = ({
     }
   };
 
-  const pauseTimer = () => {
+  const pauseTimer = async () => {
     const datePause = Date.now(); //Captura la fecha al pausar en ms
     const fin = performance.now();
 
@@ -115,14 +115,14 @@ const Timer = ({
       fecha_fin_atencion: moment(new Date(datePause)).format('YYYY-MM-DD'),
       hora_ini_atencion: moment(dateStart).format('kk:mm:ss'),
       hora_fin_atencion: moment(new Date(datePause)).format('kk:mm:ss'),
-      tiempo_calc: Math.floor(tiempoTotal / 1000),
+      tiempo_calc: Math.floor(tiempoTotal / 1000), //Tiempo en Segundos
     };
 
     setPause(true);
     setTimeElapsed(0);
     //Inserto el registro de control al pausar la solicitud
-    postControl(dataControl, idTicket, idSolicitud);
-    updateSolicitud(idTicket, idSolicitud, {
+    await postControl(dataControl, idTicket, idSolicitud);
+    await updateSolicitud(idTicket, idSolicitud, {
       estatus: 'pausado',
     });
     getDataTicket();
@@ -138,7 +138,7 @@ const Timer = ({
     });
   };
 
-  const finishTimer = () => {
+  const finishTimer = async () => {
     setPause(true);
     const dateFin = Date.now(); //Captura la fecha al Finalizar en ms
     // setDatePause(moment(new Date(dateFin)).format('YYYY-MM-DDTkk:mm:ss'));
@@ -225,6 +225,7 @@ const Timer = ({
         })
         .catch((error) => {
           console.log(error);
+          alert(error);
         });
       //a continuación realizar llamada de todas las solicitudes del ticket
       //para determinar la última a finalizar y dar por terminado la fecha y estado final de todo el ticket
@@ -257,6 +258,7 @@ const Timer = ({
         })
         .catch((error) => {
           console.log(error);
+          alert(error);
         });
       showSolucion(true);
     }

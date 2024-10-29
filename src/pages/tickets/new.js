@@ -73,6 +73,8 @@ const Newregister = () => {
     active: false,
   });
 
+  const [disableReturn, setDisableReturn] = useState(false);
+
   useEffect(() => {
     // getDataTicket();
     validateExpToken();
@@ -128,7 +130,7 @@ const Newregister = () => {
   const handleChange = (e) => {
     setValueState({ ...valueState, [e.target.name]: e.target.value });
   };
-  //Controla el change para la infomación de la solicitud
+  //Controla el change para la información de la solicitud
   const handleChangeSol = (e) => {
     setStateSolicitud({ ...stateSolicitud, [e.target.name]: e.target.value });
   };
@@ -140,6 +142,7 @@ const Newregister = () => {
       .then((response) => {
         console.log(response);
         setTicketCreated({ isCreated: true, response });
+        setDisableReturn(true);
       })
       .catch((error) => {
         console.error(error);
@@ -159,6 +162,7 @@ const Newregister = () => {
         });
         setShowButtonSol(false);
         getOnlySolicitud(ticketCreated.response.id_ticket);
+        setDisableReturn(false);
       })
       .catch((error) => {
         console.error(error);
@@ -325,29 +329,31 @@ const Newregister = () => {
                 </button>
               )}
 
-              <button
-                title="Cancelar"
-                className={`${styles.formButton}`}
-                id="cancelButton"
-                style={{ background: 'white' }}
-              >
-                <Link href="/home" className={`${styles.cancelButton}`}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    style={{ color: '#e43b3b' }}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </Link>
-              </button>
+              {!disableReturn && (
+                <button
+                  title="Cancelar"
+                  className={`${styles.formButton}`}
+                  id="cancelButton"
+                  style={{ background: 'white' }}
+                >
+                  <Link href="/home" className={`${styles.cancelButton}`}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      style={{ color: '#e43b3b' }}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </Link>
+                </button>
+              )}
             </span>
             <span style={{ gridColumn: '2 span' }}>
               <span className={styles['input-container']}>

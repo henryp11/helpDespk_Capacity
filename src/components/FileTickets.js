@@ -169,14 +169,14 @@ const FileTickets = ({
         <div className={`${styles.inputImage} ${styles.inputImageModal}`}>
           <h1>Para añadir un archivo, de click en el recuadro o arrastrelo</h1>
           <button
-            tittle="Cancelar"
+            title="Cancelar"
             type="button"
             onClick={() => {
               setShowModalFile({ ...showModal, active: false });
               // Al Cerrar el modal de preview de archivos, si solo está viendo un archivo
               // Ya subido y cancela no se quitara el URL de estado de la solicitud
               // Esta condición solo aplica para cuando se ha seleccionado algún archivo
-              //Y no se subió al Storage y se dió clic en cancelar, se entiende que debe enserar el estado del archivo
+              //Y no se subió al Storage y se dió clic en cancelar, se entiende que debe encerar el estado del archivo
               if (!stateSolicitud.capturas[idFile].url) {
                 setStateSolicitud({
                   ...stateSolicitud,

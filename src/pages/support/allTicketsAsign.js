@@ -11,7 +11,7 @@ const moduleHeaders = {
     { id: 'col4', name: 'Categoría', show: true },
     { id: 'col5', name: 'Prioridad', show: true },
     { id: 'col6', name: 'Descrip. General Ticket', show: true },
-    { id: 'col7', name: 'Ult. Agente Asignado', show: true },
+    { id: 'col7', name: 'Ult. Agente Asig.', show: true },
     { id: 'col8', name: 'Estado', show: true },
   ],
 };

@@ -77,6 +77,8 @@ const Newregister = () => {
     active: false,
   });
 
+  const [disableReturn, setDisableReturn] = useState(false);
+
   useEffect(() => {
     getDataTicket();
     validateExpToken();
@@ -142,13 +144,13 @@ const Newregister = () => {
     setValueState({ ...valueState, [e.target.name]: e.target.value });
   };
 
-  const handleCheck = (fieldCheck) => {
-    if (fieldCheck === 'plan') {
-      setValueState({ ...valueState, planMant: !valueState.planMant });
-    } else if (fieldCheck === 'est') {
-      setValueState({ ...valueState, estatus: !valueState.estatus });
-    }
-  };
+  // const handleCheck = (fieldCheck) => {
+  //   if (fieldCheck === 'plan') {
+  //     setValueState({ ...valueState, planMant: !valueState.planMant });
+  //   } else if (fieldCheck === 'est') {
+  //     setValueState({ ...valueState, estatus: !valueState.estatus });
+  //   }
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -172,6 +174,13 @@ const Newregister = () => {
         detSolucion: valueState.solucion,
       }
     );
+  };
+
+  //Esta función bloqueará el botón para cerrar la ventana de atención mientras este en ejecución el Timer
+  //Se la envía como parametro del Timer
+  const blockButton = (block) => {
+    document.getElementById('returnButton').disabled = block;
+    setDisableReturn(block);
   };
 
   console.log({ stateCompon: valueState });
@@ -326,6 +335,7 @@ const Newregister = () => {
                 showSolucion={setShowSolucion}
                 data={valueState}
                 payloadJwt={payloadJWT}
+                blockButton={blockButton}
               />
               <span
                 style={{
@@ -619,29 +629,46 @@ const Newregister = () => {
 
             <span className={styles.buttonContainer}>
               <button
-                tittle="Regresar"
+                title="Regresar"
                 className={`${styles.formButton}`}
                 id="returnButton"
               >
-                <Link
-                  href="/support/allTicketsAsign"
-                  className={`${styles.cancelButton}`}
-                >
+                {!disableReturn ? (
+                  <Link
+                    href="/support/allTicketsAsign"
+                    className={`${styles.cancelButton}`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                  </Link>
+                ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="w-6 h-6"
+                    className="size-6"
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                     />
                   </svg>
-                </Link>
+                )}
               </button>
             </span>
           </form>

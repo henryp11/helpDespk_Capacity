@@ -105,7 +105,7 @@ const CreateLinkPersonalEmp = ({ userName, subPayload, mail }) => {
             ...rucEmpresa,
             nombre_emp: 'Empresa no Registrada',
             alert:
-              'La empresa indicada no forma parte de nuestros clientes, por favor comuniquese al número xxxxxxx o envienos un correo a xxxxxx para indicarnos la información de su empresa y corroborar que pertenezca como cliente de Capacity-Soft para que pueda utilizar la aplicación',
+              'La empresa indicada no forma parte de nuestros clientes, por favor comuniquese al número 0991989296 o envienos un correo a: info@capacity-soft.com y soporte@capacity-soft.com, con la información de su empresa (RUC, razón social, número de contacto, correo electrónico), para poder corroborar que pertenezca como cliente de Capacity-Soft para que pueda utilizar la aplicación',
           });
         }
       })

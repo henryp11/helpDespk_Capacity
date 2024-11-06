@@ -11,6 +11,7 @@ import useApiTickets from '@/hooks/useApiTickets';
 import FileDownload from '@/components/FileDownload';
 import { validateExpToken } from '@/utils/helpers';
 import { timeFormat } from '../../../utils/helpers';
+import { toast } from 'react-hot-toast';
 import styles from '@/styles/forms.module.css';
 import stylesEmp from '@/styles/emp.module.css';
 
@@ -77,12 +78,47 @@ const Newregister = () => {
     active: false,
   });
 
-  const [disableReturn, setDisableReturn] = useState(false);
+  const [disableReturn, setDisableReturn] = useState(false); //Desahilita el botón de retorno/cancelar al momento de crear una solicitud
+  const [isSaving, setIsSaving] = useState(false); // Estado para verificar si se está guardando
 
   useEffect(() => {
     getDataTicket();
     validateExpToken();
   }, [ruta]);
+
+  //Este Effect controla la pestaña para no cerrarla directamente y muestre una advertencia si no se ha guardado la información
+  useEffect(() => {
+    // Definir la función de advertencia para el evento
+    const handleBeforeUnload = (event) => {
+      if (isSaving) {
+        console.log(event);
+        event.preventDefault();
+        event.returnValue = ''; // Necesario para algunos navegadores
+        toast.error(
+          'DEBE PAUSAR O FINALIZAR LA ATENCIÓN PARA ESTA SOLICITUD ANTES DE CERRAR ESTA VENTANA',
+          {
+            duration: 10000,
+            position: 'bottom-center',
+            style: {
+              borderRadius: '10px',
+              background: '#333',
+              color: '#fff',
+            },
+          }
+        );
+      }
+    };
+
+    // Agregar el evento cuando `isSaving` es true
+    if (isSaving) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    }
+
+    // Eliminar el evento cuando `isSaving` es false o cuando el componente se desmonte
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isSaving]); // Ejecutar este efecto cuando cambie `isSaving`
 
   const getDataTicket = () => {
     setLoadCreate({ loading: true, error: null });
@@ -142,6 +178,7 @@ const Newregister = () => {
 
   const handleChange = (e) => {
     setValueState({ ...valueState, [e.target.name]: e.target.value });
+    setIsSaving(true);
   };
 
   // const handleCheck = (fieldCheck) => {
@@ -336,6 +373,7 @@ const Newregister = () => {
                 data={valueState}
                 payloadJwt={payloadJWT}
                 blockButton={blockButton}
+                setIsSaving={setIsSaving} //Función que bloquea pestaña para que se cierre mientras esta el Timer ejecutandose
               />
               <span
                 style={{

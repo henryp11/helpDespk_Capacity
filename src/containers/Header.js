@@ -339,6 +339,14 @@ const Header = () => {
                   Reportes
                 </Link>
               </li>
+              <li>
+                <a
+                  href="https://www.youtube.com/playlist?list=PLfjX1LD2x_jUpQGi2JCKV2BjY6A5sRZwA"
+                  target="_blank"
+                >
+                  Video Tutoriales
+                </a>
+              </li>
               <li
                 onClick={() => {
                   logOut();

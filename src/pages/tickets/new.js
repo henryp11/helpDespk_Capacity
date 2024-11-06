@@ -73,13 +73,43 @@ const Newregister = () => {
     active: false,
   });
 
-  const [disableReturn, setDisableReturn] = useState(false);
+  const [disableReturn, setDisableReturn] = useState(false); //Desahilita el botón de retorno/cancelar al momento de crear una solicitud
+  const [isSaving, setIsSaving] = useState(false); // Estado para verificar si se está guardando
 
   useEffect(() => {
     // getDataTicket();
     validateExpToken();
     getCategory();
   }, [ruta]);
+
+  //Este Effect controla la pestaña para no cerrarla directamente y muestre una advertencia si no se ha guardado la información
+  useEffect(() => {
+    // Definir la función de advertencia para el evento
+    const handleBeforeUnload = (event) => {
+      if (isSaving) {
+        console.log(event);
+        event.preventDefault();
+        event.returnValue = ''; // Necesario para algunos navegadores
+        toast.error(
+          'DEBE INGRESAR LA SOLICITUD PENDIENTE DANDO CLIC EN EL BOTÓN DE "CREAR SOLICITUD", (Si abandona la página sin subir la solicitud su ticket NO será atendido)',
+          {
+            duration: 9500,
+            position: 'bottom-center',
+          }
+        );
+      }
+    };
+
+    // Agregar el evento cuando `isSaving` es true
+    if (isSaving) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    }
+
+    // Eliminar el evento cuando `isSaving` es false o cuando el componente se desmonte
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isSaving]); // Ejecutar este efecto cuando cambie `isSaving`
 
   console.log({ dataCateg });
 
@@ -133,6 +163,7 @@ const Newregister = () => {
   //Controla el change para la información de la solicitud
   const handleChangeSol = (e) => {
     setStateSolicitud({ ...stateSolicitud, [e.target.name]: e.target.value });
+    setIsSaving(true);
   };
 
   //Submit para crear el ticket en MTR_TICKETS
@@ -188,6 +219,7 @@ const Newregister = () => {
     setStateSolicitud(initialStateSolic);
     setResetUpFiles(true);
     setShowButtonSol(true);
+    setIsSaving(true);
   };
 
   //Para controlar el input select de categorías
@@ -257,6 +289,9 @@ const Newregister = () => {
                 title="Registrar"
                 className={`${styles.formButton} ${styles.formButtonTicket}`}
                 id={styles.regTicket}
+                onClick={() => {
+                  setIsSaving(true);
+                }}
               >
                 Registrar Ticket
               </button>
@@ -283,7 +318,17 @@ const Newregister = () => {
             diferente(s) para el ticket`}{' '}
             <b>#{ticketCreated.response.id_ticket}</b>
             <br /> Si ya no desea añadir más, de clic en el botón de{' '}
-            <b>CANCELAR</b> {`(❌)`}
+            <b>Cancelar</b> {`(❌)`} <br />
+            <b
+              style={{
+                color: '#ffc870',
+                borderBottom: '1px dotted #ffc870',
+                padding: '2px',
+              }}
+            >
+              NO OLVIDE SUBIR SU SOLICITUD DANDO CLIC EN EL BOTON DE "⬆ CREAR
+              SOLICITUD"
+            </b>
           </p>
         )}
         {solicitudCreated.isCreated && (
@@ -305,12 +350,15 @@ const Newregister = () => {
             <h2 className={styles.numberReg}>{solicitudCreated.cantidad}</h2>
             <span
               className={styles.buttonContainer}
-              style={{ gridRow: '2 span', gridColumn: '1 span' }}
+              style={{ gridRow: '2 span', gridColumn: '1 span', width: '95%' }}
             >
               {showButtonSol && (
                 <button
                   title="Crear Solicitud"
-                  className={styles['formButton']}
+                  className={`${styles.formButton} ${styles.buttonCreateSolic}`}
+                  onClick={() => {
+                    setIsSaving(false);
+                  }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -326,6 +374,7 @@ const Newregister = () => {
                       d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12"
                     />
                   </svg>
+                  Crear Solicitud
                 </button>
               )}
 

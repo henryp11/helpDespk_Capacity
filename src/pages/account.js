@@ -134,7 +134,16 @@ const Account = () => {
         </span>
       </form>
       {error && (
-        <ErrorLayout messageError={messageError} statusCode={statusError} />
+        <ErrorLayout
+          messageError={messageError}
+          statusCode={statusError}
+          customMessage={
+            statusError === 409 &&
+            'Este correo ya se encuentra registrado. Por favor ingrese con sus credenciales. Si no las recuerda puede "cambiar su contraseña" dando clic en la siguiente opción: '
+          }
+          account={false}
+          restart={statusError === 409 && true}
+        />
       )}
     </div>
   );

@@ -15,6 +15,7 @@ const Timer = ({
   data,
   payloadJwt,
   blockButton,
+  setIsSaving,
 }) => {
   // const [diff, setDiff] = useState(null);
   const [initial, setInitial] = useState(null);
@@ -57,6 +58,7 @@ const Timer = ({
     setDateStart(moment(new Date(dateBegin)).format('YYYY-MM-DDTkk:mm:ss')); //creo la nueva Fecha a partir de los ms y transformo
 
     blockButton(true);
+    setIsSaving(true); //Para que permita o bloquee cerrar pestaña
 
     //Si el ticket esta en estado "solicitado" significa que aun no se ha comenzado a procesar ninguna solicitud
     //dentro del mismo. Por lo tanto al comenzar el contador en cualquier solicitud del ticket se cambiará su estado a proceso
@@ -123,6 +125,7 @@ const Timer = ({
 
     setPause(true);
     setTimeElapsed(0);
+    setIsSaving(false); //Para que permita o bloquee cerrar pestaña
     //Inserto el registro de control al pausar la solicitud
     await postControl(dataControl, idTicket, idSolicitud);
     await updateSolicitud(idTicket, idSolicitud, {
@@ -141,11 +144,13 @@ const Timer = ({
       estatus: 'proceso',
     });
     blockButton(true);
+    setIsSaving(true); //Para que permita o bloquee cerrar pestaña
   };
 
   const finishTimer = async () => {
     setPause(true);
     blockButton(true);
+    setIsSaving(false); //Para que permita o bloquee cerrar pestaña
     const dateFin = Date.now(); //Captura la fecha al Finalizar en ms
     // setDatePause(moment(new Date(dateFin)).format('YYYY-MM-DDTkk:mm:ss'));
 

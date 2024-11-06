@@ -78,7 +78,7 @@ const FileTickets = ({
         },
       });
 
-      toast('No olvide dar clic en [SUBIR]', {
+      toast('No olvide dar clic en el botón SUBIR', {
         icon: '🔔',
         duration: 4000,
       });
@@ -122,7 +122,7 @@ const FileTickets = ({
       //   deleteImageOld(); //Se elimina la imagen anterior del Storage si existiera
       // }
 
-      toast.success('Archivo subido con éxito!');
+      toast.success('Archivo subido correctamente');
       setIsUpload(true);
       setShowModalFile({ ...showModal, active: false });
     }
@@ -152,7 +152,7 @@ const FileTickets = ({
           },
         });
         setPreviewImg('');
-        toast.success('Archivo eliminado con éxito!');
+        toast.success('Archivo eliminado');
       })
       .catch((error) => {
         console.log(`Error al eliminar archivo: ${error}`);
@@ -166,7 +166,9 @@ const FileTickets = ({
   return (
     <>
       {showModal.active && showModal.name === idFile && (
-        <div className={`${styles.inputImage} ${styles.inputImageModal}`}>
+        <div
+          className={`${styles.inputImage} ${styles.inputImageModal} notranslate`}
+        >
           <h1>Para añadir un archivo, de click en el recuadro o arrastrelo</h1>
           <button
             title="Cancelar"

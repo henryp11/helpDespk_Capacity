@@ -225,7 +225,7 @@ const Newregister = () => {
   return (
     <>
       <div
-        className={stylesEmp.crudEmpContainer}
+        className={`${stylesEmp.crudEmpContainer} notranslate`}
         style={{ position: 'relative' }}
       >
         <h2>

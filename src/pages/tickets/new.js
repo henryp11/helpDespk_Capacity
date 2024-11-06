@@ -234,7 +234,7 @@ const Newregister = () => {
 
   return (
     <>
-      <div className={stylesEmp.crudEmpContainer}>
+      <div className={`${stylesEmp.crudEmpContainer} notranslate`}>
         <h2>Ingresando Nuevo ticket</h2>
         <form
           id="form"

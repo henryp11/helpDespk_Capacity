@@ -144,7 +144,7 @@ const Newregister = () => {
 
   return (
     <>
-      <div className={stylesEmp.crudEmpContainer}>
+      <div className={`${stylesEmp.crudEmpContainer} notranslate`}>
         <h2>
           {idSearch !== 'new'
             ? `Ticket ${valueState.nombre_categ} # ${idSearch} `

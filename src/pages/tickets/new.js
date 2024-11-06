@@ -326,8 +326,8 @@ const Newregister = () => {
                 padding: '2px',
               }}
             >
-              NO OLVIDE SUBIR SU SOLICITUD DANDO CLIC EN EL BOTON DE "⬆ CREAR
-              SOLICITUD"
+              NO OLVIDE SUBIR SU SOLICITUD DANDO CLIC EN EL BOTON DE &quot;⬆
+              CREAR SOLICITUD&quot;
             </b>
           </p>
         )}

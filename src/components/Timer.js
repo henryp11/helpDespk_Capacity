@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { timeFormat } from '@/utils/helpers';
 import moment from 'moment';
+import styles from '@/styles/forms.module.css';
 
 const Timer = ({
   idTicket,
@@ -25,6 +26,10 @@ const Timer = ({
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [dateStart, setDateStart] = useState(data.fecha_ini_solucion);
   const [datePaused, setDatePaused] = useState(null);
+  const [valueStateControl, setValueStateControl] = useState({
+    motivo_reasig_pausa: '',
+  });
+  const [showMotivo, setShowMotivo] = useState(false);
 
   // console.log(`props del Timer= idTicker: ${idTicket} - ${idSolicitud}`);
 
@@ -49,6 +54,14 @@ const Timer = ({
   // const tick = () => {
   //   setDiff(new Date(+new Date() - initial));
   // };
+
+  const handleChangeControl = (e) => {
+    setValueStateControl({
+      ...valueStateControl,
+      [e.target.name]: e.target.value,
+    });
+    setIsSaving(true);
+  };
 
   const start = () => {
     const dateBegin = Date.now(); //Captura la fecha actual en ms
@@ -121,6 +134,9 @@ const Timer = ({
       hora_ini_atencion: moment(dateStart).format('kk:mm:ss'),
       hora_fin_atencion: moment(new Date(datePause)).format('kk:mm:ss'),
       tiempo_calc: Math.floor(tiempoTotal / 1000), //Tiempo en Segundos
+      motivo_reasig_pausa: valueStateControl.motivo_reasig_pausa
+        ? valueStateControl.motivo_reasig_pausa
+        : '-',
     };
 
     setPause(true);
@@ -133,6 +149,7 @@ const Timer = ({
     });
     getDataTicket();
     blockButton(false);
+    setShowMotivo(false);
   };
 
   const resumeTimer = () => {
@@ -320,7 +337,13 @@ const Timer = ({
           </button>
         )}
         {!pause ? (
-          <button onClick={pauseTimer} disabled={pause && true} type="button">
+          <button
+            onClick={() => {
+              setShowMotivo(true);
+            }}
+            disabled={pause && true}
+            type="button"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -394,6 +417,51 @@ const Timer = ({
           Finalizar
         </button>
         {/* <button onClick={restartTimer}>Reiniciar</button> */}
+        {showMotivo && (
+          <div className={styles.modalSolucion}>
+            <span className={styles['input-container']}>
+              <textarea
+                name="motivo_reasig_pausa"
+                onChange={handleChangeControl}
+                defaultValue={valueStateControl.motivo_reasig_pausa}
+                cols="30"
+                rows="5"
+                className={styles.textArea}
+                placeholder="Ingrese el motivo de la Pausa"
+              ></textarea>
+              <label className={styles['activate-label-position']}>
+                Motivo de la pausa
+              </label>
+            </span>
+            <span
+              className={styles.buttonContainer}
+              id={styles.buttonSolicitud}
+            >
+              <button
+                onClick={pauseTimer}
+                disabled={pause && true}
+                type="button"
+                style={{ width: '100%', borderRadius: '8px', gap: '16px' }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  style={{ color: 'rgb(66, 167, 96)' }}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+                <b>Guardar Registro</b>
+              </button>
+            </span>
+          </div>
+        )}
       </span>
     </div>
   );

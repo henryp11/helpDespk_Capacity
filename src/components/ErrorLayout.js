@@ -15,16 +15,13 @@ const ErrorLayout = ({
       {customMessage && <h3>{customMessage}</h3>}
       {/* {!customMessage && messageError[0].code !== 'ERR_NETWORK' ? ( */}
 
-      {messageError?.map((error, index) => {
+      {/* {messageError?.map((error, index) => {
         return <p key={index}>{error}</p>;
-      })}
-      {/* {!customMessage ? (
+      })} */}
+      {!customMessage &&
         messageError?.map((error, index) => {
           return <p key={index}>{error}</p>;
-        })
-      ) : (
-        <p>{customMessage}</p>
-      )} */}
+        })}
       {/* {!customMessage && messageError[0].code !== 'ERR_NETWORK' ? (
         messageError.map((error, index) => {
           return <p key={index}>{error}</p>;

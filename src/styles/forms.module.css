@@ -532,6 +532,29 @@
   color: var(--subtittles-hk);
 }
 
+.controlsTable tr {
+  display: grid;
+  grid-template-columns: 4% repeat(3, 18%) 40%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4px;
+  text-align: right;
+}
+
+.controlsTable tr td:last-child {
+  text-align: justify;
+}
+.controlsTable tr td:first-child,
+.controlsTable tr th:first-child,
+.controlsTable tr th:last-child {
+  text-align: center;
+}
+
+.controlsTable tr td:nth-of-type(4),
+.controlsTable tr th:nth-of-type(4) {
+  text-align: center;
+}
+
 #buttonTicket,
 #buttonSolicitud {
   grid-column: auto;
@@ -571,6 +594,7 @@
 #buttonTicket button:hover,
 #buttonSolicitud button:hover {
   background: var(--button-color-hk-hover);
+  color: var(--subtittles-hk);
 }
 
 #buttonTicket button:hover svg,
@@ -590,6 +614,7 @@
   z-index: 100;
   display: flex;
   width: 100%;
+  height: calc(100vh - 45px);
   flex-direction: column;
   justify-content: center;
 }

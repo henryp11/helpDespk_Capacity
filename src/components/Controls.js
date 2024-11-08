@@ -154,7 +154,7 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
                 {dataControl.reasignado && (
                   <p>
                     <b>Motivo Reasignación:</b>
-                    {dataControl.motivo_reasig}
+                    {dataControl.motivo_reasig_pausa}
                   </p>
                 )}
               </span>
@@ -167,6 +167,7 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
                   )}
                   onChange={handleChange}
                   nameLabel="Fecha Inicio"
+                  disabled={true}
                 />
                 <CustomInput
                   typeInput="text"
@@ -174,6 +175,7 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
                   valueInput={dataControl.hora_ini_atencion}
                   onChange={handleChange}
                   nameLabel="Hora Inicio"
+                  disabled={true}
                 />
               </span>
               <span className={styles.containerDates}>
@@ -185,6 +187,7 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
                   )}
                   onChange={handleChange}
                   nameLabel="Fecha Fin"
+                  disabled={true}
                 />
                 <CustomInput
                   typeInput="text"
@@ -192,6 +195,7 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
                   valueInput={dataControl.hora_fin_atencion}
                   onChange={handleChange}
                   nameLabel="Hora Fin"
+                  disabled={true}
                 />
               </span>
               <CustomInput
@@ -251,6 +255,18 @@ const Controls = ({ id_ticket, id_solicitud, perfil }) => {
                 </button> */}
                   </span>
                 ))}
+              {dataControl.motivo_reasig_pausa && (
+                <span style={{ gridColumn: '1 / -1' }}>
+                  <CustomInput
+                    typeInput="text"
+                    nameInput="motivo_reasig_pausa"
+                    valueInput={dataControl.motivo_reasig_pausa}
+                    onChange={handleChange}
+                    nameLabel="Motivo Pausa"
+                    disabled={true}
+                  />
+                </span>
+              )}
             </form>
           );
         })}

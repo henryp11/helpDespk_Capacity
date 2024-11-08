@@ -53,6 +53,7 @@ const Newregister = () => {
     control_tickets: [],
   };
   const [valueState, setValueState] = useState(initialState);
+
   const [loadCreate, setLoadCreate] = useState({
     loading: false,
     error: null,
@@ -191,7 +192,7 @@ const Newregister = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //El tercer parámetro (false) se usa en la pantalla de asignación de ticket a agente, por eso coloco en false (Porque aquí no estoy asignando agente, ya está asignado el ticket)
+    //El tercer parámetro (false) se usa en la pantalla de asignación de ticket a agente, por eso coloco en false (Porque aquí no estoy asignando agente, ya está asignado a la solicitud)
     //El último parámetro (true) es para que se redireccione a la pantalla anterior una vez actualizado
     //No son parámetros obligatorios, pero en este caso si requiero enviar el último parámetro para el redireccionamiento
     //El último objeto es para enviar el correo de solicitud finalizada, ya que este submit solo se realizará al finalizar la atención de la solicitud
@@ -602,39 +603,11 @@ const Newregister = () => {
             {valueState.control_tickets && (
               <fieldset
                 className={`${styles.fieldSetCustom} ${styles.fieldSetControls}`}
+                style={{ height: '40vh', overflow: 'auto' }}
               >
                 <legend>
                   Historial de control de tiempos para la solicitud
                 </legend>
-
-                <table className={styles.controlsTable}>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Fecha / Hora Inicio</th>
-                      <th>Fecha / Hora Fin</th>
-                      <th>Tiempo transcurrido</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {valueState.control_tickets.map((control, index) => {
-                      return (
-                        <tr key={control.id_control}>
-                          <td>
-                            <strong>{index + 1}</strong>
-                          </td>
-                          <td>{`${moment(control.fecha_ini_atencion).format(
-                            'DD-MM-YYYY'
-                          )} | ${control.hora_ini_atencion}`}</td>
-                          <td>{`${moment(control.fecha_fin_atencion).format(
-                            'DD-MM-YYYY'
-                          )} | ${control.hora_fin_atencion}`}</td>
-                          <td>{timeFormat(control.tiempo_calc * 1000)}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
                 <div
                   style={{
                     display: 'flex',
@@ -644,7 +617,7 @@ const Newregister = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     gap: '12px',
-                    borderTop: '1px solid #444a8d',
+                    border: '1px solid #444a8d',
                     fontSize: '1.2em',
                   }}
                 >
@@ -662,6 +635,36 @@ const Newregister = () => {
                     )}
                   </b>
                 </div>
+                <table className={styles.controlsTable}>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Fecha / Hora Inicio</th>
+                      <th>Fecha / Hora Fin</th>
+                      <th>Tiempo transcurrido</th>
+                      <th>Motivo Pausa/Reasig.</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {valueState.control_tickets.map((control, index) => {
+                      return (
+                        <tr key={control.id_control}>
+                          <td>
+                            <strong>{index + 1}</strong>
+                          </td>
+                          <td>{`${moment(control.fecha_ini_atencion).format(
+                            'DD-MM-YYYY'
+                          )} | ${control.hora_ini_atencion}`}</td>
+                          <td>{`${moment(control.fecha_fin_atencion).format(
+                            'DD-MM-YYYY'
+                          )} | ${control.hora_fin_atencion}`}</td>
+                          <td>{timeFormat(control.tiempo_calc * 1000)}</td>
+                          <td>{control.motivo_reasig_pausa}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </fieldset>
             )}
 

@@ -370,7 +370,9 @@ const Newregister = () => {
                 getDataTicket={getDataTicket}
                 getTicketSolic={getTicketSolic}
                 getOnlySolicitud={getOnlySolicitud}
-                showSolucion={setShowSolucion}
+                showSolucion={setShowSolucion} //Cambio el state para mostar el modal de solución
+                modalSolution={showSolucion} // variable que muestra el modal de solución true/false
+                setValueState={setValueState} //Para poder usar el handleChance en el timer que ahora tiene el ingreso de la solución
                 data={valueState}
                 payloadJwt={payloadJWT}
                 blockButton={blockButton}
@@ -554,7 +556,7 @@ const Newregister = () => {
                 )}
               </span>
             </fieldset>
-            <span
+            {/* <span
               className={`${styles.inputContainer1_1} ${styles.inputContainer1_1v}`}
             >
               {showSolucion && (
@@ -599,7 +601,7 @@ const Newregister = () => {
                   </span>
                 </div>
               )}
-            </span>
+            </span> */}
             {valueState.control_tickets && (
               <fieldset
                 className={`${styles.fieldSetCustom} ${styles.fieldSetControls}`}

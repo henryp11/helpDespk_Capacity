@@ -11,9 +11,11 @@ const Timer = ({
   postControl,
   getTicketSolic,
   showSolucion,
+  modalSolution,
+  setValueState,
+  data,
   getDataTicket,
   getOnlySolicitud,
-  data,
   payloadJwt,
   blockButton,
   setIsSaving,
@@ -30,6 +32,8 @@ const Timer = ({
     motivo_reasig_pausa: '',
   });
   const [showMotivo, setShowMotivo] = useState(false);
+  const [saveFinal, setSaveFinal] = useState(false);
+  const [finalTimeSolic, setFinalTimeSolic] = useState(0);
 
   // console.log(`props del Timer= idTicker: ${idTicket} - ${idSolicitud}`);
 
@@ -241,6 +245,7 @@ const Timer = ({
             0
           );
           console.log(`Tiempo final control: ${finalTimeControls}`);
+
           //Actualizo tiempo final añadiendo al tiempo previo si existe de otras solicitudes para ese ticket
           updateMtrTicket(idTicket, {
             tiempo_calc_sop: Number(
@@ -250,6 +255,7 @@ const Timer = ({
               mtrTickets.tiempo_real_sop + finalTimeControls
             ),
           });
+          setFinalTimeSolic(finalTimeControls);
         })
         .catch((error) => {
           console.log(error);
@@ -288,8 +294,27 @@ const Timer = ({
           console.log(error);
           alert(error);
         });
-      showSolucion(true);
+      // showSolucion(true);
+      setSaveFinal(true);
     }
+  };
+
+  //Esta función muestra el modal de la solución, pero mantiene por debajo el tiempo corriendo todavía
+  //Luego el modal de la solución contendrá el botón final para que finalice el cáculo del tiempo y el control final
+  //Es decir este botón dentro del modal es el que contiene la función "finishTimer()"
+  const finishSolicitudButton = () => {
+    if (initial) {
+      showSolucion(true);
+      blockButton(true);
+      setIsSaving(false); //Para que permita o bloquee cerrar pestaña
+    }
+  };
+
+  //Se usa aquí el handle que a su vez modifica el estado del componente superiror [idSolicitud]
+  //Por lo que viene como props el setValueState y la data del state (valueState)
+  const handleChange = (e) => {
+    setValueState({ ...data, [e.target.name]: e.target.value });
+    setIsSaving(true);
   };
 
   // const restartTimer = () => {
@@ -306,6 +331,8 @@ const Timer = ({
     fecha_ini_atencion: moment(dateStart).format('YYYY-MM-DD'),
     hora_ini_atencion: moment(dateStart).format('kk:mm:ss'),
   });*/
+
+  console.log(`Tiempo FINAL Solicitud en segundos: ${finalTimeSolic}`);
 
   return (
     <div className="timerContainer">
@@ -394,7 +421,34 @@ const Timer = ({
           </button>
         )}
 
-        <button onClick={finishTimer} type="button">
+        {/* <button onClick={finishTimer} type="button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            style={{ color: 'rgb(155, 32, 32)' }}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z"
+            />
+          </svg>
+          Finalizar
+        </button> */}
+        <button
+          onClick={() => {
+            finishSolicitudButton();
+          }}
+          type="button"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -463,6 +517,131 @@ const Timer = ({
           </div>
         )}
       </span>
+      {modalSolution && (
+        <span
+          className={`${styles.inputContainer1_1} ${styles.inputContainer1_1v}`}
+        >
+          <div className={styles.modalSolucion}>
+            <span className={styles['input-container']}>
+              <textarea
+                name="solucion"
+                onChange={handleChange}
+                defaultValue={data.solucion}
+                cols="30"
+                rows="7"
+                className={styles.textArea}
+                placeholder="Ingrese la solución para esta solicitud"
+              ></textarea>
+              <label className={styles['activate-label-position']}>
+                Detalle de la Solución
+              </label>
+            </span>
+            {!saveFinal && (
+              <span
+                className={styles.buttonContainer}
+                id={styles.buttonSolicitud}
+              >
+                <button
+                  onClick={finishTimer}
+                  type="button"
+                  style={{
+                    width: '100%',
+                    borderRadius: '8px',
+                    gap: '8px',
+                    padding: '4px',
+                    cursor: 'pointer',
+                    border: '1px solid #444a8d',
+                    color: '#e43b3b',
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    style={{ color: 'rgb(155, 32, 32)' }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z"
+                    />
+                  </svg>
+                  <b>Calcular Tiempo Final</b>
+                </button>
+              </span>
+            )}
+            {saveFinal && (
+              <div style={{ width: '100%', background: 'white' }}>
+                <span
+                  style={{
+                    color: '#1a73e8',
+                    display: 'flex',
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                    borderBottom: '1px solid #1a73e8',
+                    padding: '4px',
+                    borderRadius: '0',
+                    width: '100%',
+                    flexWrap: 'wrap',
+                    gap: '8px',
+                  }}
+                >
+                  <h3>Tiempo final para esta solicitud:</h3>
+                  <b>{timeFormat(finalTimeSolic * 1000)}</b>
+                  <span
+                    className={styles.buttonContainer}
+                    id={styles.buttonSolicitud}
+                    style={{
+                      borderRadius: '8px',
+                      gap: '8px',
+                      cursor: 'pointer',
+                      border: '1px solid #444a8d',
+                      padding: '0',
+                      margin: '0',
+                    }}
+                  >
+                    <button
+                      title="Guardar Solicitud Final"
+                      className={styles['formButton']}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        borderRadius: '8px',
+                        gap: '16px',
+                        color: '#42a760',
+                        padding: '4px',
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        style={{ color: 'rgb(66, 167, 96)', scale: '1.1' }}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      <b>Guardar Solicitud Final</b>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            )}
+          </div>
+        </span>
+      )}
     </div>
   );
 };

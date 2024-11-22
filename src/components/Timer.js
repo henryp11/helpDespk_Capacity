@@ -192,17 +192,18 @@ const Timer = ({
 
       setTimeElapsed(0);
       //Inserto el registro de control al finalizar la solicitud
-      postControl(dataControl, idTicket, idSolicitud);
+      await postControl(dataControl, idTicket, idSolicitud);
       //Actualizo estado y fecha de fin de solución de la solicitud
-      updateSolicitud(idTicket, idSolicitud, {
+      await updateSolicitud(idTicket, idSolicitud, {
         estatus: 'finalizado',
         fecha_fin_solucion: moment(new Date(dateFin)).format(
           'YYYY-MM-DDTkk:mm:ss'
         ),
       });
       //Una vez actualizado, obtengo los datos del ticket y solicitud con todos sus controles
-      const response = getTicketSolic(idTicket, idSolicitud);
-      response
+      // const response = await getTicketSolic(idTicket, idSolicitud); //Función que espera datos desde el servidor
+
+      await getTicketSolic(idTicket, idSolicitud)
         .then((data) => {
           console.log({ dataFinalTicketSolic: data });
           //Armo objeto para la tabla MTR_TICKETS y actualizar sus tiempo finales
@@ -238,7 +239,7 @@ const Timer = ({
 
           console.log({ MTR_TICKET: mtrTickets });
           //Realizo sumatoria de todos los tiempos para añadir el total al mtr_ticket
-          const finalTimeControls = data[0].control_tickets.reduce(
+          const finalTimeControls = data[0]?.control_tickets.reduce(
             (acumulador, control) => {
               return acumulador + Number(control.tiempo_calc);
             },
@@ -255,6 +256,7 @@ const Timer = ({
               mtrTickets.tiempo_real_sop + finalTimeControls
             ),
           });
+
           setFinalTimeSolic(finalTimeControls);
         })
         .catch((error) => {
@@ -332,7 +334,7 @@ const Timer = ({
     hora_ini_atencion: moment(dateStart).format('kk:mm:ss'),
   });*/
 
-  console.log(`Tiempo FINAL Solicitud en segundos: ${finalTimeSolic}`);
+  //console.log(`Tiempo FINAL Solicitud en segundos: ${finalTimeSolic}`);
 
   return (
     <div className="timerContainer">

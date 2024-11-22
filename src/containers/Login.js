@@ -1,5 +1,5 @@
 'use Client';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import CustomInput from '../components/CustomInput';
 import ErrorLayout from '../components/ErrorLayout';
@@ -18,6 +18,8 @@ const Login = () => {
     messageError,
     signIn,
   } = useAuth();
+
+  const [showEye, setShowEye] = useState(false);
 
   const handleChange = (e) => {
     // const {name, value} = e.target; //Se puede desestructurar el evento como objeto
@@ -55,12 +57,13 @@ const Login = () => {
             required={true}
           />
           <CustomInput
-            typeInput="password"
+            typeInput={!showEye ? 'password' : 'text'}
             nameInput="pass"
             valueInput={dataUser.pass}
             onChange={handleChange}
             nameLabel="Contraseña"
             required={true}
+            buttonEspEye={{ showEye: showEye, setShowEye: setShowEye }}
           />
           <button onClick={handleSignIn} className={styles['formButton']}>
             Acceder

@@ -274,10 +274,36 @@ const Newregister = () => {
               nameInput="descrip_tk"
               valueInput={valueState.descrip_tk}
               onChange={handleChange}
-              placeholder="Ingrese una descripción general del motivo por el que requiere soporte para que su ticket sea ingresado"
+              placeholder="Ingrese una BREVE descripción del motivo que requiere soporte para este ticket"
               nameLabel="Descripción General"
+              maxlength="250"
               required={true}
             />
+            <span
+              style={{
+                gridColumn: '1/-1',
+                textAlign: 'right',
+                color: '#9b2020',
+                fontSize: '0.6em',
+                fontWeight: 'bold',
+                padding: '0 14px',
+              }}
+            >
+              Máx. {250 - valueState.descrip_tk.length} <br />
+              {valueState.descrip_tk.length >= 200 && (
+                <span style={{ fontSize: '1.3em' }}>
+                  El número máximo de caracteres para este campo es de 250,
+                  recuerde que este campo solo es una descripción BREVE y
+                  GENERAL para el ticket de soporte que está solicitando.
+                  Despues de dar clic en el botón &quot;Registrar ticket&quot;
+                  podrá detallar su solicitud o solicitudes para el ticket.{' '}
+                  <br />
+                  En estas solicitudes usted podrá detallar todo lo que desee
+                  con la mayor explicación posible, donde incluso podrá cargar
+                  archivos para respaldar su explicación.
+                </span>
+              )}
+            </span>
           </span>
 
           {!ticketCreated.isCreated && (

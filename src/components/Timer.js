@@ -484,10 +484,23 @@ const Timer = ({
                 rows="5"
                 className={styles.textArea}
                 placeholder="Ingrese el motivo de la Pausa"
+                maxLength="500"
               ></textarea>
               <label className={styles['activate-label-position']}>
                 Motivo de la pausa
               </label>
+            </span>
+            <span
+              style={{
+                gridColumn: '1/-1',
+                textAlign: 'right',
+                color: '#9b2020',
+                fontSize: '0.6em',
+                fontWeight: 'bold',
+                padding: '0 14px',
+              }}
+            >
+              Máx. {500 - valueStateControl.motivo_reasig_pausa.length}
             </span>
             <span
               className={styles.buttonContainer}

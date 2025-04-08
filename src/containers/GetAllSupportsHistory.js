@@ -16,9 +16,9 @@ import useScreenSize from '@/hooks/useScreenSize';
 import SectionSearch from '@/containers/SectionSearch';
 import useSearchSimple from '@/hooks/useSearchSimple';
 import useApiTickets from '@/hooks/useApiTickets';
-import { validateExpToken } from '@/utils/helpers';
+import { validateExpToken, timeFormat } from '@/utils/helpers';
 
-const GetAllSupport = ({ headersTable, enviroment, agent }) => {
+const GetAllSupportsHistory = ({ headersTable, enviroment, agent }) => {
   const {
     getSolicitudes,
     deleteTicket,
@@ -54,9 +54,7 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
 
   const getDataSolicitudes = () => {
     if (agent) {
-      getSolicitudes(true, false, agent); //Para ver solicitudes asginadas a un agente
-    } else if (enviroment === 'tracking') {
-      getSolicitudes(true, true); //Para ver solicitudes pendientes sin Agente
+      getSolicitudes(false, false, agent); //Para ver historial de solicitudes del agente
     } else {
       getSolicitudes();
     }
@@ -93,12 +91,11 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
 
   return (
     <div className="mainContainer">
-      {/* <MenuLateral /> */}
       <section className="generalContainer">
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          title={agent ? 'Solicitudes Asignadas' : 'Solicitudes Pendientes'}
+          title={'Solicitudes Atendidas'}
           placeholder={
             !isMobile
               ? 'Buscar por: #Ticket / #Solicitud / Empresa / Solicitante / Descrip. General'
@@ -133,18 +130,13 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
                   key={`${register.id_ticket}-${register.id_solicitud}`}
                   className={
                     register.estatus === 'anulado'
-                      ? 'grid_solicitudes item_detail item_detail_nulled'
-                      : 'grid_solicitudes item_detail'
+                      ? 'grid_solicitudes_historico item_detail item_detail_nulled'
+                      : 'grid_solicitudes_historico item_detail'
                   }
                 >
                   <span className="counter">{index + 1}</span>
                   <span>
                     {register.id_ticket}-{register.id_solicitud}
-                  </span>
-                  <span>
-                    {moment(register.mtr_tickets.fecha_reg).format(
-                      'DD/MM/YYYY - kk:mm:ss'
-                    )}
                   </span>
                   <span>
                     <i>
@@ -153,19 +145,48 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
                     <br />
                     <b>{register.mtr_tickets.personal_emp?.nombre}</b>
                   </span>
+                  <span>
+                    {moment(register.mtr_tickets.fecha_reg).format(
+                      'DD/MM/YYYY - kk:mm:ss'
+                    )}
+                  </span>
+                  <span>
+                    {moment(register.fecha_ini_solucion).format(
+                      'DD/MM/YYYY - kk:mm:ss'
+                    )}
+                  </span>
+                  <span>
+                    {moment(register.fecha_fin_solucion).format(
+                      'DD/MM/YYYY - kk:mm:ss'
+                    )}
+                  </span>
+
                   <span className="hideElement">
                     {register.mtr_tickets.categorias_sop
                       ? register.mtr_tickets.categorias_sop.descrip
                       : '-'}
                   </span>
                   <span className="hideElement">
-                    {register.mtr_tickets.prioridad}
-                  </span>
-                  <span className="hideElement">
                     {register.mtr_tickets.descrip_tk}
                   </span>
                   <span className="hideElement">
                     {register.agentes_sop?.nombre}
+                  </span>
+                  <span className="hideElement">
+                    {timeFormat(
+                      register.control_tickets
+                        .filter((controlSolicitud) => {
+                          return (
+                            controlSolicitud.id_solicitud ===
+                            register.id_solicitud
+                          );
+                        })
+                        .reduce((acumulador, control) => {
+                          return (
+                            acumulador + Number(control.tiempo_calc * 1000)
+                          );
+                        }, 0)
+                    )}
                   </span>
                   <span
                     style={{
@@ -228,96 +249,13 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
                         />
                       </svg>
                     </button>
-                    {!agent && (
-                      <button
-                        title="Tomar Solicitud"
-                        onClick={() => {
-                          updateSolicitud(
-                            register.id_ticket,
-                            register.id_solicitud,
-                            {
-                              estatus: 'asignado',
-                              agente_asig: payloadJwt.agSop,
-                            },
-                            true,
-                            false,
-                            {
-                              email: register.mtr_tickets.personal_emp?.correo,
-                              nameAgente: payloadJwt.nameAgSop,
-                              estatus: 1,
-                              descripSolic: register.descripcion,
-                            }
-                          );
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          dataSlot="icon"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M10.05 4.575a1.575 1.575 0 1 0-3.15 0v3m3.15-3v-1.5a1.575 1.575 0 0 1 3.15 0v1.5m-3.15 0 .075 5.925m3.075.75V4.575m0 0a1.575 1.575 0 0 1 3.15 0V15M6.9 7.575a1.575 1.575 0 1 0-3.15 0v8.175a6.75 6.75 0 0 0 6.75 6.75h2.018a5.25 5.25 0 0 0 3.712-1.538l1.732-1.732a5.25 5.25 0 0 0 1.538-3.712l.003-2.024a.668.668 0 0 1 .198-.471 1.575 1.575 0 1 0-2.228-2.228 3.818 3.818 0 0 0-1.12 2.687M6.9 7.575V12m6.27 4.318A4.49 4.49 0 0 1 16.35 15m.002 0h-.002"
-                          />
-                        </svg>
-                      </button>
-                    )}
-                    {agent && (
-                      <Link
-                        href={`/support/${register.id_ticket}/${register.id_solicitud}`}
-                      >
-                        <button title="Iniciar/Continuar Atención">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M21 7.5V18M15 7.5V18M3 16.811V8.69c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811Z"
-                            />
-                          </svg>
-                        </button>
-                      </Link>
-                    )}
-
-                    {payloadJwt.perfil === 'admin' && (
-                      <button
-                        title="Eliminación integra del Ticket"
-                        onClick={() => {
-                          deleteTicket(
-                            register.id_ticket,
-                            '¿Desea eliminar el registro seleccionado?'
-                          );
-                        }}
-                        className="delete"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                          />
-                        </svg>
-                      </button>
-                    )}
                   </span>
                   {regCapture === register.id_solicitud && (
-                    <SolicitudDetails open={open} details={dataRegCap} />
+                    <SolicitudDetails
+                      open={open}
+                      details={dataRegCap}
+                      estatus={register.estatus}
+                    />
                   )}
                 </div>
               );
@@ -329,4 +267,4 @@ const GetAllSupport = ({ headersTable, enviroment, agent }) => {
   );
 };
 
-export default GetAllSupport;
+export default GetAllSupportsHistory;

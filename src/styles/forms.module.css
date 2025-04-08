@@ -54,7 +54,7 @@
   top: -11px !important;
   background-color: white !important;
   z-index: 2;
-  color: var(--button-color-hk) !important;
+  color: var(--button-color-hk);
   font-size: var(--font-sm) !important;
 }
 
@@ -366,6 +366,18 @@
   animation-iteration-count: 1;
   /* animation-direction: alternate; */
   animation-timing-function: ease;
+}
+
+.formButtonshowSolucion {
+  background: var(--tittles-hk);
+  color: var(--button-color-hk-hover);
+  font-size: medium;
+  padding: 2px;
+  border-radius: 8px;
+  box-shadow: 0 0px 4px 3px;
+  transition: 0.3s;
+  margin: 0 auto;
+  margin-bottom: 4px;
 }
 
 @keyframes beat {

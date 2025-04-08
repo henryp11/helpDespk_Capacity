@@ -188,6 +188,48 @@
   background: var(--button-color-hk-hover);
 }
 
+/*Para componente de número de tickets por agente en pantalla principal*/
+
+.solicAgentContainer {
+  background: var(--background-hk);
+  padding: 8px;
+  width: 85%;
+  border-radius: 8px;
+}
+
+.solicAgentContainer h4 {
+  border-bottom: 1px solid var(--tittles-hk);
+}
+
+.solicAgentGrid {
+  display: grid;
+  grid-template-columns: 33% repeat(4, 16%);
+  font-size: small;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 4px 0;
+  border-bottom: 1px solid var(--save-button);
+}
+
+.solicAgentGrid span:first-child {
+  /* text-align: left; */
+  font-weight: bold;
+}
+
+.solicAgentGrid span:nth-child(2) {
+  color: var(--estatus-det-asignado);
+}
+.solicAgentGrid span:nth-child(3) {
+  color: var(--estatus-det-proceso);
+}
+.solicAgentGrid span:nth-child(4) {
+  color: var(--estatus-det-pausado);
+}
+.solicAgentGrid span:nth-child(5) {
+  color: var(--estatus-det-reasignado);
+}
+
 /* Mobile  Normal*/
 @media screen and (max-width: 480px) {
   .containerModGeneral {

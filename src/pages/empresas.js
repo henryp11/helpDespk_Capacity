@@ -93,6 +93,7 @@ const Empresas = () => {
           query={query}
           setQuery={setQuery}
           placeholder={'Buscar por: Código / Nombre / RUC'}
+          title="Gestión de Empresas"
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

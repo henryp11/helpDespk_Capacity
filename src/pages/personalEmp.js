@@ -98,6 +98,7 @@ const PersonalEmp = () => {
               ? 'Buscar por: Cédula / Nombre / Empresa / Correo / Cargo'
               : 'Buscar por: Cédula / Nombre / Empresa'
           }
+          title="Gestión de Empleados"
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

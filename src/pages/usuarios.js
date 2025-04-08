@@ -96,6 +96,7 @@ const Usuarios = () => {
               ? 'Buscar por: UserName / Empresa / Nombre personal / Correo / Rol'
               : 'Buscar por: UserName / Empresa / Nombre p.'
           }
+          title="Gestión de Usuarios"
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

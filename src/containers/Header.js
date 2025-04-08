@@ -52,7 +52,7 @@ const Header = () => {
           <span>
             <h2>HelpDesk - CapSoft</h2>
             <h5>
-              AppWeb Atención y Soporte Técnico <i>v1.1</i>
+              AppWeb Atención y Soporte Técnico <i>v1.3</i>
             </h5>
           </span>
           {showButtonMovil ? (

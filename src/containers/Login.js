@@ -83,7 +83,7 @@ const Login = () => {
             statusCode={statusError}
             customMessage={
               statusError === 401
-                ? `Usuario o contraseña invalido. Si no está registrado proceda a "crear su cuenta" o si olvidó su contraseña proceda a "reestablecerla" `
+                ? `Usuario o contraseña invalido. Si no está registrado de clic en "crear cuenta" y si olvidó su contraseña de clic en "reestablecer contraseña" `
                 : statusError === 400
                 ? 'Debe Ingresar su correo y contraseña para poder ingresar, por favor intentelo nuevamente'
                 : ''

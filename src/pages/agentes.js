@@ -93,6 +93,7 @@ const Agentes = () => {
               ? 'Buscar Agente por Id / Nombre / Cargo / Nivel'
               : 'Buscar Agente por Id / Nombre / Cargo'
           }
+          title="Gestión Agentes de Soporte"
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

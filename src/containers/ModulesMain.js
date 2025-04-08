@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import ModuleCard from '../components/ModuleCard';
+import EstatusAgente from '@/components/EstatusAgente';
+import useApiTickets from '@/hooks/useApiTickets'; //Traere los tickets en atención para agentes
 import styles from '../styles/modulGeneral.module.css';
 
 //Opciones a mostrar para el modulo de Empresas por perfil
@@ -81,17 +83,31 @@ const modTicketsAgents = [
   },
   {
     idOption: 3,
-    descrip: 'Historial de tickets atendidos',
-    route: '/support/supportAgent',
+    descrip: 'Ingresar Ticket Extemporaneo',
+    route: '/tickets/ticketExt',
   },
   {
     idOption: 4,
+    descrip: 'Historial de tickets atendidos del Agente',
+    route: '/support/supportAgent',
+  },
+  {
+    idOption: 5,
     descrip: 'Consultar historial de tickets y solicitudes realizadas',
     route: '/tickets/allTickets',
   },
 ];
 
 const ModulesMain = ({ userName }) => {
+  const {
+    getSolicitudEstatus,
+    dataSolicEstatus,
+    load,
+    statusError,
+    error,
+    messageError,
+  } = useApiTickets();
+
   const [payloadJwt, setPayloadJwt] = useState({});
 
   useEffect(() => {
@@ -100,6 +116,10 @@ const ModulesMain = ({ userName }) => {
     //Si existen las variables, se las transforma en JSON para su uso
     const payloadStorage = payloadLS && JSON.parse(payloadLS);
     payloadLS && setPayloadJwt(payloadStorage);
+
+    if (payloadStorage.perfil === 'agente') {
+      getSolicitudEstatus();
+    }
   }, []);
 
   return (
@@ -272,6 +292,13 @@ const ModulesMain = ({ userName }) => {
           ]}
         />
       )}
+
+      {payloadJwt.perfil === 'agente' &&
+        (load ? (
+          '...loading'
+        ) : (
+          <EstatusAgente solicByAgente={dataSolicEstatus} />
+        ))}
     </section>
   );
 };

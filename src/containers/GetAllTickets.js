@@ -21,7 +21,10 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
     getTickets,
     deleteTicket,
     deleteAllSolicitud,
+    getcountTickets,
     dataTicket,
+    amountTickets,
+    pagesTotal,
     payloadJwt,
     load,
     statusError,
@@ -31,15 +34,26 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
 
   console.log({ entorno: enviroment });
 
+  const [searchAll, setSearchAll] = useState(false); //Muestra todos los registros (por defecto se limita a los 50 primeros)
+  const [offset, setOffset] = useState({ pageNumber: 0, offsetPosition: 0 }); //Majenará el número de página a ver y el offset o cant de registros a mostrar
+
+  const cantRegistros = 100; //La cantidad de registros a mostrar por página
+
   useEffect(() => {
     if (enviroment === 'tracking') {
-      getTickets(true); //Con tracking activo (true) se quitan los tickets finalizados y anulados
+      //Con tracking activo (true) se quitan los tickets finalizados y anulados
+      getcountTickets(true, cantRegistros); //Conteo y paginación
+      getTickets(true); //Obtiene los tickets
     } else {
-      //getTickets(false, 10, 1); //Para agregar paginación
-      getTickets(); //Trae todos los tickets caso para historial y usuarios admin
+      getcountTickets(false, cantRegistros); //Cuenta todos los tickets caso para historial y usuarios admin
+      if (searchAll) {
+        getTickets(); //Trae todos los tickets caso para historial y usuarios admin
+      } else {
+        getTickets(false, cantRegistros, offset.offsetPosition); //Para agregar paginación
+      }
     }
     validateExpToken();
-  }, []);
+  }, [searchAll, offset]); //Debe realizar el llamado cada que cambie de página o se traigan o quiten todos los registros
 
   // Funciones y objetos desde contexto inicial
   const isMobile = useScreenSize();
@@ -51,6 +65,36 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
     dataTicket,
     'tickets'
   );
+
+  const handleChangePag = (e) => {
+    setOffset({
+      ...offset,
+      pageNumber: +e.target.value.split('|')[0],
+      offsetPosition: +e.target.value.split('|')[1],
+    });
+  };
+
+  const nextPrevPage = (increase) => {
+    setOffset({
+      ...offset,
+      pageNumber: increase ? offset.pageNumber + 1 : offset.pageNumber - 1,
+      offsetPosition: increase
+        ? offset.offsetPosition + cantRegistros
+        : offset.offsetPosition - cantRegistros,
+    });
+  };
+
+  const beginFinPage = (begin) => {
+    if (begin) {
+      setOffset({ ...offset, pageNumber: 0, offsetPosition: 0 });
+    } else {
+      setOffset({
+        ...offset,
+        pageNumber: pagesTotal.length - 1,
+        offsetPosition: pagesTotal[pagesTotal.length - 1].offset,
+      });
+    }
+  };
 
   if (error) {
     console.log({ message: messageError, code: statusError });
@@ -79,6 +123,8 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
   }
 
   console.log({ userId: payloadJwt.sub, userRol: payloadJwt.perfil });
+  console.log({ cantTotalTickets: amountTickets });
+  console.log({ totalPaginas: pagesTotal, currentOffset: offset });
 
   return (
     <div className="mainContainer">
@@ -87,6 +133,15 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
           query={query}
           setQuery={setQuery}
           placeholder={'Buscar por: #Ticket / Empresa / Solicitante'}
+          title={
+            enviroment === 'tracking'
+              ? 'Seguimiento Tickets'
+              : 'Historial Tickets'
+          }
+          searchAll={searchAll}
+          showAll={setSearchAll}
+          showButtonAll={true}
+          messageButtonAll={`Mostrar ${cantRegistros} registros por página`}
         />
         <HeadersColumns
           classEsp={headersTable.classEspec}
@@ -119,7 +174,9 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
                       : 'grid_tickets item_detail'
                   }
                 >
-                  <span className="counter">{index + 1}</span>
+                  <span className="counter">
+                    {offset.offsetPosition + index + 1}
+                  </span>
                   <span>{register.id_ticket}</span>
                   <span>
                     {register.personal_emp?.empresa.nombre_emp} <br />
@@ -282,6 +339,103 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
                 </div>
               );
             })}
+          </div>
+        )}
+        {!load && (
+          <div className="paginacionContainer">
+            <span>Total Registros: {amountTickets}</span>
+            {!searchAll && (
+              <span className="pagNavigate">
+                <button
+                  type="button"
+                  onClick={() => {
+                    beginFinPage(true);
+                  }}
+                >
+                  Inicio
+                </button>
+                {offset.pageNumber != 0 && (
+                  <button
+                    type="button"
+                    title="Pág. Anterior"
+                    onClick={() => {
+                      nextPrevPage(false); //Si es false disminuye la página
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z"
+                      />
+                    </svg>
+                  </button>
+                )}
+                <span>
+                  Página # {offset.pageNumber + 1} de{' '}
+                  {Math.ceil(amountTickets / cantRegistros)}
+                </span>
+                {offset.pageNumber < pagesTotal.length - 1 && (
+                  <button
+                    type="button"
+                    title="Pág. Siguiente"
+                    onClick={() => {
+                      nextPrevPage(true); //Si es true aumenta la página
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z"
+                      />
+                    </svg>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    beginFinPage(false);
+                  }}
+                >
+                  Fin
+                </button>
+              </span>
+            )}
+            {!searchAll && (
+              <span>
+                <label htmlFor="">Elegir Página Específica: </label>
+                <select name="" onChange={handleChangePag}>
+                  <option value="" selected={true} disabled>
+                    Seleccionar Pag.
+                  </option>
+                  {pagesTotal.map((pagina) => {
+                    return (
+                      <option
+                        key={pagina.pag}
+                        value={`${pagina.pag}|${pagina.offset}`}
+                      >
+                        {pagina.pag + 1}
+                      </option>
+                    );
+                  })}
+                </select>
+              </span>
+            )}
           </div>
         )}
       </section>

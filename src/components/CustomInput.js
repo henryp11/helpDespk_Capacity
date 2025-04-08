@@ -12,11 +12,13 @@ const CustomInput = ({
   disabled,
   required,
   maxlength,
+  min,
   buttonEsp,
   buttonEspEye,
   onClickSearch,
   readonly,
   isChecked,
+  errorValidate,
 }) => {
   return (
     <>
@@ -30,6 +32,7 @@ const CustomInput = ({
             defaultValue={valueInput}
             placeholder={placeholder}
             maxLength={maxlength}
+            min={min}
             disabled={disabled}
             readOnly={readonly}
             required={required}
@@ -48,9 +51,11 @@ const CustomInput = ({
                 ? styles['activate-label-position']
                 : ''
             }
+            style={errorValidate ? { color: 'red' } : {}}
           >
             {required && <b>*</b>}
             {nameLabel}
+            {errorValidate && ' (x)'}
           </label>
 
           {buttonEsp && (

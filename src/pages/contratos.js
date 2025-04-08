@@ -92,6 +92,7 @@ const Contratos = () => {
           query={query}
           setQuery={setQuery}
           placeholder={'Buscar Contrato por Id / Empresa / Plan'}
+          title="Gestión de Contratos"
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

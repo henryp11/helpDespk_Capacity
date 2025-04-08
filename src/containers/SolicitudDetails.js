@@ -1,9 +1,10 @@
 import React from 'react';
 import moment from 'moment';
+import Controls from '@/components/Controls';
 import styles from '../styles/emp.module.css';
 
 const SolicitudDetails = (props) => {
-  const { open, details } = props;
+  const { open, details, estatus } = props;
 
   const capturasArray = Object.values(details.capturas);
   const filesWithUrl = capturasArray.filter((file) => {
@@ -27,7 +28,18 @@ const SolicitudDetails = (props) => {
                 )}
             </p>
           </span>
-          <span className={styles.wrapFields}>
+          {estatus === 'finalizado' && (
+            <span className={styles.wrapFields}>
+              <h3 className={styles.wrapTittles}>Fecha Fin Solución</h3>
+              <p>
+                {details.fecha_ini_solucion !== null &&
+                  moment(details.fecha_fin_solucion).format(
+                    'DD/MM/YYYY - kk:mm:ss'
+                  )}
+              </p>
+            </span>
+          )}
+          <span className={styles.wrapFields} style={{ gridColumn: '3 span' }}>
             <h3 className={styles.wrapTittles}>Detalle Solicitud</h3>
             <p>{details.descripcion}</p>
           </span>
@@ -56,6 +68,19 @@ const SolicitudDetails = (props) => {
               );
             })}
           </span>
+          {estatus === 'finalizado' && (
+            <span className={styles.wrapFields} style={{ gridColumn: '1/-1' }}>
+              <h3 className={styles.wrapTittles}>Solución</h3>
+              <p>{details.solucion}</p>
+            </span>
+          )}
+          {estatus === 'finalizado' && (
+            <Controls
+              id_ticket={details.id_ticket}
+              id_solicitud={details.id_solicitud}
+              // perfil={perfil}
+            />
+          )}
         </div>
       )}
     </>

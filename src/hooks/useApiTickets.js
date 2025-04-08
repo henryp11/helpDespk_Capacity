@@ -9,17 +9,21 @@ import { toast } from 'react-hot-toast';
 const API = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/tickets`;
 const API_DET = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/detalle-tickets`;
 const API_CTR = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/control-tickets`;
+const API_AGE = `${process.env.NEXT_PUBLIC_API_ROUTE}/api/v1/agentes`;
 // const API_CAT = 'http://localhost:3000/api/v1/category';
 
 const useApiTickets = () => {
   const router = useRouter();
   const [dataTicket, setDataTicket] = useState([]);
+  const [amountTickets, setAmountTickets] = useState(0);
   const [token, setToken] = useState('');
   const [payloadJwt, setPayloadJwt] = useState({});
   const [error, setError] = useState(false);
   const [load, setLoad] = useState(true);
   const [messageError, setMessageError] = useState({});
   const [statusError, setStatusError] = useState('');
+  const [pagesTotal, setPagesTotal] = useState([]);
+  const [dataSolicEstatus, setDataSolicEstatus] = useState([]);
 
   //Controla los errores a mostrar para todo tipo de petición, invocandolo en el catch
   const showError = (error) => {
@@ -72,6 +76,45 @@ const useApiTickets = () => {
       }
     } catch (error) {
       setLoad(false);
+      showError(error);
+    }
+  };
+
+  //Trae el número total de registros en la tabla ticket, se verifica si es historico o tracking,
+  //la cantOffset es el número de registros a mostrar en cada página para calcular el total de páginas y cuantos registros por offsets para el array de páginas
+  const getcountTickets = async (tracking, cantOffset) => {
+    const API_COUNT = `${API}/count`;
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    const payloadLS = localStorage.getItem('payload');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    const payloadStorage = payloadLS && JSON.parse(payloadLS);
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+        params: {
+          rol: payloadStorage.perfil,
+          idemp: payloadStorage.idEmp,
+          idclient: payloadStorage.idClient,
+          tracking: tracking || false, //Se usa el estatus (de la BD) cuando quiero quitar los tickets finalizados y anulados caso de tracking
+        },
+      };
+      const response = await axios.get(API_COUNT, axiosConfig);
+      if (response) {
+        console.log(response);
+        setAmountTickets(response.data); //Se obtiene el total de tickets
+        const totPag = Math.ceil(response.data / cantOffset); //Se obtiene el total de páginas
+        let arrayPag = [];
+        //Se crea un array con el número de páginas para posterior selección
+        for (let index = 0; index < totPag; index++) {
+          arrayPag[index] = { pag: index, offset: cantOffset * index };
+        }
+        setPagesTotal(arrayPag);
+      }
+    } catch (error) {
       showError(error);
     }
   };
@@ -146,6 +189,36 @@ const useApiTickets = () => {
     }
   };
 
+  //Obtiene las solicitudes filtrado por estatus de agentes para mostrar la cantidad de solicitudes con sus estatus
+  //A cada agente para que se pueda ver quien esta atendiendo y cuantas solicitudes atiende.
+  const getSolicitudEstatus = async () => {
+    const API_PARAMS = `${API_AGE}/solicAgentes`;
+    //Obtengo las variables del LocalStorage
+    const tokenLS = localStorage.getItem('jwt');
+    const payloadLS = localStorage.getItem('payload');
+    //Si existen las variables, se las transforma en JSON para su uso
+    const tokenStorage = tokenLS && JSON.parse(tokenLS);
+    const payloadStorage = payloadLS && JSON.parse(payloadLS);
+
+    try {
+      let axiosConfig = {
+        headers: {
+          Authorization: `Bearer ${tokenStorage}`,
+        },
+      };
+      setLoad(true);
+      const response = await axios.get(API_PARAMS, axiosConfig);
+      if (response) {
+        // setPayloadJwt(payloadStorage);
+        setDataSolicEstatus(response.data);
+        setLoad(false);
+      }
+    } catch (error) {
+      setLoad(false);
+      showError(error);
+    }
+  };
+
   // const getTicketByRuc = async (ruc) => {
   //   const API_PARAMS = `${API}/ruc`;
   //   //Obtengo las variables del LocalStorage
@@ -190,7 +263,7 @@ const useApiTickets = () => {
         localStorage.setItem(
           'ticket',
           JSON.stringify(response.data.newRegister)
-        );
+        ); //Una vez se crea el ticket, lo guardo en  el localStorage
         const ticketNew = response.data.newRegister;
         return ticketNew;
       }
@@ -578,6 +651,7 @@ const useApiTickets = () => {
   };
   return {
     getTickets,
+    getcountTickets,
     getTicketById,
     postTickets,
     updateTicket,
@@ -589,7 +663,11 @@ const useApiTickets = () => {
     deleteAllSolicitud,
     getTicketSolic,
     postControl,
+    getSolicitudEstatus,
+    dataSolicEstatus,
     dataTicket,
+    amountTickets,
+    pagesTotal,
     token,
     payloadJwt,
     load,

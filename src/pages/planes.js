@@ -88,6 +88,7 @@ const Planes = () => {
               ? 'Buscar Plan por Nombre / Id / Horas Soporte/ Días vigencia'
               : 'Buscar Plan por Nombre / Id / Horas Soporte'
           }
+          title="Gestión Planes de Mantenimiento"
         />
         <HeadersColumns
           classEsp={moduleHeaders.classEspec}

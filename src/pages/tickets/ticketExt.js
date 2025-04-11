@@ -363,11 +363,42 @@ const Newregister = () => {
         ...stateSolicitud,
         [e.target.name]: valueState.fecha_reg,
       });
+      setTiempoTotal(0); //Se resetea el tiempo total de soporte
       setErrorDate({ ...errorDate, errorInicio: true }); //Se activa el error de fecha de inicio
     } else {
       //Si se corrige se desactiva el error y se guarda la fecha de inicio de solución para validar la fecha de fin posteriormente
       setErrorDate({ ...errorDate, errorInicio: false });
       setDateTimeIniSol(selectedDate);
+      //Si la fecha de fin existe y está OK, se realiza el calculo del tiempo de la solicitud,
+      //restando el valor registrado en el state de fecha_fin, menos la fecha de inicio digitada en el input
+      if (stateSolicitud.fecha_fin_solucion) {
+        setTiempoTotal(
+          (new Date(stateSolicitud.fecha_fin_solucion) -
+            new Date(e.target.value)) /
+            1000
+        );
+      }
+      //Si al exisitir una fecha de fin y digitar la fecha de inicio, está es negativa, saldrá error
+      if (
+        new Date(stateSolicitud.fecha_fin_solucion) - new Date(e.target.value) <
+        0
+      ) {
+        toast.error(
+          'La fecha de inicio NO puede ser posterior a la fecha de finalización!!',
+          {
+            duration: 5500,
+            position: 'bottom-center',
+            style: {
+              borderRadius: '8px',
+              background: '#333',
+              color: '#fff',
+              border: '1px solid #c92a2a',
+            },
+          }
+        );
+        setTiempoTotal(0);
+        setErrorDate({ ...errorDate, errorInicio: true });
+      }
     }
   };
   //Controla el change de la fecha de Fin de la solución de la solicitud

@@ -474,7 +474,8 @@
 .inputContainer3_1 {
   grid-column: 1/-1;
   display: grid;
-  grid-template-columns: repeat(3, 28%) 16%;
+  /* grid-template-columns: repeat(3, 28%) 16%; */
+  grid-template-columns: repeat(3, 20%) repeat(3, 13%);
 }
 
 .inputContainer1_3 {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { timeFormat } from '@/utils/helpers';
+import CustomInput from './CustomInput';
 import moment from 'moment';
 import styles from '@/styles/forms.module.css';
 
@@ -72,22 +73,21 @@ const Timer = ({
     setInitial(performance.now() - timeElapsed);
     setPause(false);
     setShowStart(false);
-    setDateStart(moment(new Date(dateBegin)).format('YYYY-MM-DDTkk:mm:ss')); //creo la nueva Fecha a partir de los ms y transformo
+    setDateStart(moment(new Date(dateBegin)).format('YYYY-MM-DDTkk:mm:ss')); //*creo la nueva Fecha a partir de los ms y transformo
 
     blockButton(true);
-    setIsSaving(true); //Para que permita o bloquee cerrar pestaña
+    setIsSaving(true); //*Para que permita o bloquee cerrar pestaña
 
-    //Si el ticket esta en estado "solicitado" significa que aun no se ha comenzado a procesar ninguna solicitud
-    //dentro del mismo. Por lo tanto al comenzar el contador en cualquier solicitud del ticket se cambiará su estado a proceso
+    //TODO:|Si el ticket esta en estado "solicitado" significa que aun no se ha comenzado a procesar ninguna solicitud
+    //TODO:|dentro del mismo. Por lo tanto al comenzar el contador en cualquier solicitud del ticket se cambiará su estado a proceso
 
     if (data.mtr_tickets.estatus === 'solicitado') {
       updateMtrTicket(idTicket, {
         estatus: 'proceso',
       });
 
-      //Si ya esta el ticket en proceso y no tiene una fecha de inicio registrada
-      //se asignará la fecha de inicio de todo el soporte para todo el ticket ya que se entiende que es
-      //la primera solicitud para ese ticket en ser atendida
+      //TODO:|Si ya esta el ticket en proceso y no tiene una fecha de inicio registrada
+      //TODO:|se asignará la fecha de inicio de todo el soporte para todo el ticket ya que se entiende que es la primera solicitud para ese ticket en ser atendida
       if (!data.mtr_tickets.fecha_ini_sop) {
         updateMtrTicket(idTicket, {
           fecha_ini_sop: moment(new Date(dateBegin)).format(
@@ -97,9 +97,9 @@ const Timer = ({
       }
     }
 
-    //Evaluo la primera vez que empieza la atención en la solicitud, es decir cuando la solicitud este como "asignado"
-    //Para cambiar su estatus y colocar la fecha de inicio de atención de la solución para la solicitud
-    //Adicional se utiliza el último parámetro de la función "updateSolicitud" para enviar los datos para el correo del cliente
+    //TODO:|Evaluo la primera vez que empieza la atención en la solicitud, es decir cuando la solicitud este como "asignado"
+    //TODO:|Para cambiar su estatus y colocar la fecha de inicio de atención de la solución para la solicitud
+    //*Adicional se utiliza el último parámetro de la función "updateSolicitud" para enviar los datos para el correo del cliente
     if (data.estatus === 'asignado') {
       updateSolicitud(
         idTicket,
@@ -123,7 +123,7 @@ const Timer = ({
   };
 
   const pauseTimer = async () => {
-    const datePause = Date.now(); //Captura la fecha al pausar en ms
+    const datePause = Date.now(); //*Captura la fecha al pausar en ms
     const fin = performance.now();
 
     setDatePaused(moment(new Date(datePause)).format('YYYY-MM-DDTkk:mm:ss'));
@@ -146,7 +146,7 @@ const Timer = ({
     setPause(true);
     setTimeElapsed(0);
     setIsSaving(false); //Para que permita o bloquee cerrar pestaña
-    //Inserto el registro de control al pausar la solicitud
+    //*Inserto el registro de control al pausar la solicitud
     await postControl(dataControl, idTicket, idSolicitud);
     await updateSolicitud(idTicket, idSolicitud, {
       estatus: 'pausado',
@@ -180,7 +180,7 @@ const Timer = ({
       const tiempoTotal = fin - initial;
       console.log(`Tiempo total transcurrido: ${timeFormat(tiempoTotal)}`);
 
-      //Al finalizar armo objeto para crear el control final del ticket
+      //*Al finalizar armo objeto para crear el control final del ticket
       const dataControl = {
         id_agente: data.agente_asig,
         fecha_ini_atencion: moment(dateStart).format('YYYY-MM-DD'),
@@ -191,55 +191,55 @@ const Timer = ({
       };
 
       setTimeElapsed(0);
-      //Inserto el registro de control al finalizar la solicitud
+      //*Inserto el registro de control al finalizar la solicitud
       await postControl(dataControl, idTicket, idSolicitud);
-      //Actualizo estado y fecha de fin de solución de la solicitud
+      //*Actualizo estado y fecha de fin de solución de la solicitud
       await updateSolicitud(idTicket, idSolicitud, {
         estatus: 'finalizado',
         fecha_fin_solucion: moment(new Date(dateFin)).format(
           'YYYY-MM-DDTkk:mm:ss'
         ),
       });
-      //Una vez actualizado, obtengo los datos del ticket y solicitud con todos sus controles
-      // const response = await getTicketSolic(idTicket, idSolicitud); //Función que espera datos desde el servidor
 
+      //TODO:|Una vez actualizado el estado de la solicitud, obtengo los datos de LA SOLICITUD anidado su TICKET
+      //TODO:|y todos sus controles, para actualizar el tiempo total en el MTR_TICKET
       await getTicketSolic(idTicket, idSolicitud)
-        .then((data) => {
-          console.log({ dataFinalTicketSolic: data });
-          //Armo objeto para la tabla MTR_TICKETS y actualizar sus tiempo finales
+        .then((dataSolicTicket) => {
+          console.log({ dataFinalTicketSolic: dataSolicTicket });
+          //*Armo objeto para la tabla MTR_TICKETS y actualizar sus tiempo finales
           const mtrTickets = {
-            descrip_tk: data[0].mtr_tickets.descrip_tk,
-            estatus: data[0].mtr_tickets.estatus,
+            descrip_tk: dataSolicTicket[0].mtr_tickets.descrip_tk,
+            estatus: dataSolicTicket[0].mtr_tickets.estatus,
             fecha_fin_sop:
-              data[0].mtr_tickets.fecha_fin_sop === null
+              dataSolicTicket[0].mtr_tickets.fecha_fin_sop === null
                 ? undefined
-                : data[0].mtr_tickets.fecha_fin_sop,
-            fecha_ini_sop: data[0].mtr_tickets.fecha_ini_sop,
-            fecha_reg: data[0].mtr_tickets.fecha_reg,
-            id_cliente: data[0].mtr_tickets.id_cliente,
-            id_emp: data[0].mtr_tickets.id_emp,
+                : dataSolicTicket[0].mtr_tickets.fecha_fin_sop,
+            fecha_ini_sop: dataSolicTicket[0].mtr_tickets.fecha_ini_sop,
+            fecha_reg: dataSolicTicket[0].mtr_tickets.fecha_reg,
+            id_cliente: dataSolicTicket[0].mtr_tickets.id_cliente,
+            id_emp: dataSolicTicket[0].mtr_tickets.id_emp,
             id_tipo:
-              data[0].mtr_tickets.id_tipo === null
+              dataSolicTicket[0].mtr_tickets.id_tipo === null
                 ? undefined
-                : data[0].mtr_tickets.id_tipo,
-            prioridad: data[0].mtr_tickets.prioridad,
+                : dataSolicTicket[0].mtr_tickets.id_tipo,
+            prioridad: dataSolicTicket[0].mtr_tickets.prioridad,
             tiempo_calc_sop:
-              data[0].mtr_tickets.tiempo_calc_sop === null
+              dataSolicTicket[0].mtr_tickets.tiempo_calc_sop === null
                 ? 0
-                : Number(data[0].mtr_tickets.tiempo_calc_sop),
+                : Number(dataSolicTicket[0].mtr_tickets.tiempo_calc_sop),
             tiempo_diferencial:
-              data[0].mtr_tickets.tiempo_diferencial === null
+              dataSolicTicket[0].mtr_tickets.tiempo_diferencial === null
                 ? 0
-                : Number(data[0].mtr_tickets.tiempo_diferencial),
+                : Number(dataSolicTicket[0].mtr_tickets.tiempo_diferencial),
             tiempo_real_sop:
-              data[0].mtr_tickets.tiempo_real_sop === null
+              dataSolicTicket[0].mtr_tickets.tiempo_real_sop === null
                 ? 0
-                : Number(data[0].mtr_tickets.tiempo_real_sop),
+                : Number(dataSolicTicket[0].mtr_tickets.tiempo_real_sop),
           };
 
           console.log({ MTR_TICKET: mtrTickets });
-          //Realizo sumatoria de todos los tiempos para añadir el total al mtr_ticket
-          const finalTimeControls = data[0]?.control_tickets.reduce(
+          //*Realizo sumatoria de todos los tiempos para añadir el total al mtr_ticket
+          const finalTimeControls = dataSolicTicket[0]?.control_tickets.reduce(
             (acumulador, control) => {
               return acumulador + Number(control.tiempo_calc);
             },
@@ -247,15 +247,30 @@ const Timer = ({
           );
           console.log(`Tiempo final control: ${finalTimeControls}`);
 
-          //Actualizo tiempo final añadiendo al tiempo previo si existe de otras solicitudes para ese ticket
-          updateMtrTicket(idTicket, {
-            tiempo_calc_sop: Number(
-              mtrTickets.tiempo_calc_sop + finalTimeControls
-            ),
-            tiempo_real_sop: Number(
-              mtrTickets.tiempo_real_sop + finalTimeControls
-            ),
-          });
+          //*Actualizo tiempo final añadiendo al tiempo previo si existe de otras solicitudes finalizadas para ese ticket
+          //*Se evalua si la solicitud fue marcada como error
+          if (!data.isError) {
+            updateMtrTicket(idTicket, {
+              tiempo_calc_sop: Number(
+                mtrTickets.tiempo_calc_sop + finalTimeControls
+              ),
+              tiempo_real_sop: Number(
+                mtrTickets.tiempo_real_sop + finalTimeControls
+              ),
+            });
+          } else {
+            //!Si la solicitud es considerada error, se calcula el tiempo de soporte normal, pero se añade al tiempo del error en el campo
+            //!tiempo diferencial, y no se aumenta al tiempo real de soporte.
+            updateMtrTicket(idTicket, {
+              tiempo_calc_sop: Number(
+                mtrTickets.tiempo_calc_sop + finalTimeControls
+              ),
+              tiempo_diferencial: Number(
+                mtrTickets.tiempo_diferencial + finalTimeControls
+              ),
+              tiempo_real_sop: Number(mtrTickets.tiempo_real_sop),
+            });
+          }
 
           setFinalTimeSolic(finalTimeControls);
         })
@@ -263,12 +278,12 @@ const Timer = ({
           console.log(error);
           alert(error);
         });
-      //a continuación realizar llamada de todas las solicitudes del ticket
-      //para determinar la última a finalizar y dar por terminado la fecha y estado final de todo el ticket
+
+      //TODO:|A continuación realizo llamada de todas las solicitudes del ticket para determinar la última a finalizar y dar por terminado la fecha y estado final de todo el ticket
       const solicitudesTicket = getOnlySolicitud(idTicket);
       solicitudesTicket
         .then((data) => {
-          //Obtengo las solicitudes diferentes a la actual para extraer su estatus
+          //*Obtengo las solicitudes diferentes a la actual para extraer su estatus
           const estatusSolicitudes = data
             .filter((solicitud) => {
               return solicitud.id_solicitud !== Number(idSolicitud);
@@ -276,13 +291,13 @@ const Timer = ({
             .map((solicitud) => {
               return solicitud.estatus;
             });
-          //Filtro los estatus que no esten finalizados
+          //*Filtro los estatus que no esten finalizados
           const noFinalizadas = estatusSolicitudes.filter((estatus) => {
             return estatus !== 'finalizado';
           });
-          //Si no obtengo un array con solicitudes (0) significa que ya no hay solicitudes
-          //Pendiente de finalizar por lo tanto la actual es la última y está será la encargada
-          //de actualizar el MTR_TICKETS (todo el ticket) la fecha de finalización de todo el soporte, asi como su estado a "finalizado"
+          //?| Si no obtengo un array con solicitudes (0) significa que ya no hay solicitudes Pendientes
+          //?| de finalizar por lo tanto la actual es la última y está será la encargada
+          //?| de actualizar el MTR_TICKETS (todo el ticket) la fecha de finalización de todo el soporte, asi como su estado a "finalizado"
           if (noFinalizadas.length === 0) {
             updateMtrTicket(idTicket, {
               fecha_fin_sop: moment(new Date(dateFin)).format(
@@ -301,9 +316,9 @@ const Timer = ({
     }
   };
 
-  //Esta función muestra el modal de la solución, pero mantiene por debajo el tiempo corriendo todavía
-  //Luego el modal de la solución contendrá el botón final para que finalice el cáculo del tiempo y el control final
-  //Es decir este botón dentro del modal es el que contiene la función "finishTimer()"
+  //TODO:|Esta función muestra el modal de la solución, pero mantiene por debajo el tiempo corriendo todavía
+  //TODO:|Luego el modal de la solución contendrá el botón final para que finalice el cáculo del tiempo y el control final
+  //TODO:|Es decir este botón dentro del modal es el que contiene la función "finishTimer()"
   const finishSolicitudButton = () => {
     if (initial) {
       showSolucion(true);
@@ -312,11 +327,15 @@ const Timer = ({
     }
   };
 
-  //Se usa aquí el handle que a su vez modifica el estado del componente superiror [idSolicitud]
-  //Por lo que viene como props el setValueState y la data del state (valueState)
+  //TODO:|Se usa aquí el handle que a su vez modifica el estado del componente superiror [idSolicitud]
+  //TODO:|Por lo que viene como props el setValueState y la data del state (valueState)
   const handleChange = (e) => {
     setValueState({ ...data, [e.target.name]: e.target.value });
     setIsSaving(true);
+  };
+
+  const handleCheck = () => {
+    setValueState({ ...data, isError: !data.isError });
   };
 
   // const restartTimer = () => {
@@ -551,6 +570,41 @@ const Timer = ({
                 Detalle de la Solución
               </label>
             </span>
+            <span style={{ borderRadius: '0' }}>
+              <CustomInput
+                typeInput="checkbox"
+                nameInput="isError"
+                valueInput={data.isError}
+                onChange={handleCheck}
+                nameLabel="Es Error?"
+                customStyle={{
+                  flexWrap: 'nowrap',
+                  width: '15%',
+                  margin: '4px auto',
+                }}
+              />
+            </span>
+            {data.isError && (
+              <span className={styles['input-container']}>
+                <textarea
+                  name="detError"
+                  onChange={handleChange}
+                  defaultValue={data.detError}
+                  cols="30"
+                  rows="4"
+                  className={styles.textArea}
+                  placeholder="Ingrese el motivo del error para su seguimiento"
+                  style={{
+                    border: '2px solid #bf616a',
+                    outlineColor: '#c92a2a',
+                    background: '#e6616129',
+                  }}
+                ></textarea>
+                {/* <label className={styles['activate-label-position']}>
+                  Detalle del Error
+                </label> */}
+              </span>
+            )}
             {!saveFinal && (
               <span
                 className={styles.buttonContainer}

@@ -14,7 +14,7 @@ const moduleHeaders = {
     { id: 'col6', name: 'Categoría', show: true },
     { id: 'col7', name: 'Descrip. General Ticket', show: true },
     { id: 'col8', name: 'Agente Asig.', show: true },
-    { id: 'col9', name: 'Tiempo Total', show: true },
+    { id: 'col9', name: 'Tiempo Soporte', show: true },
     { id: 'col10', name: 'Estado', show: true },
   ],
 };

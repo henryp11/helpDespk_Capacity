@@ -54,7 +54,7 @@ const GetAllSupportsHistory = ({ headersTable, enviroment, agent }) => {
 
   const getDataSolicitudes = () => {
     if (agent) {
-      getSolicitudes(false, false, agent); //Para ver historial de solicitudes del agente
+      getSolicitudes(false, false, agent); //*Parámetros para ver historial de solicitudes del agente
     } else {
       getSolicitudes();
     }
@@ -133,6 +133,7 @@ const GetAllSupportsHistory = ({ headersTable, enviroment, agent }) => {
                       ? 'grid_solicitudes_historico item_detail item_detail_nulled'
                       : 'grid_solicitudes_historico item_detail'
                   }
+                  style={register.isError ? { color: '#970000' } : {}}
                 >
                   <span className="counter">{index + 1}</span>
                   <span>

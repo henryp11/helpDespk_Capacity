@@ -22,19 +22,19 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
     sheet: 'Detalle',
   });
 
-  //Este estado sirve para extraer los tickets unicos cuando se genere reporte por detalle, ya que en ese caso
-  //Se tiene cada solicitud y dentro de ella se repite el MTR_TICKET por lo que para tener la sumatoria total de tiempo
-  //Se duplicaria si existiera varias solicitudes en un solo ticket, por ende se extrae los tickets únicos para ese caso
-  //Y usar el nuevo array para que este realiza la sumatoria en el caso de reporte detallado por solicitud.
+  //TODO:|Este estado sirve para extraer los tickets unicos cuando se genere reporte por detalle, ya que en ese caso
+  //TODO:|Se tiene cada solicitud y dentro de ella se repite el MTR_TICKET por lo que para tener la sumatoria total de tiempo
+  //TODO:|Se duplicaria si existiera varias solicitudes en un solo ticket, por ende se extrae los tickets únicos para ese caso
+  //TODO:|Y usar el nuevo array para que este realiza la sumatoria en el caso de reporte detallado por solicitud.
   const [ticketsUnique, setTicketsUnique] = useState([]);
   const [showColumn, setShowColumn] = useState(true);
 
   useEffect(() => {
     if (typeReport === 'detalle') {
-      const ids = new Set(); //Clase de Javascript en cargada de excluir valores duplicados
+      const ids = new Set(); //*Clase de Javascript encargada de excluir valores duplicados
       const unique = [];
-      //Se itera sobre cada solicitud, con la función has() de Set se verifica si existe el id_ticket
-      //Si no existe con la funciñon add() se añade al listado del Set y se agrega el objeto al nuevo array
+      //*Se itera sobre cada solicitud, con la función has() de Set se verifica si existe el id_ticket
+      //*Si no existe, con la función add() se añade al listado del Set y se agrega el objeto al nuevo array
       dataTicket.forEach((ticket) => {
         if (!ids.has(ticket.id_ticket)) {
           ids.add(ticket.id_ticket);
@@ -153,7 +153,9 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
               <th>Descripción General Ticket</th>
               <th>F. Inicio Atención</th>
               <th>F. Fin Atención</th>
-              <th>Tiempo Total</th>
+              <th>Tiempo Real Soporte</th>
+              <th>(-) Tiempo Incidencias</th>
+              <th>Tiempo Final</th>
               <th className={!showColumn && 'hideElement'}>Cant. Solic</th>
             </tr>
           </thead>
@@ -180,6 +182,12 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
                     {moment(register.fecha_fin_sop).format(
                       'DD/MM/YYYY - kk:mm:ss'
                     )}
+                  </td>
+                  <td>{timeFormat(register.tiempo_calc_sop * 1000)}</td>
+                  <td>
+                    {register.tiempo_diferencial
+                      ? timeFormat(register.tiempo_diferencial * 1000)
+                      : 0}
                   </td>
                   <td>{timeFormat(register.tiempo_real_sop * 1000)}</td>
                   <td className={!showColumn && 'hideElement'}>
@@ -233,12 +241,16 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
               <th className={!showColumn && 'hideElement'}>Agente Asignado</th>
               <th>Tiempo Solicitud</th>
               <th>Detalle Solución</th>
+              <th>No Considerar al Total?</th>
             </tr>
           </thead>
           <tbody>
             {dataTicket.map((register, index) => {
               return (
-                <tr key={register.id_solicitud}>
+                <tr
+                  key={register.id_solicitud}
+                  style={register.isError ? { color: 'red' } : {}}
+                >
                   <td>{index + 1}</td>
                   <td className={!showColumn && 'hideElement'}>
                     {register.mtr_tickets?.personal_emp.empresa.nombre_emp}
@@ -286,6 +298,7 @@ const TableReport = ({ dataTicket, typeReport, loadData }) => {
                     )}
                   </td>
                   <td>{register.solucion}</td>
+                  <td>{register.isError ? 'X' : ''}</td>
                 </tr>
               );
             })}

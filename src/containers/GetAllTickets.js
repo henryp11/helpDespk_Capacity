@@ -132,7 +132,7 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
         <SectionSearch
           query={query}
           setQuery={setQuery}
-          placeholder={'Buscar por: #Ticket / Empresa / Solicitante'}
+          placeholder={'Buscar por: #Ticket / Empresa / Solicitante / Estatus'}
           title={
             enviroment === 'tracking'
               ? 'Seguimiento Tickets'

@@ -37,17 +37,19 @@ const TicketsDetails = (props) => {
                 moment(details.fecha_fin_sop).format('DD/MM/YYYY - kk:mm:ss')}
             </p>
           </span>
-          {/* <span className={styles.wrapFields}>
-            <h3 className={styles.wrapTittles}>Tiempo Calculado</h3>
+          <span className={styles.wrapFields}>
+            <h3 className={styles.wrapTittles}>Tiempo Total Soporte</h3>
             <p>{timeFormat(Number(details.tiempo_calc_sop) * 1000)}</p>
           </span>
           <span className={styles.wrapFields}>
-            <h3 className={styles.wrapTittles}>Tiempo Diferencial</h3>
+            <h3 className={styles.wrapTittles}>(-) Tiempo No Considerado</h3>
             <p>{timeFormat(Number(details.tiempo_diferencial) * 1000)}</p>
-          </span> */}
+          </span>
           <span className={styles.wrapFields}>
             <h3 className={styles.wrapTittles}>Tiempo Final Soporte</h3>
-            <p>{timeFormat(Number(details.tiempo_real_sop) * 1000)}</p>
+            <b style={{ fontSize: '1.1em' }}>
+              {timeFormat(Number(details.tiempo_real_sop) * 1000)}
+            </b>
           </span>
         </div>
       )}

@@ -216,12 +216,32 @@ const Newregister = () => {
               />
               <CustomInput
                 typeInput="text"
+                nameInput="tiempo_calc_sop"
+                valueInput={timeFormat(
+                  Number(valueState.tiempo_calc_sop) * 1000
+                )}
+                onChange={handleChange}
+                nameLabel="T. Soporte"
+                disabled={true}
+              />
+              <CustomInput
+                typeInput="text"
+                nameInput="tiempo_diferencial"
+                valueInput={timeFormat(
+                  Number(valueState.tiempo_diferencial) * 1000
+                )}
+                onChange={handleChange}
+                nameLabel="(-)T. Incidencias"
+                disabled={true}
+              />
+              <CustomInput
+                typeInput="text"
                 nameInput="tiempo_real_sop"
                 valueInput={timeFormat(
                   Number(valueState.tiempo_real_sop) * 1000
                 )}
                 onChange={handleChange}
-                nameLabel="Tiempo Total"
+                nameLabel="T. Final"
                 disabled={true}
               />
             </span>
@@ -373,16 +393,53 @@ const Newregister = () => {
                 }}
               >
                 <h4
-                  style={{
-                    display: 'flex',
-                    margin: '5px 10px',
-                    justifyContent: 'space-evenly',
-                    alignItems: 'center',
-                    gap: '4px',
-                    color: '#444a8d',
-                  }}
+                  style={
+                    !solicitud.isError
+                      ? {
+                          display: 'flex',
+                          margin: '5px 10px',
+                          justifyContent: 'space-evenly',
+                          alignItems: 'center',
+                          gap: '4px',
+                          color: '#444a8d',
+                        }
+                      : {
+                          display: 'flex',
+                          margin: '5px 10px',
+                          justifyContent: 'space-evenly',
+                          alignItems: 'center',
+                          gap: '2px',
+                          color: '#9b2020',
+                        }
+                  }
                 >
                   Solicitud # {index + 1} | <em>Estado: {solicitud.estatus}</em>
+                  {solicitud.isError && (
+                    <span
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                      }}
+                      title="La solicitud ha sido marcada como error, el tiempo de este soporte no se considerará en el soporte total del cliente"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
+                        style={{ color: '#9b2020' }}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
+                        />
+                      </svg>
+                    </span>
+                  )}
                   <button
                     className={`${styles['formButton']} ${styles['formButtonShow']}`}
                     onClick={() => {
@@ -404,6 +461,7 @@ const Newregister = () => {
                       }
                     }}
                     type="button"
+                    title="Muestra el detalle completo de la solicitud"
                   >
                     Mostrar
                     {regCapture === solicitud.id_solicitud && showSolicitud ? (

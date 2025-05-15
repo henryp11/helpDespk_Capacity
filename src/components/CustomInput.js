@@ -19,11 +19,12 @@ const CustomInput = ({
   readonly,
   isChecked,
   errorValidate,
+  customStyle,
 }) => {
   return (
     <>
       {typeInput !== 'checkbox' ? (
-        <span className={styles['input-container']}>
+        <span className={styles['input-container']} style={customStyle}>
           <input
             type={typeInput}
             name={nameInput}
@@ -129,7 +130,7 @@ const CustomInput = ({
           )}
         </span>
       ) : (
-        <span className={styles['input-containerCheckbox']}>
+        <span className={styles['input-containerCheckbox']} style={customStyle}>
           <label htmlFor={nameInput}>
             {required && <b>*</b>}
             {nameLabel}

@@ -36,7 +36,7 @@ const Newregister = () => {
   // const idSearch = nextRouter.query.id_ticket; //Para verificar el string param de id_ticket y saber si estoy creando o editando un registro
   const ruta = usePathname();
 
-  //Estado inicial para el ticket en la tabla MTR_TICKETS
+  //TODO: Estado inicial para el ticket en la tabla MTR_TICKETS
   const initialState = {
     id_emp: '',
     id_cliente: '',
@@ -44,7 +44,7 @@ const Newregister = () => {
     descrip_tk: '',
     id_tipo: '',
   };
-  //Estado inicial para la solicitud en la tabla DET_TICKETS, por defecto se crea con el estado "asignado"
+  //TODO: Estado inicial para la solicitud en la tabla DET_TICKETS, por defecto se crea con el estado "asignado"
   const initialStateSolic = {
     fecha_ini_solucion: null,
     fecha_fin_solucion: null,
@@ -61,15 +61,15 @@ const Newregister = () => {
   };
   const [valueState, setValueState] = useState(initialState); //Estado final del Ticket
   const [stateSolicitud, setStateSolicitud] = useState(initialStateSolic); //Estado final de la Solicitud
-  const [ticketCreated, setTicketCreated] = useState({ isCreated: false }); //Verifica si se creo el ticket en la tabla
+  const [ticketCreated, setTicketCreated] = useState({ isCreated: false }); //*Verifica si se creo el ticket en la tabla
   const [solicitudCreated, setSolicitudCreated] = useState({
     isCreated: false,
     cantidad: 1,
-  }); //Verifica si ya se creo la solicitud y colocar la cantidad de solicitudes en el Ticket
+  }); //*Verifica si ya se creo la solicitud y colocar la cantidad de solicitudes en el Ticket
   const [perfil, setPerfil] = useState('');
-  const [personalEmp, setPersonalEmp] = useState([]); //Almacenará el personal de la empresa al elegir una empresa
+  const [personalEmp, setPersonalEmp] = useState([]); //*Almacenará el personal de la empresa al elegir una empresa
   const [showButtonSol, setShowButtonSol] = useState(true); //Para mostrar el botón de añadir solicitud
-  //Estados para control de archivos e imágenes
+  //TODO:Estados para control de archivos e imágenes
   const [resetUpFiles, setResetUpFiles] = useState(false);
   //Para control de módales para cada archivo (máximo 4)
   const [showModalFile1, setShowModalFile1] = useState({
@@ -89,15 +89,15 @@ const Newregister = () => {
     active: false,
   });
 
-  const [disableReturn, setDisableReturn] = useState(false); //Desahilita el botón de retorno/cancelar al momento de crear una solicitud
+  const [disableReturn, setDisableReturn] = useState(false); //*Desahilita el botón de retorno/cancelar al momento de crear una solicitud
   const [isSaving, setIsSaving] = useState(false); // Estado para verificar si se está guardando e impedir que cierren la pestaña
-  const [showSolucion, setShowSolucion] = useState(false); // Para mostrar si se finalizará la solicitud al momento de ingresarla
-  const [dateTimeIniTicket, setDateTimeIniTicket] = useState(''); //Para controlar la fecha min cuando se vaya a ingresar la fecha inicial de la solución
-  const [dateTimeIniSol, setDateTimeIniSol] = useState(''); //Para controlar la fecha min cuando se vaya a ingresar la fecha final de la solución
+  const [showSolucion, setShowSolucion] = useState(false); //*Para mostrar si se finalizará la solicitud al momento de ingresarla
+  const [dateTimeIniTicket, setDateTimeIniTicket] = useState(''); //*Para controlar la fecha min cuando se vaya a ingresar la fecha inicial de la solución
+  const [dateTimeIniSol, setDateTimeIniSol] = useState(''); //*Para controlar la fecha min cuando se vaya a ingresar la fecha final de la solución
   const [errorDate, setErrorDate] = useState({
     errorInicio: false,
     errorFin: false,
-  }); //Controlará el error de fechas si no pasa la validación
+  }); //*Controlará el error de fechas si no pasa la validación
   const [tiempoTotal, setTiempoTotal] = useState(0); //El tiempo del soporte en segundos cuando se ingresa una solicitud que se debe finalizar en ese momento.
 
   useEffect(() => {
@@ -108,10 +108,10 @@ const Newregister = () => {
       JSON.parse(localStorage.getItem('payload'));
     getEmpresas();
     setPerfil(payloadStorage.perfil);
-    setStateSolicitud({ ...stateSolicitud, agente_asig: payloadStorage.agSop }); //Al cargar el estado ya asigna el agente desde el token
+    setStateSolicitud({ ...stateSolicitud, agente_asig: payloadStorage.agSop }); //?Al cargar el estado ya asigna el agente desde el token
   }, [ruta]);
 
-  //Este Effect controla la pestaña para no cerrarla directamente y muestre una advertencia si no se ha guardado la información
+  //TODO:Este Effect controla la pestaña para no cerrarla directamente y muestre una advertencia si no se ha guardado la información
   useEffect(() => {
     // Definir la función de advertencia para el evento
     const handleBeforeUnload = (event) => {
@@ -129,27 +129,27 @@ const Newregister = () => {
       }
     };
 
-    // Agregar el evento cuando `isSaving` es true
+    //*Agregar el evento cuando `isSaving` es true
     if (isSaving) {
       window.addEventListener('beforeunload', handleBeforeUnload);
     }
 
-    // Eliminar el evento cuando `isSaving` es false o cuando el componente se desmonte
+    //*Eliminar el evento cuando `isSaving` es false o cuando el componente se desmonte
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [isSaving]); // Ejecutar este efecto cuando cambie `isSaving`
+  }, [isSaving]); //?Ejecutar este efecto cuando cambie `isSaving`
 
   //Controla el listado de selección de empresas.
   const handleChangeEmp = (e) => {
     setValueState({ ...valueState, [e.target.name]: e.target.value });
-    //Al elegir la empresa, se almacena el personal de la empresa elegida en este estado, para optimizar la busqueda
+    //*Al elegir la empresa, se almacena el personal de la empresa elegida en este estado, para optimizar la busqueda
     setPersonalEmp(() => {
       return dataEmp.filter((empresa) => empresa.id_emp === e.target.value)[0]
         .personal_emp;
     });
-    //Cuando cambia de una empresa a otra despues de seleccionar un empleado, se vacia ese empleado seleccionado anteriormente
-    //Para evitar que se quede guardado el empleado de la empresa incorrecta.
+    //*Cuando cambia de una empresa a otra despues de seleccionar un empleado, se vacia ese empleado seleccionado anteriormente
+    //*Para evitar que se quede guardado el empleado de la empresa incorrecta.
     if (valueState.id_cliente) {
       setValueState({ ...valueState, id_cliente: '' });
     }
@@ -213,7 +213,7 @@ const Newregister = () => {
     setIsSaving(true);
   };
 
-  //Submit para crear el ticket en MTR_TICKETS
+  //TODO:Submit para crear el ticket en MTR_TICKETS
   const handleSubmit = (e) => {
     e.preventDefault();
     postTickets(valueState)
@@ -227,7 +227,7 @@ const Newregister = () => {
       });
   };
 
-  //Submit para crear la(s) solicitud en DET_TICKETS para el ticket previamente creado.
+  //TODO:Submit para crear la(s) solicitud en DET_TICKETS para el ticket previamente creado.
   const handleSubmitSolic = (e) => {
     e.preventDefault();
     postSolicitud(stateSolicitud, ticketCreated.response.id_ticket)
@@ -241,8 +241,8 @@ const Newregister = () => {
         setShowButtonSol(false);
         getOnlySolicitud(ticketCreated.response.id_ticket);
         setDisableReturn(false);
-        // Sí existe una fecha de finalización, despues de que se cree la solicitud, se crea el control respectivo
-        //Asi como el update para finalizar el ticket.
+        //?Sí existe una fecha de finalización, despues de que se cree la solicitud, se crea el control respectivo
+        //?Asi como el update para finalizar el ticket.
         if (stateSolicitud.fecha_fin_solucion) {
           const dataControl = {
             id_agente: response.agente_asig,
@@ -290,9 +290,10 @@ const Newregister = () => {
     }
   };
 
+  //TODO:Función que controla cuando se quiera añadir una solicitud adicional despues de guardar la anterior
   const addSolicitud = () => {
     let formS = document.getElementById('formSolicitud');
-    formS.reset();
+    formS.reset(); //Resetea el formulario con la info de la solicitud anterior
     setSolicitudCreated({
       ...solicitudCreated,
       cantidad: solicitudCreated.cantidad + 1,
@@ -312,36 +313,36 @@ const Newregister = () => {
     setValueState({ ...valueState, [e.target.name]: e.target.value });
   };
 
-  //Función que controla cuando se quiera añadir la solución en la solicitud al momento de crearla
+  //TODO:Función que controla cuando se quiera añadir la solución en la solicitud al momento de crearla
   const addSolucion = () => {
     setShowSolucion(!showSolucion);
     setDateTimeIniTicket(new Date(valueState.fecha_reg)); //Apenas se ejecuta la función se almacena la fecha de registro del ticket
     if (!showSolucion) {
-      //Cuando se despliega sección de solución, se coloca por defecto la fecha de inicio solución = a fecha registro ticket y estado de solicitud "finalizado"
+      //*Cuando se despliega sección de solución, se coloca por defecto la fecha de inicio solución = a fecha registro ticket y estado de solicitud "finalizado"
       setStateSolicitud({
         ...stateSolicitud,
         fecha_ini_solucion: valueState.fecha_reg,
         estatus: 'finalizado',
       });
     } else {
-      //Si se quita la sección se coloca en nulo las fechas de la solicitud y el estado vuelve a "asignado"
+      //*Si se quita la sección se coloca en nulo las fechas de la solicitud y el estado vuelve a "asignado"
       setStateSolicitud({
         ...stateSolicitud,
         fecha_ini_solucion: null,
         fecha_fin_solucion: null,
         estatus: 'asignado',
       });
-      setDateTimeIniSol(''); //Así como quitar nuevamente la fecha de inicio de solución, usada posteriormente para validación
+      setDateTimeIniSol(''); //*Así como quitar nuevamente la fecha de inicio de solución, usada posteriormente para validación
     }
   };
 
-  //Controla el change de la fecha de inicio de la solución de la solicitud
+  //TODO:Controla el change de la fecha de inicio de la solución de la solicitud
   const handleChangeDateBegin = (e) => {
     setStateSolicitud({ ...stateSolicitud, [e.target.name]: e.target.value });
     setIsSaving(true);
 
     const selectedDate = new Date(e.target.value);
-    // Se verifica la fecha/hora que se cambie que no sea anterior a la fecha de registro del ticket
+    //?Se verifica la fecha/hora que se cambie que no sea anterior a la fecha de registro del ticket
     if (selectedDate < dateTimeIniTicket) {
       toast.error(
         `La fecha y hora deben ser posteriores a la fecha del registro del ticket: ${moment(
@@ -358,7 +359,7 @@ const Newregister = () => {
           },
         }
       );
-      //Si da error se vuelve la fecha de inicio de solución a la fecha del ticket
+      //!Si da error se vuelve la fecha de inicio de solución a la fecha del ticket
       setStateSolicitud({
         ...stateSolicitud,
         [e.target.name]: valueState.fecha_reg,
@@ -366,50 +367,52 @@ const Newregister = () => {
       setTiempoTotal(0); //Se resetea el tiempo total de soporte
       setErrorDate({ ...errorDate, errorInicio: true }); //Se activa el error de fecha de inicio
     } else {
-      //Si se corrige se desactiva el error y se guarda la fecha de inicio de solución para validar la fecha de fin posteriormente
+      //*Si se corrige se desactiva el error y se guarda la fecha de inicio de solución para validar la fecha de fin posteriormente
       setErrorDate({ ...errorDate, errorInicio: false });
       setDateTimeIniSol(selectedDate);
-      //Si la fecha de fin existe y está OK, se realiza el calculo del tiempo de la solicitud,
-      //restando el valor registrado en el state de fecha_fin, menos la fecha de inicio digitada en el input
+      //?Si la fecha de fin existe y está OK, se realiza el calculo del tiempo de la solicitud,
+      //?restando el valor registrado en el state de fecha_fin, menos la fecha de inicio digitada en el input
       if (stateSolicitud.fecha_fin_solucion) {
         setTiempoTotal(
           (new Date(stateSolicitud.fecha_fin_solucion) -
             new Date(e.target.value)) /
             1000
         );
-      }
-      //Si al exisitir una fecha de fin y digitar la fecha de inicio, está es negativa, saldrá error
-      if (
-        new Date(stateSolicitud.fecha_fin_solucion) - new Date(e.target.value) <
-        0
-      ) {
-        toast.error(
-          'La fecha de inicio NO puede ser posterior a la fecha de finalización!!',
-          {
-            duration: 5500,
-            position: 'bottom-center',
-            style: {
-              borderRadius: '8px',
-              background: '#333',
-              color: '#fff',
-              border: '1px solid #c92a2a',
-            },
-          }
-        );
-        setTiempoTotal(0);
-        setErrorDate({ ...errorDate, errorInicio: true });
+        //!Si al existir una fecha de fin y digitar la fecha de inicio, esta es negativa, saldrá error
+        //Significa que la fecha de inicio es anterior a la fecha de fin.
+        if (
+          new Date(stateSolicitud.fecha_fin_solucion) -
+            new Date(e.target.value) <
+          0
+        ) {
+          toast.error(
+            'La fecha de inicio NO puede ser posterior a la fecha de finalización!!',
+            {
+              duration: 5500,
+              position: 'bottom-center',
+              style: {
+                borderRadius: '8px',
+                background: '#333',
+                color: '#fff',
+                border: '1px solid #c92a2a',
+              },
+            }
+          );
+          setTiempoTotal(0);
+          setErrorDate({ ...errorDate, errorInicio: true });
+        }
       }
     }
   };
-  //Controla el change de la fecha de Fin de la solución de la solicitud
+  //TODO:Controla el change de la fecha de Fin de la solución de la solicitud
   const handleChangeDateEnd = (e) => {
     setStateSolicitud({ ...stateSolicitud, [e.target.name]: e.target.value });
     setIsSaving(true);
 
     const selectedDate = new Date(e.target.value);
 
-    //En el caso de que no se cambie la fecha de inicio de solución, se entiende que se quiere trabajar con la fecha de inicio del ticket
-    //Como fecha de inicio de solución, por ende esta fecha se coloca como estado de fecha de inicio de solución para la validación
+    //?En el caso de que no se cambie la fecha de inicio de solución, se entiende que se quiere trabajar con la fecha de inicio del ticket
+    //?Como fecha de inicio de solución, por ende esta fecha se coloca como estado de fecha de inicio de solución para la validación
     if (!dateTimeIniSol) {
       setDateTimeIniSol(new Date(valueState.fecha_reg));
     }
@@ -430,7 +433,7 @@ const Newregister = () => {
           },
         }
       );
-      //Si da error la fecha colocada como fecha de finalización, se colocará nula en el estado de la solicitud.
+      //!Si da error la fecha colocada como fecha de finalización, se colocará nula en el estado de la solicitud.
       setStateSolicitud({
         ...stateSolicitud,
         [e.target.name]: null,
@@ -439,8 +442,8 @@ const Newregister = () => {
       setErrorDate({ ...errorDate, errorFin: true });
     } else {
       setErrorDate({ ...errorDate, errorFin: false });
-      //Si la fecha de fin está OK, se realiza el calculo del tiempo de la solicitud, restando el valor ingresado en
-      //el input de la fecha_fin, menos la fecha de inicio registrada en el state de la solicitud
+      //*Si la fecha de fin está OK, se realiza el calculo del tiempo de la solicitud, restando el valor ingresado en
+      //*el input de la fecha_fin, menos la fecha de inicio registrada en el state de la solicitud
       setTiempoTotal(
         (new Date(e.target.value) -
           new Date(stateSolicitud.fecha_ini_solucion)) /
@@ -449,10 +452,6 @@ const Newregister = () => {
     }
   };
 
-  // console.log(dateTimeIniTicket);
-  // console.log(dateTimeIniSol);
-  // console.log({ tiempoSeg: tiempoTotal });
-  // console.log(timeFormat(tiempoTotal * 1000));
   console.log({ stateTicket: valueState });
   console.log({ stateSolicitud: stateSolicitud });
   console.log(ticketCreated);

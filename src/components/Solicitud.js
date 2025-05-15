@@ -34,6 +34,8 @@ const Solicitud = ({
     id_categ_supuesta: undefined,
     modulo: undefined,
     solucion: '',
+    isError: false,
+    detError: '',
   };
 
   const [valueState, setValueState] = useState(stateSolicitud);
@@ -92,6 +94,8 @@ const Solicitud = ({
           : valueState.id_categ_supuesta,
       modulo: valueState.modulo === null ? undefined : valueState.modulo,
       solucion: valueState.solucion === null ? undefined : valueState.solucion,
+      isError: valueState.isError,
+      detError: valueState.detError === null ? undefined : valueState.detError,
     };
     updateSolicitud(
       dataSolicitud.id_ticket,
@@ -439,6 +443,33 @@ const Solicitud = ({
               </label>
             </span>
           </span>
+          {valueState.isError && (
+            <span
+              className={`${styles.inputContainer1_1} ${styles.inputContainer1_1v}`}
+            >
+              <span className={styles['input-container']}>
+                <textarea
+                  name="detError"
+                  onChange={handleChange}
+                  defaultValue={valueState.detError}
+                  cols="30"
+                  rows="4"
+                  className={styles.textArea}
+                  disabled={
+                    perfil === 'admin' || perfil === 'agente' ? false : true
+                  }
+                  style={{
+                    background: '#e6616129',
+                    border: '2px solid #bf616a',
+                    outlineColor: '#c92a2a',
+                  }}
+                ></textarea>
+                <label className={styles['activate-label-position']}>
+                  Detalle del error detectado
+                </label>
+              </span>
+            </span>
+          )}
         </form>
       )}
       {showSolicitud && showControl && (

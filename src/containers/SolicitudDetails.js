@@ -74,6 +74,12 @@ const SolicitudDetails = (props) => {
               <p>{details.solucion}</p>
             </span>
           )}
+          {details.isError && (
+            <span className={styles.wrapFields} style={{ gridColumn: '1/-1' }}>
+              <h3 className={styles.wrapTittles}>Detalle del Error:</h3>
+              <p>{details.detError}</p>
+            </span>
+          )}
           {estatus === 'finalizado' && (
             <Controls
               id_ticket={details.id_ticket}

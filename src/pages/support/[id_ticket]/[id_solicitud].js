@@ -49,6 +49,8 @@ const Newregister = () => {
     fecha_fin_solucion: undefined,
     solucion: '',
     estatus: '',
+    isError: false,
+    detError: '',
     mtr_tickets: { personal_emp: { empresa: {} } },
     control_tickets: [],
   };
@@ -161,6 +163,8 @@ const Newregister = () => {
                   'YYYY-MM-DDTkk:mm:ss'
                 ),
           solucion: data[0].solucion === null ? undefined : data[0].solucion,
+          isError: data[0].isError,
+          detError: data[0].detError === null ? undefined : data[0].detError,
           estatus: data[0].estatus,
           mtr_tickets: data[0].mtr_tickets,
           control_tickets:
@@ -182,25 +186,19 @@ const Newregister = () => {
     setIsSaving(true);
   };
 
-  // const handleCheck = (fieldCheck) => {
-  //   if (fieldCheck === 'plan') {
-  //     setValueState({ ...valueState, planMant: !valueState.planMant });
-  //   } else if (fieldCheck === 'est') {
-  //     setValueState({ ...valueState, estatus: !valueState.estatus });
-  //   }
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    //El tercer parámetro (false) se usa en la pantalla de asignación de ticket a agente, por eso coloco en false (Porque aquí no estoy asignando agente, ya está asignado a la solicitud)
-    //El último parámetro (true) es para que se redireccione a la pantalla anterior una vez actualizado
-    //No son parámetros obligatorios, pero en este caso si requiero enviar el último parámetro para el redireccionamiento
-    //El último objeto es para enviar el correo de solicitud finalizada, ya que este submit solo se realizará al finalizar la atención de la solicitud
+    //*El tercer parámetro (false) se usa en la pantalla de asignación de ticket a agente, por eso coloco en false (Porque aquí no estoy asignando agente, ya está asignado a la solicitud)
+    //*El último parámetro (true) es para que se redireccione a la pantalla anterior una vez actualizado
+    //*No son parámetros obligatorios, pero en este caso si requiero enviar el último parámetro para el redireccionamiento
+    //*El último objeto es para enviar el correo de solicitud finalizada, ya que este submit solo se realizará al finalizar la atención de la solicitud
     updateSolicitud(
       idTicketSearch,
       idSolicSearch,
       {
         solucion: valueState.solucion,
+        isError: valueState.isError,
+        detError: valueState.detError,
       },
       false,
       true,
@@ -214,8 +212,8 @@ const Newregister = () => {
     );
   };
 
-  //Esta función bloqueará el botón para cerrar la ventana de atención mientras este en ejecución el Timer
-  //Se la envía como parametro del Timer
+  //TODO|Esta función bloqueará el botón para cerrar la ventana de atención mientras este en ejecución el Timer
+  //*Se la envía como parametro del Timer
   const blockButton = (block) => {
     document.getElementById('returnButton').disabled = block;
     setDisableReturn(block);
@@ -364,15 +362,15 @@ const Newregister = () => {
               <Timer
                 idTicket={idTicketSearch}
                 idSolicitud={idSolicSearch}
-                updateMtrTicket={updateTicket} //Actualiza estado del TICKET y fechas de inicio y fin en Timer
-                updateSolicitud={updateSolicitud} //Actualiza estado de la SOLICITUD y fechas de inicio y fin en Timer
+                updateMtrTicket={updateTicket} //*Actualiza estado del TICKET y fechas de inicio y fin en Timer
+                updateSolicitud={updateSolicitud} //*Actualiza estado de la SOLICITUD y fechas de inicio y fin en Timer
                 postControl={postControl}
                 getDataTicket={getDataTicket}
                 getTicketSolic={getTicketSolic}
                 getOnlySolicitud={getOnlySolicitud}
-                showSolucion={setShowSolucion} //Cambio el state para mostar el modal de solución
-                modalSolution={showSolucion} // variable que muestra el modal de solución true/false
-                setValueState={setValueState} //Para poder usar el handleChance en el timer que ahora tiene el ingreso de la solución
+                showSolucion={setShowSolucion} //*Cambio el state para mostar el modal de solución
+                modalSolution={showSolucion} //*Muestra el modal de solución true/false
+                setValueState={setValueState} //*Para poder usar el handleChance en el Timer que ahora tiene el ingreso de la solución
                 data={valueState}
                 payloadJwt={payloadJWT}
                 blockButton={blockButton}

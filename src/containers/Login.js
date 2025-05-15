@@ -35,7 +35,11 @@ const Login = () => {
   };
 
   console.log({
-    userData: dataUser,
+    userData: {
+      user: dataUser.user,
+      recoveryToken: dataUser.recoveryToken,
+      cont: ':)',
+    },
     data: resData,
     isError: error,
     codeStatus: statusError,

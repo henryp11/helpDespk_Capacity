@@ -576,7 +576,7 @@ const Timer = ({
                 nameInput="isError"
                 valueInput={data.isError}
                 onChange={handleCheck}
-                nameLabel="Es Error?"
+                nameLabel="NO es error del usuario, es error de la solución de software"
                 customStyle={{
                   flexWrap: 'nowrap',
                   width: '15%',

@@ -370,8 +370,7 @@ const Newregister = () => {
           <form
             id="formSolicitud"
             onSubmit={handleSubmitSolic}
-            className={styles['form-default']}
-            style={{ gridTemplateColumns: '5% 1fr 10%' }}
+            className={`${styles['form-default']} ${styles.gridSolicExt}`}
           >
             <h2 className={styles.numberReg}>{solicitudCreated.cantidad}</h2>
             <span

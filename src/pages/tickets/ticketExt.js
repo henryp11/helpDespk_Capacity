@@ -469,7 +469,7 @@ const Newregister = () => {
         >
           <span
             className={stylesEmp.gridMtrTicket}
-            style={{ gridTemplateColumns: '30% 70%' }}
+            // style={{ gridTemplateColumns: '30% 70%' }}
           >
             <span className={styles.selectContainer}>
               {/* <b>* Categoría Soporte:</b> */}
@@ -651,8 +651,7 @@ const Newregister = () => {
           <form
             id="formSolicitud"
             onSubmit={handleSubmitSolic}
-            className={styles['form-default']}
-            style={{ gridTemplateColumns: '5% 1fr 10%' }}
+            className={`${styles['form-default']} ${styles.gridSolicExt}`}
           >
             <h2 className={styles.numberReg}>{solicitudCreated.cantidad}</h2>
             <span
@@ -741,16 +740,8 @@ const Newregister = () => {
               )}
             </span>
             {showSolucion && (
-              <span
-                style={{
-                  gridColumn: '3 span',
-                  display: 'grid',
-                  gridTemplateColumns: '30% 70%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <span>
+              <span className={styles.showSolucionExt}>
+                <span className={styles.solucionDates}>
                   <CustomInput
                     typeInput="datetime-local"
                     nameInput="fecha_ini_solucion"

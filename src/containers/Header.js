@@ -67,15 +67,15 @@ const Header = () => {
 
   return (
     <header
-      style={{
-        height: '40px',
-      }}
+    // style={{
+    //   height: '40px',
+    // }}
     >
       <Link href="/" title="home">
         <img
           src="https://i.imgur.com/WS7IrBY.jpeg"
           alt="app logo"
-          style={{ height: '40px' }}
+          className="headerLogo"
         />
       </Link>
       <Link href="/" title="home">

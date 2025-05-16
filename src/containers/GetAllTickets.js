@@ -419,7 +419,11 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
             {!searchAll && (
               <span>
                 <label htmlFor="">Elegir Página Específica: </label>
-                <select name="" onChange={handleChangePag}>
+                <select
+                  name=""
+                  onChange={handleChangePag}
+                  style={{ fontSize: '12px' }}
+                >
                   <option value="" selected={true} disabled>
                     Seleccionar Pag.
                   </option>

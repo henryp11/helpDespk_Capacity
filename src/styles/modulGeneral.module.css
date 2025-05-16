@@ -230,6 +230,14 @@
   color: var(--estatus-det-reasignado);
 }
 
+/*Tablet*/
+@media screen and (max-width: 768px) {
+  .buttonLogOut {
+    width: 25px;
+    height: 25px;
+  }
+}
+
 /* Mobile  Normal*/
 @media screen and (max-width: 480px) {
   .containerModGeneral {
@@ -249,5 +257,18 @@
 
   .containerCardMod .titleCard {
     justify-content: center;
+  }
+
+  .solicAgentContainer {
+    padding: 4px;
+    width: 98%;
+  }
+
+  .solicAgentGrid {
+    font-size: 11px;
+  }
+
+  .solicAgentContainer h3 {
+    font-size: 14px;
   }
 }

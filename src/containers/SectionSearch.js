@@ -39,7 +39,6 @@ const SectionSearch = ({
           className="search_bar"
         />
       </label>
-      <span className="icons-container"></span>
       {showButtonAll && (
         <button
           type="button"

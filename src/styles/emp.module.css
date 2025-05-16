@@ -89,7 +89,7 @@
 /* Tablet  */
 @media screen and (max-width: 768px) {
   .wrapContainer {
-    grid-template-columns: auto auto auto;
+    grid-template-columns: repeat(3, 1fr);
     padding: 8px;
     gap: 8px 16px;
   }
@@ -113,7 +113,7 @@
 /* Mobile  Normal*/
 @media screen and (max-width: 480px) {
   .wrapContainer {
-    grid-template-columns: auto auto auto;
+    grid-template-columns: repeat(3, 1fr);
     border-radius: 8px;
     padding: 8px;
     gap: 8px 12px;

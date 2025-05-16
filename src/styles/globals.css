@@ -101,7 +101,7 @@ h5 {
 header {
   /* background: var(--background-hk); */
   background: var(--white);
-  height: 60px;
+  height: 40px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -111,6 +111,10 @@ header {
 
 header svg {
   cursor: pointer;
+}
+
+.headerLogo {
+  height: 40px;
 }
 
 .loginView {
@@ -812,8 +816,34 @@ button:disabled {
 /* RESPONSIVE DESIGN */
 @media screen and (max-width: 768px) {
   /* Tablet  */
+  header {
+    height: 35px;
+  }
+
+  .headerLogo {
+    height: 33px;
+  }
+
   h2 {
     font-size: var(--font-xl);
+  }
+
+  svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .search_container {
+    width: 99%;
+  }
+
+  .search_container label {
+    width: 60%;
+    font-size: small;
+  }
+
+  .search_bar {
+    height: 25px;
   }
 
   #iconAdd {
@@ -842,7 +872,7 @@ button:disabled {
   }
 
   .generalTitle {
-    font-size: var(--font-nm);
+    font-size: var(--font-sm);
     word-break: break-word !important;
   }
 
@@ -852,6 +882,18 @@ button:disabled {
 
   .grid_solicitudes {
     grid-template-columns: var(--grid-column-solicitud-tablet);
+  }
+
+  .generalContainerDetails {
+    height: 65vh;
+  }
+  .paginacionContainer {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .pagNavigate button {
+    height: 22px;
   }
 }
 
@@ -879,8 +921,17 @@ button:disabled {
   }
 
   .search_container {
-    width: 98%;
+    gap: 2px;
   }
+
+  .search_container h4 {
+    width: 100%;
+    text-align: center;
+  }
+  .search_container label {
+    width: 70%;
+  }
+
   .search_bar {
     width: 98%;
     border-radius: 6px;
@@ -888,6 +939,10 @@ button:disabled {
     font-size: 0.8em;
     transition: 0.2s ease;
     color: var(--background-hk);
+  }
+
+  .buttonShowAll {
+    font-size: 11px;
   }
 
   .counter {
@@ -909,11 +964,6 @@ button:disabled {
 
   .item_detail {
     font-size: var(--font-sm);
-  }
-
-  svg {
-    width: 30px;
-    height: 30px;
   }
 
   header {
@@ -944,6 +994,10 @@ button:disabled {
 
   .grid_solicitudes {
     grid-template-columns: var(--grid-column-solicitud-mobile);
+  }
+
+  .generalContainerDetails {
+    height: 62vh;
   }
 
   .icons-container svg {

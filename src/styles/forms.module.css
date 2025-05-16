@@ -474,7 +474,6 @@
 .inputContainer3_1 {
   grid-column: 1/-1;
   display: grid;
-  /* grid-template-columns: repeat(3, 28%) 16%; */
   grid-template-columns: repeat(3, 20%) repeat(3, 13%);
 }
 
@@ -1050,6 +1049,19 @@
   padding: 8px;
 }
 
+/*Estilos para solicitudes extemporaneas*/
+.gridSolicExt {
+  grid-template-columns: 5% 1fr 10% !important;
+}
+
+.showSolucionExt {
+  grid-column: 3 span;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  justify-content: center;
+  align-items: center;
+}
+
 /* RESPONSIVE DESIGN */
 @media screen and (max-width: 1024px) {
   /*Laptop 1024*/
@@ -1099,12 +1111,45 @@
   .previewReports table thead {
     font-size: 10px;
   }
+
+  .inputContainer3_1 {
+    grid-template-columns: repeat(3, 33%);
+  }
 }
 
 @media screen and (max-width: 480px) {
   /* Movil  */
   .form-default {
     padding: 8px;
+  }
+
+  .gridSolicExt {
+    grid-template-columns: 1fr !important;
+    height: 100% !important;
+  }
+
+  .gridSolicExt .buttonContainer {
+    height: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  .buttonCreateSolic {
+    height: 90% !important;
+  }
+
+  .showSolucionExt {
+    grid-column: 1 span;
+    grid-template-columns: 1fr;
+  }
+
+  .solucionDates {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin-bottom: 8px;
+  }
+
+  .solucionDates span:nth-last-of-type(1) {
+    grid-column: 1/-1;
   }
 
   .textArea {

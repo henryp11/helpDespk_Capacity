@@ -171,7 +171,7 @@ const Timer = ({
   const finishTimer = async () => {
     setPause(true);
     blockButton(true);
-    setIsSaving(false); //Para que permita o bloquee cerrar pestaña
+    setIsSaving(true); //Para que permita o bloquee cerrar pestaña
     const dateFin = Date.now(); //Captura la fecha al Finalizar en ms
     // setDatePause(moment(new Date(dateFin)).format('YYYY-MM-DDTkk:mm:ss'));
 
@@ -323,7 +323,7 @@ const Timer = ({
     if (initial) {
       showSolucion(true);
       blockButton(true);
-      setIsSaving(false); //Para que permita o bloquee cerrar pestaña
+      setIsSaving(true); //Para que permita o bloquee cerrar pestaña
     }
   };
 
@@ -579,7 +579,7 @@ const Timer = ({
                 nameLabel="NO es error del usuario, es error de la solución de software"
                 customStyle={{
                   flexWrap: 'nowrap',
-                  width: '15%',
+                  width: '50%',
                   margin: '4px auto',
                 }}
               />

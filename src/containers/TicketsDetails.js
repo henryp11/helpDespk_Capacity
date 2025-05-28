@@ -20,8 +20,8 @@ const TicketsDetails = (props) => {
             </p>
           </span>
           <span className={styles.wrapFields}>
-            <h3 className={styles.wrapTittles}>Solicitante</h3>
-            <p>{details.personal_emp.nombre}</p>
+            <h3 className={styles.wrapTittles}>Correo</h3>
+            <p>{details.personal_emp.correo}</p>
           </span>
           <span className={styles.wrapFields}>
             <h3 className={styles.wrapTittles}>Fecha Inicio Soporte</h3>

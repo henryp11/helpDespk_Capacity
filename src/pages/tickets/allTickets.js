@@ -11,7 +11,7 @@ const moduleHeaders = {
     { id: 'col4', name: 'Categoría', show: true },
     { id: 'col5', name: '#Solic.', show: true },
     { id: 'col6', name: 'F.Registro', show: true },
-    { id: 'col7', name: 'Tiempo', show: true },
+    { id: 'col7', name: 'Tiempos', show: true },
     { id: 'col8', name: 'Estado', show: true },
   ],
 };

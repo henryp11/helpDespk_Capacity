@@ -83,6 +83,7 @@ const Newregister = () => {
 
   const [disableReturn, setDisableReturn] = useState(false); //Desahilita el botón de retorno/cancelar al momento de crear una solicitud
   const [isSaving, setIsSaving] = useState(false); // Estado para verificar si se está guardando
+  const [blockSaveFormSolic, setBlockSaveFormSolic] = useState(false); //Desabilita el botón de "Guardar solicitud final" por si se demora el envío del correo y no se vuelva a dar clic
 
   useEffect(() => {
     getDataTicket();
@@ -188,6 +189,7 @@ const Newregister = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setBlockSaveFormSolic(true); //Bloquea el botón que guadar la solicitud una vez se activo el submit
     //*El tercer parámetro (false) se usa en la pantalla de asignación de ticket a agente, por eso coloco en false (Porque aquí no estoy asignando agente, ya está asignado a la solicitud)
     //*El último parámetro (true) es para que se redireccione a la pantalla anterior una vez actualizado
     //*No son parámetros obligatorios, pero en este caso si requiero enviar el último parámetro para el redireccionamiento
@@ -373,8 +375,9 @@ const Newregister = () => {
                 setValueState={setValueState} //*Para poder usar el handleChance en el Timer que ahora tiene el ingreso de la solución
                 data={valueState}
                 payloadJwt={payloadJWT}
-                blockButton={blockButton}
+                blockButton={blockButton} //Función que bloquea el botón de cerrar pantalla mientras se ejecuta el Timer
                 setIsSaving={setIsSaving} //Función que bloquea pestaña para que se cierre mientras esta el Timer ejecutandose
+                blockSaveFormSolic={blockSaveFormSolic} //Bloquea el botón de guardar solicitud despues de que se pulse para guardar.
               />
               <span
                 style={{
@@ -554,52 +557,6 @@ const Newregister = () => {
                 )}
               </span>
             </fieldset>
-            {/* <span
-              className={`${styles.inputContainer1_1} ${styles.inputContainer1_1v}`}
-            >
-              {showSolucion && (
-                <div className={styles.modalSolucion}>
-                  <span className={styles['input-container']}>
-                    <textarea
-                      name="solucion"
-                      onChange={handleChange}
-                      defaultValue={valueState.solucion}
-                      cols="30"
-                      rows="7"
-                      className={styles.textArea}
-                      placeholder="Ingrese la solución para esta solicitud"
-                    ></textarea>
-                    <label className={styles['activate-label-position']}>
-                      Detalle de la Solución
-                    </label>
-                  </span>
-                  <span
-                    className={styles.buttonContainer}
-                    id={styles.buttonSolicitud}
-                  >
-                    <button
-                      title="Guardar Solicitud"
-                      className={styles['formButton']}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        style={{ color: 'rgb(66, 167, 96)', scale: '1.3' }}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    </button>
-                  </span>
-                </div>
-              )}
-            </span> */}
             {valueState.control_tickets && (
               <fieldset
                 className={`${styles.fieldSetCustom} ${styles.fieldSetControls}`}

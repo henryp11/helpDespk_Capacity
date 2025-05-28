@@ -39,6 +39,10 @@ const SolicitudDetails = (props) => {
               </p>
             </span>
           )}
+          <span className={styles.wrapFields} style={{ gridColumn: '2 span' }}>
+            <h3 className={styles.wrapTittles}>Correo Solicitante</h3>
+            <p>{details.mtr_tickets.personal_emp.correo}</p>
+          </span>
           <span className={styles.wrapFields} style={{ gridColumn: '3 span' }}>
             <h3 className={styles.wrapTittles}>Detalle Solicitud</h3>
             <p>{details.descripcion}</p>

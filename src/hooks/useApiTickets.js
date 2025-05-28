@@ -350,11 +350,11 @@ const useApiTickets = () => {
       const response = await axios.patch(API_PARAMS, dataUpdate, axiosConfig);
       if (response) {
         toast.success(response.data.message);
-        //Assign = true para recargar la página al momento de asignar el agente
-        //Se envía cuerpo de correo para enviar mail de ticket asignado agente
+        //*Assign = true para recargar la página al momento de asignar el agente
+        //*Se envía cuerpo de correo para enviar mail de ticket asignado agente
         if (assign) {
           toast.success('Solicitud asignada con éxito');
-          // Llamar api para envío de correo al cliente de solicitud asignada y que agente se asignó
+          // Llamar api para envío de correo al cliente de solicitud asignada y cual agente se asignó
           const dataToMail = {
             id_ticket: id_ticket,
             id_solicitud: id_solicitud,
@@ -371,16 +371,18 @@ const useApiTickets = () => {
             );
 
             if (responseMail) {
-              //Muestro el mensaje de retorno de la API
-              console.log(response);
+              //Muestro el mensaje de retorno de la API de mail enviado con éxito
+              console.log(responseMail.data.message);
+              toast.success(responseMail.data.message);
+              getSolicitudes(true, true);
             }
-            getSolicitudes(true, true);
           } catch (error) {
             console.log(error);
+            toast.error('No se pudo enviar el correo de asignación');
             getSolicitudes(true, true);
           }
         }
-        //Se envía cuerpo de correo para enviar mail de inicio de ticket
+        //*Se arma cuerpo de correo para enviar mail de inicio del proceso de la solicitud
         if (dataMail && dataMail.estatus === 2) {
           console.log('verificacion ingresa a solicitud en proceso');
           // Llamar api para envío de correo al cliente de solicitud Iniciada
@@ -400,18 +402,31 @@ const useApiTickets = () => {
             );
 
             if (responseMail) {
-              //Muestro el mensaje de retorno de la API
-              console.log(response);
+              //Muestro el mensaje de retorno de la API de mail enviado con éxito
+              console.log(responseMail.data.message);
+              toast.success(responseMail.data.message);
             }
           } catch (error) {
             console.log(error);
+            toast.error(
+              'No se pudo enviar el correo para indicar el inicio del soporte'
+            );
           }
         }
 
-        //Si "redirect=true" se redirecciona a la página principal de solicitudes, usado cuando se finaliza una solicitud
-        //Se envía cuerpo de correo para enviar mail de finalización de ticket
+        //*Si "redirect=true" se redirecciona a la página principal de solicitudes, usado cuando se finaliza una solicitud
+        //Se envía cuerpo de correo para enviar mail de finalización de la solicitud
         if (redirect) {
           toast.success('Solicitud Finalizada');
+
+          toast('...Enviando Correo', {
+            icon: '🚀',
+            style: {
+              borderRadius: '12px',
+              background: '#3bc9db',
+            },
+          });
+
           // Llamar api para envío de correo al cliente de solicitud Finalizada
           const dataToMail = {
             id_ticket: id_ticket,
@@ -431,11 +446,13 @@ const useApiTickets = () => {
 
             if (responseMail) {
               //Muestro el mensaje de retorno de la API
-              console.log(response);
+              console.log(responseMail);
+              toast.success(responseMail.data.message);
+              router.push('/support/allTicketsAsign');
             }
-            router.push('/support/allTicketsAsign');
           } catch (error) {
             console.log(error);
+            toast.error('No se pudo enviar el correo de finalización');
             router.push('/support/allTicketsAsign');
           }
         }

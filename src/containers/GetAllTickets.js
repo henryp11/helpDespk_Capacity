@@ -201,7 +201,11 @@ const GetAllTickets = ({ headersTable, enviroment }) => {
                     {moment(register.fecha_reg).format('DD/MM/YYYY - kk:mm:ss')}
                   </span>
                   <span className="hideElement">
-                    {timeFormat(register.tiempo_real_sop * 1000)}
+                    Soporte: {timeFormat(register.tiempo_calc_sop * 1000)}
+                    <br />
+                    <b>
+                      T. Final: {timeFormat(register.tiempo_real_sop * 1000)}
+                    </b>
                   </span>
                   <span
                     style={{
